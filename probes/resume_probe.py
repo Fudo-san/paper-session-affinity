@@ -12,6 +12,7 @@
   warm    : 新規セッション → 即 resume            → cache_read ≈ H を予測（1/12.7 の再現）
   gap     : 新規セッション → g 分待機 → resume    → TTL 実効生存の探索
   switch  : 新規セッション → 即 resume(別モデル)  → キャッシュ全損を予測
+  xsession: 同一プレフィックスで新規セッションを2本  → クロスセッション prefix cache の有無(M4)
   legacy  : 旧来の単一セッション連続測定（再現用。新規測定には使わない）
 
 計画と判定規則: probes/PROBE_PLAN.md / protocol/rqs_hypotheses.md H4(a)
@@ -145,8 +146,15 @@ def measure_one(exe: str, mode: str, rep: int,
         time.sleep(gap_s)
     gap_actual = round(time.time() - t_gap0, 1)
 
-    r1 = call(exe, "Reply exactly: OK-2", f"{mode}_r{rep}_resume",
-              {**base, "gap_actual_s": gap_actual}, resume=sid, model=model)
+    if mode == "xsession":
+        # M4: 2本目は resume せず、**同一プレフィックスで新規セッション**を作る。
+        # ここで cache_read ≈ H なら別セッション間で prefix cache がヒットしている
+        # （= γ ≈ α_r。【A1】反証）。cache_write ≈ H なら当初 A1 どおり（γ = 1）。
+        r1 = call(exe, prefix + "\n## Q\nReply exactly: OK-2",
+                  f"{mode}_r{rep}_second", {**base, "gap_actual_s": gap_actual})
+    else:
+        r1 = call(exe, "Reply exactly: OK-2", f"{mode}_r{rep}_resume",
+                  {**base, "gap_actual_s": gap_actual}, resume=sid, model=model)
 
     verdict, h = classify(r0, r1)
     summary = {"label": f"{mode}_r{rep}_verdict", "iso": datetime.now(timezone.utc).astimezone().isoformat(),
@@ -159,8 +167,12 @@ def measure_one(exe: str, mode: str, rep: int,
         summary["cost_ratio_resume_over_init"] = round(r1["cost_usd"] / r0["cost_usd"], 4)
     with OUT.open("a", encoding="utf-8") as f:
         f.write(json.dumps(summary, ensure_ascii=False) + "\n")
+    note = ""
+    if mode == "xsession":
+        note = ("  [warm=クロスセッションヒット(γ≈α_r・A1反証) / "
+                "cold=ヒットなし(γ=1・A1どおり)]")
     print(f"  -> verdict={verdict} H={h:,} gap_actual={gap_actual:.0f}s "
-          f"cost_ratio={summary.get('cost_ratio_resume_over_init')}", flush=True)
+          f"cost_ratio={summary.get('cost_ratio_resume_over_init')}{note}", flush=True)
     return summary
 
 
@@ -183,7 +195,8 @@ def run_legacy(exe: str, cli_ver: str) -> int:
 
 def main() -> int:
     ap = argparse.ArgumentParser(description="resume/TTL probe (1 measurement = 1 fresh session)")
-    ap.add_argument("--mode", choices=["warm", "gap", "switch", "legacy"], default="warm")
+    ap.add_argument("--mode", choices=["warm", "gap", "switch", "xsession", "legacy"],
+                    default="warm")
     ap.add_argument("--gap-min", type=float, default=0.0, help="mode=gap のギャップ（分）")
     ap.add_argument("--reps", type=int, default=1)
     ap.add_argument("--switch-model", default="haiku", help="mode=switch で切り替える先")
