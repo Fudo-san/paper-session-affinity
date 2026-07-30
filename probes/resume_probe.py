@@ -1,26 +1,36 @@
 #!/usr/bin/env python3
-"""resume プローブ: 仮定【A3】の検証（Week 4 前倒し実施）.
+"""resume プローブ: 仮定【A3】の検証 / TTL 実効生存の測定.
 
 検証内容: claude CLI の --resume で継承した履歴 H がキャッシュ可能プレフィックスとして
-扱われるか。3ケースを測る:
-  P1(warm):   直後に resume (g ≪ τ=5min)  → cache_read ≈ H を予測
-  P2(cold):   6分超待って resume (g > τ)   → cache_creation ≈ H を予測
-  P3(switch): モデル切替で resume          → キャッシュ全損（モデル別）を予測
+扱われるか、およびその生存時間。
 
-結果は resume_probe_results.jsonl に1呼び出し1行で保存（rawごと）。
-コスト: 20k トークン級 ×4 呼び出し（1ドル未満）。
+**設計上の要点（2026-07-31 改修）**: resume は成功した時点でキャッシュ寿命を延長する。
+そのため単一セッションでギャップを伸ばしながら連続測定すると cold 境界を過大評価する。
+本スクリプトは **1測定 = 1新規セッション** を厳守する。
+
+モード:
+  warm    : 新規セッション → 即 resume            → cache_read ≈ H を予測（1/12.7 の再現）
+  gap     : 新規セッション → g 分待機 → resume    → TTL 実効生存の探索
+  switch  : 新規セッション → 即 resume(別モデル)  → キャッシュ全損を予測
+  legacy  : 旧来の単一セッション連続測定（再現用。新規測定には使わない）
+
+計画と判定規則: probes/PROBE_PLAN.md / protocol/rqs_hypotheses.md H4(a)
+結果は resume_probe_results.jsonl へ **追記のみ**（改変禁止）。
 """
 from __future__ import annotations
 
+import argparse
 import json
 import shutil
 import subprocess
 import sys
 import time
+from datetime import datetime, timezone
 from pathlib import Path
 
 OUT = Path(__file__).resolve().parent / "resume_probe_results.jsonl"
-PREFIX_LINES = 500  # 約30,000 chars。Opus系の最小キャッシュ4096トークンを確実に超える
+PREFIX_LINES = 500  # 約30,000 chars。最小キャッシュ単位を確実に超える
+WARM_RATIO = 0.9    # 分類閾値（PROBE_PLAN §2 で測定前に固定）
 
 
 def find_claude() -> str | None:
@@ -34,8 +44,23 @@ def find_claude() -> str | None:
     return None
 
 
-def call(exe: str, prompt: str, label: str, resume: str | None = None,
-         model: str | None = None) -> dict:
+def cli_version(exe: str) -> str:
+    try:
+        p = subprocess.run([exe, "--version"], capture_output=True, timeout=30)
+        return p.stdout.decode(errors="replace").strip()[:120]
+    except Exception as exc:  # バージョン取得失敗で測定は止めない
+        return f"unknown ({exc})"
+
+
+def build_prefix() -> str:
+    return "## Project context (resume-probe)\n" + "\n".join(
+        f"- probe rule {i:04d}: keep interfaces stable, write focused tests, "
+        "never edit files outside declared scope." for i in range(PREFIX_LINES)
+    )
+
+
+def call(exe: str, prompt: str, label: str, meta: dict,
+         resume: str | None = None, model: str | None = None) -> dict:
     cmd = [exe, "--print", "--output-format", "json"]
     if resume:
         cmd += ["--resume", resume]
@@ -43,10 +68,12 @@ def call(exe: str, prompt: str, label: str, resume: str | None = None,
         cmd += ["--model", model]
     t0 = time.time()
     proc = subprocess.run(cmd, input=prompt.encode("utf-8"),
-                          capture_output=True, timeout=600)
+                          capture_output=True, timeout=900)
     rec: dict = {"label": label, "resume": bool(resume), "model_flag": model,
                  "rc": proc.returncode, "wall_s": round(time.time() - t0, 1),
-                 "at": time.strftime("%H:%M:%S")}
+                 "at": time.strftime("%H:%M:%S"),
+                 "iso": datetime.now(timezone.utc).astimezone().isoformat(),
+                 **meta}
     try:
         data = json.loads(proc.stdout.decode("utf-8", errors="replace"))
         u = data.get("usage") or {}
@@ -72,41 +99,115 @@ def call(exe: str, prompt: str, label: str, resume: str | None = None,
     return rec
 
 
+def classify(r0: dict, r1: dict) -> tuple[str, int]:
+    """PROBE_PLAN §2 の分類規則。H = 直前の P0 の (cache_write + cache_read)。"""
+    h = (r0.get("cache_w") or 0) + (r0.get("cache_r") or 0)
+    if h <= 0:
+        return "unknown", h
+    if (r1.get("cache_r") or 0) >= WARM_RATIO * h:
+        return "warm", h
+    if (r1.get("cache_w") or 0) >= WARM_RATIO * h:
+        return "cold", h
+    return "ambiguous", h
+
+
+def measure_one(exe: str, prefix: str, mode: str, rep: int,
+                gap_s: float, model: str | None, cli_ver: str) -> dict | None:
+    """1測定 = 1新規セッション（resume がキャッシュ寿命を延長するため必須）。"""
+    base = {"mode": mode, "rep": rep, "gap_planned_s": gap_s,
+            "cli_version": cli_ver, "prefix_lines": PREFIX_LINES}
+
+    r0 = call(exe, prefix + "\n## Q\nReply exactly: OK-1",
+              f"{mode}_r{rep}_init", base)
+    sid = r0.get("session_id")
+    if not sid or r0["rc"] != 0:
+        print(f"[SKIP] {mode} rep{rep}: initial call failed", file=sys.stderr, flush=True)
+        return None
+
+    t_gap0 = time.time()
+    if gap_s > 0:
+        print(f"[WAIT] {gap_s:.0f}s (mode={mode} rep={rep})...", flush=True)
+        time.sleep(gap_s)
+    gap_actual = round(time.time() - t_gap0, 1)
+
+    r1 = call(exe, "Reply exactly: OK-2", f"{mode}_r{rep}_resume",
+              {**base, "gap_actual_s": gap_actual}, resume=sid, model=model)
+
+    verdict, h = classify(r0, r1)
+    summary = {"label": f"{mode}_r{rep}_verdict", "iso": datetime.now(timezone.utc).astimezone().isoformat(),
+               "mode": mode, "rep": rep, "gap_planned_s": gap_s,
+               "gap_actual_s": gap_actual, "H": h, "verdict": verdict,
+               "cache_r_resume": r1.get("cache_r"), "cache_w_resume": r1.get("cache_w"),
+               "cost_init_usd": r0.get("cost_usd"), "cost_resume_usd": r1.get("cost_usd"),
+               "cli_version": cli_ver, "model_flag": model}
+    if r0.get("cost_usd") and r1.get("cost_usd"):
+        summary["cost_ratio_resume_over_init"] = round(r1["cost_usd"] / r0["cost_usd"], 4)
+    with OUT.open("a", encoding="utf-8") as f:
+        f.write(json.dumps(summary, ensure_ascii=False) + "\n")
+    print(f"  -> verdict={verdict} H={h:,} gap_actual={gap_actual:.0f}s "
+          f"cost_ratio={summary.get('cost_ratio_resume_over_init')}", flush=True)
+    return summary
+
+
+def run_legacy(exe: str, prefix: str, cli_ver: str) -> int:
+    """旧来の単一セッション連続測定（既存結果の再現用。cold境界の測定には使わない）。"""
+    base = {"mode": "legacy", "cli_version": cli_ver}
+    r1 = call(exe, prefix + "\n## Q\nReply exactly: OK-1", "P0_initial", base)
+    sid = r1.get("session_id")
+    if not sid or r1["rc"] != 0:
+        return 1
+    call(exe, "Reply exactly: OK-2", "P1_warm_resume", base, resume=sid)
+    print("[WAIT] 380s...", flush=True)
+    time.sleep(380)
+    call(exe, "Reply exactly: OK-3", "P2_cold_resume", base, resume=sid)
+    call(exe, "Reply exactly: OK-4", "P3_model_switch_resume", base,
+         resume=sid, model="haiku")
+    return 0
+
+
 def main() -> int:
+    ap = argparse.ArgumentParser(description="resume/TTL probe (1 measurement = 1 fresh session)")
+    ap.add_argument("--mode", choices=["warm", "gap", "switch", "legacy"], default="warm")
+    ap.add_argument("--gap-min", type=float, default=0.0, help="mode=gap のギャップ（分）")
+    ap.add_argument("--reps", type=int, default=1)
+    ap.add_argument("--switch-model", default="haiku", help="mode=switch で切り替える先")
+    args = ap.parse_args()
+
     exe = find_claude()
     if not exe:
         print("[ERROR] claude CLI not found", file=sys.stderr)
         return 1
-    prefix = "## Project context (resume-probe)\n" + "\n".join(
-        f"- probe rule {i:04d}: keep interfaces stable, write focused tests, "
-        "never edit files outside declared scope." for i in range(PREFIX_LINES)
-    )
-    print(f"claude={exe} prefix_chars={len(prefix):,}", flush=True)
+    ver = cli_version(exe)
+    prefix = build_prefix()
+    print(f"claude={exe} version={ver} prefix_chars={len(prefix):,} "
+          f"mode={args.mode} reps={args.reps} gap_min={args.gap_min}", flush=True)
 
-    r1 = call(exe, prefix + "\n## Q\nReply exactly: OK-1", "P0_initial")
-    sid = r1.get("session_id")
-    if not sid or r1["rc"] != 0:
-        print("[ABORT] initial call failed or no session_id", file=sys.stderr)
-        return 1
+    if args.mode == "legacy":
+        return run_legacy(exe, prefix, ver)
 
-    r2 = call(exe, "Reply exactly: OK-2", "P1_warm_resume", resume=sid)
+    if args.mode == "gap" and args.gap_min <= 0:
+        print("[ERROR] --mode gap には --gap-min が必要", file=sys.stderr)
+        return 2
 
-    print("[WAIT] 380s for TTL expiry...", flush=True)
-    time.sleep(380)
+    gap_s = args.gap_min * 60.0 if args.mode == "gap" else 0.0
+    model = args.switch_model if args.mode == "switch" else None
 
-    r3 = call(exe, "Reply exactly: OK-3", "P2_cold_resume", resume=sid)
-    r4 = call(exe, "Reply exactly: OK-4", "P3_model_switch_resume",
-              resume=sid, model="haiku")
+    results = []
+    for rep in range(1, args.reps + 1):
+        s = measure_one(exe, prefix, args.mode, rep, gap_s, model, ver)
+        if s:
+            results.append(s)
 
-    print("\n=== verdict hints ===", flush=True)
-    if isinstance(r2.get("cache_r"), int) and isinstance(r1.get("cache_w"), int):
-        ratio = r2["cache_r"] / max(1, (r1.get("cache_w") or 0) + (r1.get("cache_r") or 0))
-        print(f"P1 warm: cache_r(P1)/total_ctx(P0) = {ratio:.2f} "
-              "(≈1なら【A3】成立)", flush=True)
-    if isinstance(r3.get("cache_w"), int):
-        print(f"P2 cold: cache_w={r3['cache_w']} cache_r={r3.get('cache_r')} "
-              "(履歴ぶんwrite優勢ならcold損益どおり)", flush=True)
-    print("done. raw: resume_probe_results.jsonl", flush=True)
+    print("\n=== summary ===", flush=True)
+    for s in results:
+        print(f"  rep{s['rep']}: {s['verdict']:9s} gap={s['gap_actual_s']:.0f}s "
+              f"cost_ratio={s.get('cost_ratio_resume_over_init')}", flush=True)
+    verdicts = [s["verdict"] for s in results]
+    if verdicts:
+        warm_n = verdicts.count("warm")
+        print(f"  warm {warm_n}/{len(verdicts)}  (PROBE_PLAN §1 の生存割合として報告する)",
+              flush=True)
+    print(f"raw+verdict: {OUT}", flush=True)
     return 0
 
 
