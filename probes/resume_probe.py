@@ -25,6 +25,7 @@ import shutil
 import subprocess
 import sys
 import time
+import uuid
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -52,11 +53,19 @@ def cli_version(exe: str) -> str:
         return f"unknown ({exc})"
 
 
-def build_prefix() -> str:
-    return "## Project context (resume-probe)\n" + "\n".join(
-        f"- probe rule {i:04d}: keep interfaces stable, write focused tests, "
-        "never edit files outside declared scope." for i in range(PREFIX_LINES)
-    )
+def build_prefix(nonce: str) -> str:
+    """測定ごとに一意なプレフィックスを作る。
+
+    2026-07-31 の M1 で判明: 同一プレフィックスは**別セッションでも**プロバイダ側の
+    prefix cache にヒットする（rep2/rep3 の init が cache_w=0, cache_r=45,098 になった）。
+    これを放置すると「新規セッションが cache_write を払う」前提が崩れ、測定が無効になる。
+    キャッシュはプレフィックス一致で効くため、**先頭行**に一意な nonce を置いて必ず破る。
+    """
+    return (f"## Project context (resume-probe nonce={nonce})\n"
+            + "\n".join(
+                f"- probe rule {i:04d}: keep interfaces stable, write focused tests, "
+                "never edit files outside declared scope." for i in range(PREFIX_LINES)
+            ))
 
 
 def call(exe: str, prompt: str, label: str, meta: dict,
@@ -111,11 +120,17 @@ def classify(r0: dict, r1: dict) -> tuple[str, int]:
     return "ambiguous", h
 
 
-def measure_one(exe: str, prefix: str, mode: str, rep: int,
+def measure_one(exe: str, mode: str, rep: int,
                 gap_s: float, model: str | None, cli_ver: str) -> dict | None:
-    """1測定 = 1新規セッション（resume がキャッシュ寿命を延長するため必須）。"""
+    """1測定 = 1新規セッション + 一意プレフィックス。
+
+    - 新規セッション: resume がキャッシュ寿命を延長するため（cold 境界の過大評価を防ぐ）
+    - 一意プレフィックス: 別セッション間の prefix cache ヒットを防ぐ（2026-07-31 実測）
+    """
+    nonce = uuid.uuid4().hex[:12]
+    prefix = build_prefix(nonce)
     base = {"mode": mode, "rep": rep, "gap_planned_s": gap_s,
-            "cli_version": cli_ver, "prefix_lines": PREFIX_LINES}
+            "cli_version": cli_ver, "prefix_lines": PREFIX_LINES, "nonce": nonce}
 
     r0 = call(exe, prefix + "\n## Q\nReply exactly: OK-1",
               f"{mode}_r{rep}_init", base)
@@ -139,7 +154,7 @@ def measure_one(exe: str, prefix: str, mode: str, rep: int,
                "gap_actual_s": gap_actual, "H": h, "verdict": verdict,
                "cache_r_resume": r1.get("cache_r"), "cache_w_resume": r1.get("cache_w"),
                "cost_init_usd": r0.get("cost_usd"), "cost_resume_usd": r1.get("cost_usd"),
-               "cli_version": cli_ver, "model_flag": model}
+               "cli_version": cli_ver, "model_flag": model, "nonce": nonce}
     if r0.get("cost_usd") and r1.get("cost_usd"):
         summary["cost_ratio_resume_over_init"] = round(r1["cost_usd"] / r0["cost_usd"], 4)
     with OUT.open("a", encoding="utf-8") as f:
@@ -149,8 +164,9 @@ def measure_one(exe: str, prefix: str, mode: str, rep: int,
     return summary
 
 
-def run_legacy(exe: str, prefix: str, cli_ver: str) -> int:
+def run_legacy(exe: str, cli_ver: str) -> int:
     """旧来の単一セッション連続測定（既存結果の再現用。cold境界の測定には使わない）。"""
+    prefix = build_prefix(uuid.uuid4().hex[:12])
     base = {"mode": "legacy", "cli_version": cli_ver}
     r1 = call(exe, prefix + "\n## Q\nReply exactly: OK-1", "P0_initial", base)
     sid = r1.get("session_id")
@@ -178,12 +194,12 @@ def main() -> int:
         print("[ERROR] claude CLI not found", file=sys.stderr)
         return 1
     ver = cli_version(exe)
-    prefix = build_prefix()
-    print(f"claude={exe} version={ver} prefix_chars={len(prefix):,} "
-          f"mode={args.mode} reps={args.reps} gap_min={args.gap_min}", flush=True)
+    print(f"claude={exe} version={ver} prefix_lines={PREFIX_LINES} "
+          f"mode={args.mode} reps={args.reps} gap_min={args.gap_min} "
+          f"(prefix nonce per measurement)", flush=True)
 
     if args.mode == "legacy":
-        return run_legacy(exe, prefix, ver)
+        return run_legacy(exe, ver)
 
     if args.mode == "gap" and args.gap_min <= 0:
         print("[ERROR] --mode gap には --gap-min が必要", file=sys.stderr)
@@ -194,7 +210,7 @@ def main() -> int:
 
     results = []
     for rep in range(1, args.reps + 1):
-        s = measure_one(exe, prefix, args.mode, rep, gap_s, model, ver)
+        s = measure_one(exe, args.mode, rep, gap_s, model, ver)
         if s:
             results.append(s)
 
