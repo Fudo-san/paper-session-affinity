@@ -1,3 +1,10 @@
 claude=/home/fudo1/.local/bin/claude version=2.1.220 (Claude Code) prefix_lines=500 mode=gap reps=1 gap_min=15.0 (prefix nonce per measurement)
 [17:16:07] gap_r1_init: rc=0 in=2 cache_w=29386 cache_r=15912 cost=$0.1933156
 [WAIT] 900s (mode=gap rep=1)...
+[17:31:30] gap_r1_resume: rc=0 in=2 cache_w=29417 cache_r=15912 cost=$0.1813716
+  -> verdict=ambiguous H=45,298 gap_actual=917s cost_ratio=0.9382
+
+=== summary ===
+  rep1: ambiguous gap=917s cost_ratio=0.9382
+  warm 0/1  (PROBE_PLAN §1 の生存割合として報告する)
+raw+verdict: /home/fudo1/project/paper-session-affinity/probes/resume_probe_results.jsonl
