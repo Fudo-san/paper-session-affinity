@@ -1,0 +1,58 @@
+{
+  "sprint_id": "sprint_1",
+  "generated_at": "2026-08-01T00:00:00+09:00",
+  "tasks": [
+    {
+      "task_id": "T-17101",
+      "feature_id": "F-1",
+      "title": "summary の provider メタデータ migration",
+      "type": "implementation",
+      "description": "src/db.py に migrate_summary_provenance(db_path=DB_PATH) を追加する。既存の summaries テーブルへ provider TEXT / model TEXT / usage_id TEXT の 3列を追加する。既存の _ensure_column と同じ方針で、存在しない列だけを ALTER TABLE で追加し、冪等であること。既存行のデータを壊さないこと（新列は NULL のままでよい）。他のテーブルには触れない。UIは変更しない。受入テスト tests/sprint17_1/test_summary_provenance_migration.py は変更しないこと。",
+      "dependencies": [],
+      "artifacts": {
+        "creates": [],
+        "modifies": [
+          "src/db.py"
+        ],
+        "reads": []
+      },
+      "test_hints": [],
+      "estimated_effort_h": 1.0,
+      "prototype_required": false,
+      "status": "pending"
+    },
+    {
+      "task_id": "T-17102",
+      "feature_id": "F-1",
+      "title": "summary provenance の読み書きAPI",
+      "type": "implementation",
+      "description": "src/db.py に summary provenance の読み書きAPIを追加する（migrate_summary_provenance が前提）。(1) set_summary_provenance(item_id, provider=None, model=None, usage_id=None, db_path=DB_PATH): None でない引数だけを更新する。省略した項目は以前の値を保持すること。(2) get_summary_provenance(item_id, db_path=DB_PATH): provider / model / usage_id を持つ dict を返す。該当する summaries 行が無ければ None を返す。Runtime の利用台帳を複製せず、参照用IDだけを保存する。受入テスト tests/sprint17_1/test_summary_provenance_api.py は変更しないこと。",
+      "dependencies": [
+        "T-17101"
+      ],
+      "artifacts": {
+        "creates": [],
+        "modifies": [
+          "src/db.py"
+        ],
+        "reads": []
+      },
+      "test_hints": [],
+      "estimated_effort_h": 1.0,
+      "prototype_required": false,
+      "status": "pending"
+    }
+  ],
+  "dependency_graph": {
+    "T-17101": [],
+    "T-17102": [
+      "T-17101"
+    ]
+  },
+  "execution_batches": [],
+  "metadata": {
+    "errors": [],
+    "shape": "N",
+    "spec_id": "s17_n_db_chain"
+  }
+}

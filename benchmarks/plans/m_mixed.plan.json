@@ -1,0 +1,98 @@
+{
+  "sprint_id": "sprint_1",
+  "generated_at": "2026-08-01T00:00:00+09:00",
+  "tasks": [
+    {
+      "task_id": "T-1310",
+      "feature_id": "F-1",
+      "title": "ウィンドウタイトルの日本語化",
+      "type": "implementation",
+      "description": "src/ui/app.py のネイティブウィンドウタイトルを日本語化する。モジュールレベル定数 WINDOW_TITLE を定義し（値は日本語を含み、製品名 'Square Media' を残すこと）、self.title(\"Square Media\") を self.title(WINDOW_TITLE) に置き換える。記事タイトルの翻訳は範囲外。受入テスト tests/nightly/test_window_title.py は変更しないこと。",
+      "dependencies": [],
+      "artifacts": {
+        "creates": [],
+        "modifies": [
+          "src/ui/app.py"
+        ],
+        "reads": []
+      },
+      "test_hints": [],
+      "estimated_effort_h": 1.0,
+      "prototype_required": false,
+      "status": "pending"
+    },
+    {
+      "task_id": "T-1311",
+      "feature_id": "F-1",
+      "title": "reader_states テーブルの migration",
+      "type": "implementation",
+      "description": "src/db.py に migrate_reader_states(db_path=DB_PATH) を追加する。reader_states テーブル（列: item_id TEXT PRIMARY KEY, is_read INTEGER NOT NULL DEFAULT 0, is_saved INTEGER NOT NULL DEFAULT 0, is_skipped INTEGER NOT NULL DEFAULT 0, user_rating INTEGER, updated_at TEXT）を CREATE TABLE IF NOT EXISTS で作成し、冪等であること。既存テーブルには触れない。UIは変更しない。受入テスト tests/nightly/test_reader_states_migration.py は変更しないこと。",
+      "dependencies": [],
+      "artifacts": {
+        "creates": [],
+        "modifies": [
+          "src/db.py"
+        ],
+        "reads": []
+      },
+      "test_hints": [],
+      "estimated_effort_h": 1.0,
+      "prototype_required": false,
+      "status": "pending"
+    },
+    {
+      "task_id": "T-1312",
+      "feature_id": "F-1",
+      "title": "reader state の読み書きAPI",
+      "type": "implementation",
+      "description": "src/db.py に reader state の読み書きAPIを追加する（migrate_reader_states が前提）。(1) set_reader_state(item_id, db_path=DB_PATH, is_read=None, is_saved=None, is_skipped=None, user_rating=None): None でない引数だけを更新する upsert。省略した項目は以前の値を保持。updated_at に現在時刻のISO文字列を保存。(2) get_reader_state(item_id, db_path=DB_PATH): 該当行を dict で返す。無ければ None。受入テスト tests/nightly/test_reader_states_api.py は変更しないこと。",
+      "dependencies": [
+        "T-1311"
+      ],
+      "artifacts": {
+        "creates": [],
+        "modifies": [
+          "src/db.py"
+        ],
+        "reads": []
+      },
+      "test_hints": [],
+      "estimated_effort_h": 1.0,
+      "prototype_required": false,
+      "status": "pending"
+    },
+    {
+      "task_id": "T-1320",
+      "feature_id": "F-1",
+      "title": "可視テキスト抽出の純関数",
+      "type": "implementation",
+      "description": "新規ファイル src/security/html_text.py に純関数 to_visible_text(text) を実装する。HTMLまたはプレーンテキストを受け取り、人間に見える本文だけを返す。要件: (1) 数式やコード中の裸の '<'（例 'i<n'）で本文を切り捨てない。(2) 実在するHTMLタグ（<p> <video> <div> 等）は除去する。(3) <script> と <style> の中身は本文に含めない。(4) HTMLエンティティ（&amp; 等）はアンエスケープする。(5) 入力が None や空文字なら空文字を返す。ネットワーク・ファイルI/Oは行わない。標準ライブラリのみ。受入テスト tests/test_html_text.py は変更しないこと。",
+      "dependencies": [],
+      "artifacts": {
+        "creates": [
+          "src/security/html_text.py"
+        ],
+        "modifies": [],
+        "reads": []
+      },
+      "test_hints": [],
+      "estimated_effort_h": 1.0,
+      "prototype_required": false,
+      "status": "pending"
+    }
+  ],
+  "dependency_graph": {
+    "T-1310": [],
+    "T-1311": [],
+    "T-1312": [
+      "T-1311"
+    ],
+    "T-1320": []
+  },
+  "execution_batches": [],
+  "metadata": {
+    "errors": [],
+    "shape": "M",
+    "spec_id": "m_mixed"
+  }
+}

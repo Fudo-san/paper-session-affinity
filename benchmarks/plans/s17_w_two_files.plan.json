@@ -1,0 +1,54 @@
+{
+  "sprint_id": "sprint_1",
+  "generated_at": "2026-08-01T00:00:00+09:00",
+  "tasks": [
+    {
+      "task_id": "T-17101",
+      "feature_id": "F-1",
+      "title": "summary の provider メタデータ migration",
+      "type": "implementation",
+      "description": "src/db.py に migrate_summary_provenance(db_path=DB_PATH) を追加する。既存の summaries テーブルへ provider TEXT / model TEXT / usage_id TEXT の 3列を追加する。既存の _ensure_column と同じ方針で、存在しない列だけを ALTER TABLE で追加し、冪等であること。既存行のデータを壊さないこと（新列は NULL のままでよい）。他のテーブルには触れない。UIは変更しない。受入テスト tests/sprint17_1/test_summary_provenance_migration.py は変更しないこと。",
+      "dependencies": [],
+      "artifacts": {
+        "creates": [],
+        "modifies": [
+          "src/db.py"
+        ],
+        "reads": []
+      },
+      "test_hints": [],
+      "estimated_effort_h": 1.0,
+      "prototype_required": false,
+      "status": "pending"
+    },
+    {
+      "task_id": "T-17103",
+      "feature_id": "F-1",
+      "title": "安全処理とプロバイダ実行の分離",
+      "type": "implementation",
+      "description": "src/llm/safe_llm_runner.py の run_safe_llm() から、injection 検知と safe prompt 組み立て（STEP 1-2）を、CLI 実行（STEP 3以降）から切り離す。(1) PreparedCall dataclass を追加する: stdin_text: str, detection: DetectionResult, injection_detected: bool。(2) build_safe_prompt(request: LLMRequest) -> PreparedCall | None を追加する。firewall が call_llm=False と判定したら None を返し、プロバイダを呼ばない。この関数の中でサブプロセスを起動しないこと。(3) run_safe_llm() は build_safe_prompt() を使うよう書き換える。ただし戻り値 LLMResult と、command が list[str] でない場合に TypeError を送出する既存契約は変えないこと。SafePrompt という名前の型を新たに定義しないこと（src/security/prompt_firewall.py の同名の型をそのまま使う）。受入テスト tests/sprint17_1/test_safe_prompt_split.py は変更しないこと。",
+      "dependencies": [],
+      "artifacts": {
+        "creates": [],
+        "modifies": [
+          "src/llm/safe_llm_runner.py"
+        ],
+        "reads": []
+      },
+      "test_hints": [],
+      "estimated_effort_h": 1.0,
+      "prototype_required": false,
+      "status": "pending"
+    }
+  ],
+  "dependency_graph": {
+    "T-17101": [],
+    "T-17103": []
+  },
+  "execution_batches": [],
+  "metadata": {
+    "errors": [],
+    "shape": "W",
+    "spec_id": "s17_w_two_files"
+  }
+}

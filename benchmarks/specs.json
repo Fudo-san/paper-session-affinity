@@ -1,0 +1,101 @@
+{
+  "specs": [
+    {
+      "spec_id": "n_db_chain",
+      "shape": "N",
+      "repo": "/home/fudo1/project/square-media",
+      "commit": "d4449a0",
+      "plan": "/home/fudo1/project/paper-session-affinity/benchmarks/plans/n_db_chain.plan.json",
+      "verify": [
+        "python3",
+        "-m",
+        "pytest",
+        "-q",
+        "tests/nightly/test_reader_states_migration.py",
+        "tests/nightly/test_reader_states_api.py"
+      ],
+      "tasks_per_lane": 2
+    },
+    {
+      "spec_id": "w_two_files",
+      "shape": "W",
+      "repo": "/home/fudo1/project/square-media",
+      "commit": "d4449a0",
+      "plan": "/home/fudo1/project/paper-session-affinity/benchmarks/plans/w_two_files.plan.json",
+      "verify": [
+        "python3",
+        "-m",
+        "pytest",
+        "-q",
+        "tests/nightly/test_window_title.py",
+        "tests/test_html_text.py"
+      ],
+      "tasks_per_lane": 1
+    },
+    {
+      "spec_id": "m_mixed",
+      "shape": "M",
+      "repo": "/home/fudo1/project/square-media",
+      "commit": "d4449a0",
+      "plan": "/home/fudo1/project/paper-session-affinity/benchmarks/plans/m_mixed.plan.json",
+      "verify": [
+        "python3",
+        "-m",
+        "pytest",
+        "-q",
+        "tests/nightly/test_window_title.py",
+        "tests/nightly/test_reader_states_migration.py",
+        "tests/nightly/test_reader_states_api.py",
+        "tests/test_html_text.py"
+      ],
+      "tasks_per_lane": 2
+    },
+    {
+      "spec_id": "s17_n_db_chain",
+      "shape": "N",
+      "repo": "/home/fudo1/project/square-media",
+      "commit": "3be3676",
+      "plan": "/home/fudo1/project/paper-session-affinity/benchmarks/plans/s17_n_db_chain.plan.json",
+      "verify": [
+        "python3",
+        "-m",
+        "pytest",
+        "-q",
+        "tests/sprint17_1/test_summary_provenance_migration.py",
+        "tests/sprint17_1/test_summary_provenance_api.py"
+      ],
+      "tasks_per_lane": 2
+    },
+    {
+      "spec_id": "s17_w_two_files",
+      "shape": "W",
+      "repo": "/home/fudo1/project/square-media",
+      "commit": "3be3676",
+      "plan": "/home/fudo1/project/paper-session-affinity/benchmarks/plans/s17_w_two_files.plan.json",
+      "verify": [
+        "python3",
+        "-m",
+        "pytest",
+        "-q",
+        "tests/sprint17_1/test_summary_provenance_migration.py",
+        "tests/sprint17_1/test_safe_prompt_split.py"
+      ],
+      "tasks_per_lane": 1
+    },
+    {
+      "spec_id": "s17_m_mixed",
+      "shape": "M",
+      "repo": "/home/fudo1/project/square-media",
+      "commit": "3be3676",
+      "plan": "/home/fudo1/project/paper-session-affinity/benchmarks/plans/s17_m_mixed.plan.json",
+      "verify": [
+        "python3",
+        "-m",
+        "pytest",
+        "-q",
+        "tests/sprint17_1/"
+      ],
+      "tasks_per_lane": 2
+    }
+  ]
+}
