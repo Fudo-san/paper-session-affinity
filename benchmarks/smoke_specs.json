@@ -1,0 +1,20 @@
+{
+  "specs": [
+    {
+      "spec_id": "s17_n_db_chain",
+      "shape": "N",
+      "repo": "/home/fudo1/project/square-media",
+      "commit": "3be3676",
+      "plan": "/home/fudo1/project/paper-session-affinity/benchmarks/plans/s17_n_db_chain.plan.json",
+      "verify": [
+        "python3",
+        "-m",
+        "pytest",
+        "-q",
+        "tests/sprint17_1/test_summary_provenance_migration.py",
+        "tests/sprint17_1/test_summary_provenance_api.py"
+      ],
+      "tasks_per_lane": 2
+    }
+  ]
+}

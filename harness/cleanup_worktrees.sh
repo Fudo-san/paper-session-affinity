@@ -14,7 +14,7 @@ for REPO in "${REPOS[@]}"; do
   echo "=== $REPO ==="
   git -C "$REPO" worktree list --porcelain \
     | sed -n 's/^worktree //p' \
-    | grep -E '^/tmp/(paper_runs|m5_arm)' \
+    | grep -E '^/tmp/(paper_|m5_arm)' \
     | while IFS= read -r w; do
         echo "  remove $w"
         git -C "$REPO" worktree remove --force "$w" 2>/dev/null || rm -rf "$w"
@@ -23,5 +23,5 @@ for REPO in "${REPOS[@]}"; do
   git -C "$REPO" worktree list
 done
 
-rm -rf /tmp/paper_runs 2>/dev/null || true
+rm -rf /tmp/paper_* 2>/dev/null || true
 echo "=== 完了 ==="

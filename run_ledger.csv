@@ -1,0 +1,5 @@
+iso,run_id,spec,arm,rep,attempt,status,cost_usd,wall_s,accepted,cli_version,model,exclusion_reason,notes
+2026-08-02T02:47:12.493220+09:00,s17_n_db_chain_B_rep1,s17_n_db_chain,B,1,1,dry_run,,,,2.1.220 (Claude Code),,,dry-run（モデル未呼び出し）
+2026-08-02T02:47:12.629948+09:00,s17_n_db_chain_C_rep1,s17_n_db_chain,C,1,1,dry_run,,,,2.1.220 (Claude Code),,,dry-run（モデル未呼び出し）
+2026-08-02T02:50:25.270539+09:00,s17_n_db_chain_B_rep1,s17_n_db_chain,B,1,1,completed,0.7789778,148.9,1,2.1.220 (Claude Code),,,.......                                                                  [100%] 7 passed in 1.21s 
+2026-08-02T02:52:33.801913+09:00,s17_n_db_chain_C_rep1,s17_n_db_chain,C,1,1,completed,0.8284187000000001,128.3,1,2.1.220 (Claude Code),,,.......                                                                  [100%] 7 passed in 1.07s 
