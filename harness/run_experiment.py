@@ -89,6 +89,14 @@ def build_schedule(specs: list[dict], reps: int, seed: int) -> list[dict]:
 
     同一 spec の同一 rep で B と C を対にし、その順序を反復ごとに反転させる
     （ABBA）。仕様の実行順は seed 固定でランダム化する。
+
+    **アーム主体で並べる**（2026-08-02 変更）。以前は spec 主体で B と C を隣接させて
+    いたため、A5 汚染回避の cooldown が毎回まるごと sleep になっていた。
+    1 rep 内で「全仕様の第1アーム → 全仕様の第2アーム」の順に流せば、ある仕様の
+    B と C の間に他仕様の実行が挟まり、待ち時間が実作業で埋まる。
+    cooldown 判定は経過時間で見ているので、自然な間隔が足りていれば sleep しない。
+
+    アームと時間帯の交絡は rep ごとのアーム順反転（ABBA）が担う。
     """
     rng = random.Random(seed)
     units: list[dict] = []
@@ -96,8 +104,8 @@ def build_schedule(specs: list[dict], reps: int, seed: int) -> list[dict]:
         order = list(specs)
         rng.shuffle(order)
         arms = ("B", "C") if rep % 2 == 1 else ("C", "B")
-        for spec in order:
-            for arm in arms:
+        for arm in arms:
+            for spec in order:
                 units.append({"spec": spec, "arm": arm, "rep": rep})
     return units
 
@@ -133,7 +141,16 @@ def main() -> int:
     ap.add_argument("--workdir", default="/tmp/paper_runs")
     ap.add_argument("--dry-run", action="store_true",
                     help="スケジュールと隔離だけ行い、モデルを呼ばない")
+    ap.add_argument("--label", default="",
+                    help="実行フェーズ名（smoke/pilot/main）。出力先と台帳を分ける。"
+                         "既存フェーズの結果を上書きしないために必ず指定する")
     args = ap.parse_args()
+
+    # 台帳はフェーズごとに分ける。1本の CSV に列を足すと、既存ヘッダと
+    # 追記行の列数がずれて過去のデータが壊れるため。
+    global LEDGER
+    if args.label:
+        LEDGER = ROOT / f"run_ledger_{args.label}.csv"
 
     specs = load_specs(Path(args.specs))
     schedule = build_schedule(specs, args.reps, args.seed)
@@ -163,7 +180,8 @@ def main() -> int:
                 if not args.dry_run:
                     time.sleep(wait)
 
-        out_dir = ROOT / "runs" / spec["spec_id"] / arm / f"rep{rep}"
+        base = ROOT / "runs" / args.label if args.label else ROOT / "runs"
+        out_dir = base / spec["spec_id"] / arm / f"rep{rep}"
         out_dir.mkdir(parents=True, exist_ok=True)
         wt = prepare_worktree(spec, arm, rep, workdir)
         print(f"[{i}/{len(schedule)}] {run_id}  worktree={wt}")
