@@ -3,17 +3,17 @@
   "spec": "w_two_files",
   "arm": "B",
   "rep": 3,
-  "iso": "2026-08-02T15:15:42.688975+09:00",
+  "iso": "2026-08-02T20:40:55.452605+09:00",
   "cli_version": "2.1.220 (Claude Code)",
   "seed": 20260801,
   "usage_actual": {
-    "input_tokens": 18,
-    "output_tokens": 1405,
-    "cache_read_tokens": 422458,
-    "cache_creation_tokens": 37428,
-    "cost_usd": 0.37358740000000007
+    "input_tokens": 48,
+    "output_tokens": 9566,
+    "cache_read_tokens": 750335,
+    "cache_creation_tokens": 30355,
+    "cost_usd": 0.5532815
   },
-  "accepted": false,
-  "verify_tail": "^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\ntests/test_html_text.py:19: in <module>\n    from src.security.html_text import to_visible_text\nE   ModuleNotFoundError: No module named 'src.security.html_text'\n=========================== short test summary info ============================\nERROR tests/test_html_text.py\n!!!!!!!!!!!!!!!!!!!! Interrupted: 1 error during collection !!!!!!!!!!!!!!!!!!!!\n1 error in 0.15s\n",
-  "wall_s": 54.4
+  "accepted": true,
+  "verify_tail": ".................                                                        [100%]\n17 passed in 0.12s\n",
+  "wall_s": 127.7
 }
