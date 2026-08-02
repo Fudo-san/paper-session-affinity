@@ -196,6 +196,23 @@ def main() -> int:
         run_id = f"{spec['spec_id']}_{arm}_rep{rep}"
         key = (spec["spec_id"], rep)
 
+        base = ROOT / "runs" / args.label if args.label else ROOT / "runs"
+        out_dir = base / spec["spec_id"] / arm / f"rep{rep}"
+
+        # --- 再開 -----------------------------------------------------------
+        # 上限は今後も来る。当たるたびに全部やり直すのは費用が持たない。
+        # 有効な結果（cost>0）が既にある run は飛ばす。cost=0 の run は
+        # 空振りなので残さず、やり直す。
+        #
+        # **cooldown より前に判定する**。順序を逆にすると、既に終わっている run の
+        # ために12分眠ってから飛ばすことになる（2026-08-02 に実際に発生）。
+        # また、スキップした run で last_run_at を更新してはならない。
+        # 実際にモデルを叩いたのは過去の別プロセスであり、「たった今走った」
+        # 扱いにすると対アームへ不要な待機を課す。
+        if args.skip_done and is_run_valid(out_dir):
+            print(f"[{i}/{len(schedule)}] {run_id}  [SKIP] 有効な結果あり")
+            continue
+
         # --- A5 汚染対策: 同一 spec/rep の対アームからクールダウンを空ける ---
         prev = last_run_at.get(key)
         if prev is not None:
@@ -204,18 +221,6 @@ def main() -> int:
                 print(f"  [COOLDOWN] {run_id}: {wait/60:.1f}分待機（A5 汚染回避）")
                 if not args.dry_run:
                     time.sleep(wait)
-
-        base = ROOT / "runs" / args.label if args.label else ROOT / "runs"
-        out_dir = base / spec["spec_id"] / arm / f"rep{rep}"
-
-        # --- 再開 -----------------------------------------------------------
-        # 上限は今後も来る。当たるたびに全部やり直すのは費用が持たない。
-        # 有効な結果（cost>0）が既にある run は飛ばす。cost=0 の run は
-        # 空振りなので残さず、やり直す。
-        if args.skip_done and is_run_valid(out_dir):
-            print(f"[{i}/{len(schedule)}] {run_id}  [SKIP] 有効な結果あり")
-            last_run_at[key] = time.time()
-            continue
 
         out_dir.mkdir(parents=True, exist_ok=True)
         wt = prepare_worktree(spec, arm, rep, workdir)
