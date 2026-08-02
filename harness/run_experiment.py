@@ -74,10 +74,17 @@ def append_ledger(row: dict) -> None:
         w.writerow({k: row.get(k, "") for k in LEDGER_FIELDS})
 
 
-def is_run_valid(out_dir: Path) -> bool:
-    """その run が実際にモデルを呼んで完走しているか。
+def is_run_valid(out_dir: Path, n_tasks: int) -> bool:
+    """その run が実際にモデルを呼んで**全タスク**を回しているか。
 
     cost=0 は空振り（上限・認証切れ）なので「済み」と見なさない。
+
+    cost>0 だけでは足りない。4タスク中1タスクだけ実行できた run も cost>0 に
+    なり、「有効な観測」として集計へ入ってしまう（2026-08-02 に m_mixed C rep3 と
+    w_two_files B rep3 で発生。一方は C を、もう一方は B を不当に安く見せ、
+    相対差を ±40〜85% 動かしていた）。計画したタスク数だけ呼び出しがあることを
+    条件にする。
+
     accepted の真偽は問わない。受入に落ちること自体は正当な観測である。
     """
     rj = out_dir / "run.json"
@@ -87,7 +94,13 @@ def is_run_valid(out_dir: Path) -> bool:
         d = json.loads(rj.read_text(encoding="utf-8"))
     except Exception:
         return False
-    return float((d.get("usage_actual") or {}).get("cost_usd") or 0) > 0
+    if float((d.get("usage_actual") or {}).get("cost_usd") or 0) <= 0:
+        return False
+    cj = out_dir / "calls.jsonl"
+    if not cj.exists():
+        return False
+    n_call = len([x for x in cj.read_text(encoding="utf-8").splitlines() if x.strip()])
+    return n_call >= n_tasks
 
 
 def load_specs(path: Path) -> list[dict]:
@@ -209,7 +222,9 @@ def main() -> int:
         # また、スキップした run で last_run_at を更新してはならない。
         # 実際にモデルを叩いたのは過去の別プロセスであり、「たった今走った」
         # 扱いにすると対アームへ不要な待機を課す。
-        if args.skip_done and is_run_valid(out_dir):
+        n_tasks = len(json.loads(
+            Path(spec["plan"]).read_text(encoding="utf-8"))["tasks"])
+        if args.skip_done and is_run_valid(out_dir, n_tasks):
             print(f"[{i}/{len(schedule)}] {run_id}  [SKIP] 有効な結果あり")
             continue
 
@@ -288,6 +303,15 @@ def main() -> int:
             # トークン0・wall 3秒の run が `completed` として記録され、
             # ドライバは残り25本を空回しし、何もしないまま 12分の cooldown を
             # 2回眠った。モデルを1回も呼べていない run は即座に打ち切る。
+            n_logged = 0
+            _cj = out_dir / "calls.jsonl"
+            if _cj.exists():
+                n_logged = len([x for x in _cj.read_text(encoding="utf-8").splitlines()
+                                if x.strip()])
+            if cost and n_logged < n_tasks:
+                raise NoModelCallError(
+                    f"部分実行: {n_logged}/{n_tasks} タスクしかモデルを呼べなかった。"
+                    f"観測として扱ってはならない")
             if not cost:
                 raise NoModelCallError(
                     f"モデル呼び出しが記録されなかった（cost=0, "
