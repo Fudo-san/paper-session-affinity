@@ -1,0 +1,19 @@
+{
+  "run_id": "s17_m_mixed_B_rep3",
+  "spec": "s17_m_mixed",
+  "arm": "B",
+  "rep": 3,
+  "iso": "2026-08-02T04:17:29.258230+09:00",
+  "cli_version": "2.1.220 (Claude Code)",
+  "seed": 20260801,
+  "usage_actual": {
+    "input_tokens": 0,
+    "output_tokens": 0,
+    "cache_read_tokens": 0,
+    "cache_creation_tokens": 0,
+    "cost_usd": 0.0
+  },
+  "accepted": false,
+  "verify_tail": "t17_1/test_summary_provenance_api.py::test_get_before_any_set_returns_null_fields\nFAILED tests/sprint17_1/test_summary_provenance_migration.py::test_migration_adds_provenance_columns\nFAILED tests/sprint17_1/test_summary_provenance_migration.py::test_migration_is_idempotent\nFAILED tests/sprint17_1/test_summary_provenance_migration.py::test_existing_summary_rows_survive\n11 failed, 2 passed in 1.11s\n",
+  "wall_s": 4.2
+}

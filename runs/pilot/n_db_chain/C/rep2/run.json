@@ -1,0 +1,19 @@
+{
+  "run_id": "n_db_chain_C_rep2",
+  "spec": "n_db_chain",
+  "arm": "C",
+  "rep": 2,
+  "iso": "2026-08-02T04:05:07.334773+09:00",
+  "cli_version": "2.1.220 (Claude Code)",
+  "seed": 20260801,
+  "usage_actual": {
+    "input_tokens": 0,
+    "output_tokens": 0,
+    "cache_read_tokens": 0,
+    "cache_creation_tokens": 0,
+    "cost_usd": 0.0
+  },
+  "accepted": false,
+  "verify_tail": "n.py::test_migration_preserves_existing_data\nFAILED tests/nightly/test_reader_states_api.py::test_get_returns_none_for_unknown_item\nFAILED tests/nightly/test_reader_states_api.py::test_set_then_get_round_trip\nFAILED tests/nightly/test_reader_states_api.py::test_partial_update_preserves_other_fields\nFAILED tests/nightly/test_reader_states_api.py::test_states_are_isolated_per_item\n7 failed in 0.72s\n",
+  "wall_s": 3.5
+}

@@ -30,12 +30,19 @@ import shutil
 import subprocess
 import sys
 import time
+import uuid
 from datetime import datetime, timezone
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent          # paper-session-affinity/
 FRAMEWORK = Path.home() / "project" / "旧agent-framework"
 LEDGER = ROOT / "run_ledger.csv"
+# 対象リポジトリの実在スプリントと衝突させないための実験専用 ID。
+SPRINT_ID = "sprint_exp"
+
+
+class NoModelCallError(RuntimeError):
+    """モデルを1回も呼べずに run が終わった。上限・認証切れ・provider 枯渇。"""
 LEDGER_FIELDS = [
     "iso", "run_id", "spec", "arm", "rep", "attempt", "status",
     "cost_usd", "wall_s", "accepted", "cli_version", "model",
@@ -65,6 +72,22 @@ def append_ledger(row: dict) -> None:
         if not exists:
             w.writeheader()
         w.writerow({k: row.get(k, "") for k in LEDGER_FIELDS})
+
+
+def is_run_valid(out_dir: Path) -> bool:
+    """その run が実際にモデルを呼んで完走しているか。
+
+    cost=0 は空振り（上限・認証切れ）なので「済み」と見なさない。
+    accepted の真偽は問わない。受入に落ちること自体は正当な観測である。
+    """
+    rj = out_dir / "run.json"
+    if not rj.exists():
+        return False
+    try:
+        d = json.loads(rj.read_text(encoding="utf-8"))
+    except Exception:
+        return False
+    return float((d.get("usage_actual") or {}).get("cost_usd") or 0) > 0
 
 
 def load_specs(path: Path) -> list[dict]:
@@ -141,6 +164,8 @@ def main() -> int:
     ap.add_argument("--workdir", default="/tmp/paper_runs")
     ap.add_argument("--dry-run", action="store_true",
                     help="スケジュールと隔離だけ行い、モデルを呼ばない")
+    ap.add_argument("--skip-done", action="store_true",
+                    help="有効な結果（cost>0）が既にある run を飛ばして再開する")
     ap.add_argument("--label", default="",
                     help="実行フェーズ名（smoke/pilot/main）。出力先と台帳を分ける。"
                          "既存フェーズの結果を上書きしないために必ず指定する")
@@ -182,6 +207,16 @@ def main() -> int:
 
         base = ROOT / "runs" / args.label if args.label else ROOT / "runs"
         out_dir = base / spec["spec_id"] / arm / f"rep{rep}"
+
+        # --- 再開 -----------------------------------------------------------
+        # 上限は今後も来る。当たるたびに全部やり直すのは費用が持たない。
+        # 有効な結果（cost>0）が既にある run は飛ばす。cost=0 の run は
+        # 空振りなので残さず、やり直す。
+        if args.skip_done and is_run_valid(out_dir):
+            print(f"[{i}/{len(schedule)}] {run_id}  [SKIP] 有効な結果あり")
+            last_run_at[key] = time.time()
+            continue
+
         out_dir.mkdir(parents=True, exist_ok=True)
         wt = prepare_worktree(spec, arm, rep, workdir)
         print(f"[{i}/{len(schedule)}] {run_id}  worktree={wt}")
@@ -202,25 +237,57 @@ def main() -> int:
             from fwcore.calls_log import CallsLogger      # noqa: E402
             from fwcore.sprint import SprintOrchestrator  # noqa: E402
 
-            plan_src = Path(spec["plan"])
-            plan_dst = wt / "sprints" / "sprint_1" / "plan.json"
-            plan_dst.parent.mkdir(parents=True, exist_ok=True)
-            plan_dst.write_text(plan_src.read_text(encoding="utf-8"), encoding="utf-8")
+            # 実験専用の sprint id を使う。対象リポジトリには実在の sprint_1 が
+            # あり、その sprints/sprint_1/ には sprint_done.json と過去の results/
+            # が入っている。sprint_done.json は fwcore/sprint.py の
+            # is_sprint_done() で SKIP を引き起こすため、衝突させてはならない。
+            # 毎回まっさらから始めるためにディレクトリごと作り直す。
+            sprint_dir = wt / "sprints" / SPRINT_ID
+            if sprint_dir.exists():
+                shutil.rmtree(sprint_dir)
+            sprint_dir.mkdir(parents=True, exist_ok=True)
+            (sprint_dir / "plan.json").write_text(
+                Path(spec["plan"]).read_text(encoding="utf-8"), encoding="utf-8")
 
             orch = SprintOrchestrator(
                 wt, framework_root=FRAMEWORK,
                 session_mode=("lane" if arm == "C" else "fresh"),
             )
+            # --- provider フォールバックの遮断（2026-08-02）--------------------
+            # ProviderScheduler は primary が落ちると既定で codex へ落ちる
+            # （mk2_config providers.fallback の既定値が "codex"）。
+            # 実験でこれが起きると、
+            #   - CodexCliBackend.supports_resume = False なので
+            #     **アームCが黙ってアームB相当に成り下がる**
+            #   - モデルが変わるのでコストが比較不能になる
+            # いずれも記録上は「成功した run」に見えてしまう。
+            # 実験中は落とさず、落ちたら空振りとして中断させる。
+            orch.runner.provider_scheduler.fallback = None
+
             orch.runner.calls_logger = CallsLogger(
                 out_dir / "calls.jsonl", spec=spec["spec_id"], arm=arm, rep=rep)
+            # run ごとに一意。run をまたぐ prefix cache 共有を遮断する（A5）。
+            orch.runner.run_nonce = f"{run_id}-{uuid.uuid4().hex[:12]}"
 
             # plan.json → SprintPlan は ArtifactStore.load_plan が正本
             # （SprintPlan.from_dict は存在しない。2026-08-01 実確認）
-            plan = orch.store.load_plan("sprint_1")
+            plan = orch.store.load_plan(SPRINT_ID)
 
-            asyncio.run(orch.development_phase("sprint_1", plan))
+            asyncio.run(orch.development_phase(SPRINT_ID, plan))
             totals = orch.runner.metrics.usage_totals()
             cost = totals.get("cost_usd", 0.0)
+
+            # --- 空振り検知 ---------------------------------------------------
+            # 2026-08-02: 利用上限に当たった際、backend がすぐ失敗を返し、
+            # development_phase は例外を出さずに戻る。その結果 cost=0・
+            # トークン0・wall 3秒の run が `completed` として記録され、
+            # ドライバは残り25本を空回しし、何もしないまま 12分の cooldown を
+            # 2回眠った。モデルを1回も呼べていない run は即座に打ち切る。
+            if not cost:
+                raise NoModelCallError(
+                    f"モデル呼び出しが記録されなかった（cost=0, "
+                    f"tokens={totals.get('cache_read_tokens', 0)}）。"
+                    f"利用上限・認証切れ・provider 枯渇の可能性がある")
             ok, tail = run_verify(wt, spec["verify"])
             accepted = "1" if ok else "0"
             status = "completed"
@@ -231,6 +298,19 @@ def main() -> int:
                 "usage_actual": totals, "accepted": ok, "verify_tail": tail,
                 "wall_s": round(time.time() - t0, 1),
             }, ensure_ascii=False, indent=2), encoding="utf-8")
+        except NoModelCallError as exc:
+            note = f"NoModelCallError: {exc}"[:300]
+            append_ledger({
+                "iso": now_iso(), "run_id": run_id, "spec": spec["spec_id"], "arm": arm,
+                "rep": rep, "attempt": 1, "status": "aborted", "cost_usd": 0,
+                "wall_s": round(time.time() - t0, 1), "accepted": "",
+                "cli_version": ver, "notes": note,
+            })
+            print(f"\n[ABORT] {run_id}: {note}", file=sys.stderr)
+            print("  空振りを検出したので中断する。原因を解消してから、"
+                  "同じコマンドに --skip-done を付けて再開すること。", file=sys.stderr)
+            print(f"\n台帳: {LEDGER}")
+            return 2
         except Exception as exc:
             status, note = "error", f"{type(exc).__name__}: {exc}"[:300]
             print(f"  [ERROR] {run_id}: {note}", file=sys.stderr)
