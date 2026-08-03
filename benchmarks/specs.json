@@ -1,6 +1,23 @@
 {
   "specs": [
     {
+      "spec_id": "ct_library",
+      "shape": "CT",
+      "repo": "/home/fudo1/project/square-media",
+      "commit": "6f5b695",
+      "plan": "/home/fudo1/project/paper-session-affinity/benchmarks/plans/ct_library.plan.json",
+      "verify": [
+        "python3",
+        "-m",
+        "pytest",
+        "-q",
+        "tests/nightly/test_library_language.py",
+        "tests/nightly/test_library_relevance_filter.py",
+        "tests/nightly/test_library_search_relevance.py"
+      ],
+      "tasks_per_lane": 3
+    },
+    {
       "spec_id": "n_db_chain",
       "shape": "N",
       "repo": "/home/fudo1/project/square-media",

@@ -149,7 +149,71 @@ PYTEST = ["python3", "-m", "pytest", "-q"]
 
 S17 = "tests/sprint17_1/"
 
+# --- 系列3: Contended（2026-08-04 追加。TODO R6 / CONTENDED_DESIGN.md）--------
+# W/N/M ではレーン方式の代償（過剰直列化）が構造的にゼロになる（W は 1レーン1タスクで
+# resume が起きず、N は依存関係で既に直列）。**依存が無いのに write-scope が交差する**
+# 形状が Contended であり、ここで初めて「並列度を捨てて文脈を再利用する」交換を測れる。
+#   A∩B = {builder.py} / B∩C = {indexer.py} / A∩C = ∅  → 連結成分は1つ
+#   アームB: A と C が並列実行できる（2単位）/ アームC: 全直列（3単位）
+# 同一ファイルを共有する対でも触る関数は分けてある（file 粒度の連結成分が過剰である実体）。
+# 受入テストは square-media 6f5b695 で「テスト有・実装無」に固定済み。
+BASE_COMMIT_CT = "6f5b695"
+CTN = "tests/nightly/"
+
+CT_A = dict(
+    task_id="CT-A",
+    title="LibraryRecord に language を追加",
+    creates=[], modifies=["src/library/schema.py", "src/library/builder.py"], deps=[],
+    description=(
+        "src/library/schema.py の LibraryRecord に language フィールドを追加する。"
+        "(1) 許容値の定数 LANGUAGE_OPTIONS を定義し、少なくとも 'ja' と 'en' を含める。"
+        "(2) language の既定値は 'ja'。(3) validate_library_record_fields で "
+        "LANGUAGE_OPTIONS 外の値を検証エラーにする（LibraryRecord 生成時に "
+        "ValueError になる）。(4) to_dict() の出力に language を含める。"
+        "(5) src/library/builder.py の _row_to_record が row の 'language' を "
+        "反映し、欠損時は既定値にする。既存フィールドの出力は変更しないこと。"
+        "受入テスト tests/nightly/test_library_language.py は変更しないこと。"
+    ),
+)
+
+CT_B = dict(
+    task_id="CT-B",
+    title="relevance フィルタを builder と indexer に通す",
+    creates=[], modifies=["src/library/builder.py", "src/library/indexer.py"], deps=[],
+    description=(
+        "relevance による絞り込みを追加する。"
+        "(1) src/library/builder.py に純関数 filter_records(records, relevance=None) "
+        "を追加する。records は dict のリスト。relevance が None なら順序を保って素通し、"
+        "文字列なら一致するものだけ、文字列のリストならいずれかに一致するものだけを返す。"
+        "(2) src/library/indexer.py の build_index に relevance 引数を追加し、"
+        "同じ基準で索引対象を絞る（既定 None のときは従来と同一件数）。"
+        "_row_to_record には触れないこと（別タスクの担当）。"
+        "受入テスト tests/nightly/test_library_relevance_filter.py は変更しないこと。"
+    ),
+)
+
+CT_C = dict(
+    task_id="CT-C",
+    title="search_library に relevance 絞り込みを追加",
+    creates=[], modifies=["src/library/indexer.py"], deps=[],
+    description=(
+        "src/library/indexer.py の search_library に relevance 引数を追加する。"
+        "既定 None では従来と同じ結果を返す（後方互換）。文字列ならその relevance の"
+        "結果だけ、文字列のリストならいずれかに一致する結果だけを返す。"
+        "limit は絞り込みの後に適用すること。build_index には触れないこと"
+        "（別タスクの担当）。"
+        "受入テスト tests/nightly/test_library_search_relevance.py は変更しないこと。"
+    ),
+)
+
 SPECS = [
+    dict(spec_id="ct_library", shape="CT", tasks=[CT_A, CT_B, CT_C],
+         commit=BASE_COMMIT_CT,
+         verify=PYTEST + [CTN + "test_library_language.py",
+                          CTN + "test_library_relevance_filter.py",
+                          CTN + "test_library_search_relevance.py"],
+         expect_lanes={"lane_count": 1, "max_tasks_per_lane": 3}),
+
     dict(spec_id="n_db_chain", shape="N", tasks=[T1311, T1312],
          verify=PYTEST + ["tests/nightly/test_reader_states_migration.py",
                           "tests/nightly/test_reader_states_api.py"],
