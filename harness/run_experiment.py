@@ -182,6 +182,11 @@ def main() -> int:
     ap.add_argument("--label", default="",
                     help="実行フェーズ名（smoke/pilot/main）。出力先と台帳を分ける。"
                          "既存フェーズの結果を上書きしないために必ず指定する")
+    ap.add_argument("--only-spec", default="",
+                    help="この spec_id だけを回す（カンマ区切り可）。CT 単独パイロット用")
+    ap.add_argument("--stream-json", action="store_true",
+                    help="A11: per-turn usage を取る（H の軌跡・num_turns が calls.jsonl に入る）。"
+                         "既定 off。R1 の較正と C′ の閾値判定に必要")
     args = ap.parse_args()
 
     # 台帳はフェーズごとに分ける。1本の CSV に列を足すと、既存ヘッダと
@@ -191,6 +196,14 @@ def main() -> int:
         LEDGER = ROOT / f"run_ledger_{args.label}.csv"
 
     specs = load_specs(Path(args.specs))
+    if args.only_spec:
+        wanted = {s.strip() for s in args.only_spec.split(",") if s.strip()}
+        specs = [s for s in specs if s["spec_id"] in wanted]
+        missing = wanted - {s["spec_id"] for s in specs}
+        if missing:
+            print(f"[ERROR] 指定した spec が見つからない: {sorted(missing)}", file=sys.stderr)
+            return 1
+        print(f"[FILTER] --only-spec {sorted(wanted)} → {len(specs)} spec")
     schedule = build_schedule(specs, args.reps, args.seed)
     workdir = Path(args.workdir)
     workdir.mkdir(parents=True, exist_ok=True)
@@ -283,6 +296,12 @@ def main() -> int:
             # いずれも記録上は「成功した run」に見えてしまう。
             # 実験中は落とさず、落ちたら空振りとして中断させる。
             orch.runner.provider_scheduler.fallback = None
+
+            # --- A11: per-turn usage（2026-08-04）------------------------------
+            # H_i の軌跡と K_j はタスク単位の合計からは取れない（sec3 §3.8.3）。
+            # stream-json は既定 off なので、明示指定のときだけ有効にする。
+            if args.stream_json:
+                orch.runner.provider_scheduler.primary.stream_json = True
 
             orch.runner.calls_logger = CallsLogger(
                 out_dir / "calls.jsonl", spec=spec["spec_id"], arm=arm, rep=rep)
