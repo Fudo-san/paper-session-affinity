@@ -1,0 +1,6 @@
+iso,run_id,spec,arm,rep,attempt,status,cost_usd,wall_s,accepted,cli_version,model,exclusion_reason,notes
+2026-08-24T22:07:55.978135+09:00,ct_library_B_rep1,ct_library,B,1,1,dry_run,,,,2.1.220 (Claude Code),,,dry-run（モデル未呼び出し）
+2026-08-24T22:07:56.091618+09:00,ct_library_C_rep1,ct_library,C,1,1,dry_run,,,,2.1.220 (Claude Code),,,dry-run（モデル未呼び出し）
+2026-08-24T22:08:03.297047+09:00,ct_library_B_rep1,ct_library,B,1,1,aborted,0,0.3,,2.1.220 (Claude Code),,,"NoModelCallError: モデル呼び出しが記録されなかった（cost=0, tokens=0）。利用上限・認証切れ・provider 枯渇の可能性がある"
+2026-08-24T22:33:46.436561+09:00,ct_library_B_rep1,ct_library,B,1,1,completed,0.9587220999999999,98.1,1,2.1.220 (Claude Code),,,...................                                                      [100%] 19 passed in 0.27s 
+2026-08-24T22:48:30.819351+09:00,ct_library_C_rep1,ct_library,C,1,1,completed,1.207953,178.5,1,2.1.220 (Claude Code),,,...................                                                      [100%] 19 passed in 0.31s 
