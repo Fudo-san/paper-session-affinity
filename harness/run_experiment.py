@@ -187,6 +187,10 @@ def main() -> int:
     ap.add_argument("--stream-json", action="store_true",
                     help="A11: per-turn usage を取る（H の軌跡・num_turns が calls.jsonl に入る）。"
                          "既定 off。R1 の較正と C′ の閾値判定に必要")
+    ap.add_argument("--only-arm", default="", choices=["", "B", "C"],
+                    help="このアームだけ回す。**R1 の較正専用**——§3.8.4 は "
+                         "「r̂ の較正にパイロットの C/B 比を使わない」と定めており、"
+                         "B 側だけを独立に走らせるために使う。本実験では使わない")
     args = ap.parse_args()
 
     # 台帳はフェーズごとに分ける。1本の CSV に列を足すと、既存ヘッダと
@@ -205,6 +209,9 @@ def main() -> int:
             return 1
         print(f"[FILTER] --only-spec {sorted(wanted)} → {len(specs)} spec")
     schedule = build_schedule(specs, args.reps, args.seed)
+    if args.only_arm:
+        schedule = [u for u in schedule if u["arm"] == args.only_arm]
+        print(f"[FILTER] --only-arm {args.only_arm} → {len(schedule)} unit")
     workdir = Path(args.workdir)
     workdir.mkdir(parents=True, exist_ok=True)
     ver = cli_version()

@@ -1,0 +1,545 @@
+{
+  "generated_by": "analysis/calibrate.py",
+  "calibration_source": "runs/calib",
+  "note": "アームB のみから較正した。パイロットの C/B 比は入力に含まない（§3.8.4）。",
+  "operational_definition": {
+    "E": "最初に編集系ツール（Write/Edit/NotebookEdit/MultiEdit）を呼ぶまでのターン群",
+    "W": "それ以降のターン群",
+    "S": "そのランで観測された1ターンあたり context の最小値",
+    "rho": "レーン2件目以降は 1（初回 resume で書き直しが起きる側に倒す）"
+  },
+  "alpha_r": 0.1,
+  "alpha_w": 1.25,
+  "specs": {
+    "ct_library": {
+      "lanes": {
+        "lane-CT-A": [
+          "CT-A",
+          "CT-B",
+          "CT-C"
+        ]
+      },
+      "calibration": [
+        {
+          "task_id": "CT-C",
+          "K": 12,
+          "K_E": 2,
+          "K_W": 10,
+          "S_hat": 27783,
+          "E_tokens": 2870,
+          "W_tokens": 83854,
+          "peak_context": 38854,
+          "cost_usd": 0.3014358,
+          "model": "claude-sonnet-5",
+          "edit_tool_seen": true
+        },
+        {
+          "task_id": "CT-A",
+          "K": 17,
+          "K_E": 3,
+          "K_W": 13,
+          "S_hat": 28051,
+          "E_tokens": 13557,
+          "W_tokens": 136762,
+          "peak_context": 41409,
+          "cost_usd": 0.3627418,
+          "model": "claude-sonnet-5",
+          "edit_tool_seen": true
+        },
+        {
+          "task_id": "CT-B",
+          "K": 15,
+          "K_E": 3,
+          "K_W": 10,
+          "S_hat": 28057,
+          "E_tokens": 20282,
+          "W_tokens": 136313,
+          "peak_context": 42908,
+          "cost_usd": 0.3434424,
+          "model": "claude-sonnet-5",
+          "edit_tool_seen": true
+        }
+      ],
+      "prediction": {
+        "r_hat": 1.5575,
+        "total_B": 1.0076,
+        "total_C_pred": 1.5694,
+        "tasks": [
+          {
+            "task_id": "CT-A",
+            "lane": "lane-CT-A",
+            "pos": 0,
+            "H_prev": null,
+            "rho": 0,
+            "cost_B": 0.3627,
+            "cost_C_pred": 0.3627
+          },
+          {
+            "task_id": "CT-B",
+            "lane": "lane-CT-A",
+            "pos": 1,
+            "H_prev": 41409,
+            "rho": 1,
+            "cost_B": 0.3434,
+            "cost_C_pred": 0.6293
+          },
+          {
+            "task_id": "CT-C",
+            "lane": "lane-CT-A",
+            "pos": 2,
+            "H_prev": 42908,
+            "rho": 1,
+            "cost_B": 0.3014,
+            "cost_C_pred": 0.5773
+          }
+        ]
+      }
+    },
+    "m_mixed": {
+      "lanes": {
+        "lane-T-1310": [
+          "T-1310"
+        ],
+        "lane-T-1311": [
+          "T-1311",
+          "T-1312"
+        ],
+        "lane-T-1320": [
+          "T-1320"
+        ]
+      },
+      "calibration": [
+        {
+          "task_id": "T-1311",
+          "K": 10,
+          "K_E": 3,
+          "K_W": 6,
+          "S_hat": 27831,
+          "E_tokens": 6869,
+          "W_tokens": 34957,
+          "peak_context": 34323,
+          "cost_usd": 0.17694919999999997,
+          "model": "claude-sonnet-5",
+          "edit_tool_seen": true
+        },
+        {
+          "task_id": "T-1310",
+          "K": 11,
+          "K_E": 3,
+          "K_W": 8,
+          "S_hat": 27766,
+          "E_tokens": 2157,
+          "W_tokens": 30109,
+          "peak_context": 32332,
+          "cost_usd": 0.17831659999999996,
+          "model": "claude-sonnet-5",
+          "edit_tool_seen": true
+        },
+        {
+          "task_id": "T-1320",
+          "K": 11,
+          "K_E": 4,
+          "K_W": 7,
+          "S_hat": 27871,
+          "E_tokens": 8997,
+          "W_tokens": 64034,
+          "peak_context": 38342,
+          "cost_usd": 0.331532,
+          "model": "claude-sonnet-5",
+          "edit_tool_seen": true
+        },
+        {
+          "task_id": "T-1312",
+          "K": 10,
+          "K_E": 2,
+          "K_W": 8,
+          "S_hat": 28175,
+          "E_tokens": 15811,
+          "W_tokens": 166275,
+          "peak_context": 51107,
+          "cost_usd": 0.39882369999999995,
+          "model": "claude-sonnet-5",
+          "edit_tool_seen": true
+        }
+      ],
+      "prediction": {
+        "r_hat": 1.1806,
+        "total_B": 1.0856,
+        "total_C_pred": 1.2817,
+        "tasks": [
+          {
+            "task_id": "T-1310",
+            "lane": "lane-T-1310",
+            "pos": 0,
+            "H_prev": null,
+            "rho": 0,
+            "cost_B": 0.1783,
+            "cost_C_pred": 0.1783
+          },
+          {
+            "task_id": "T-1311",
+            "lane": "lane-T-1311",
+            "pos": 0,
+            "H_prev": null,
+            "rho": 0,
+            "cost_B": 0.1769,
+            "cost_C_pred": 0.1769
+          },
+          {
+            "task_id": "T-1312",
+            "lane": "lane-T-1311",
+            "pos": 1,
+            "H_prev": 34323,
+            "rho": 1,
+            "cost_B": 0.3988,
+            "cost_C_pred": 0.5949
+          },
+          {
+            "task_id": "T-1320",
+            "lane": "lane-T-1320",
+            "pos": 0,
+            "H_prev": null,
+            "rho": 0,
+            "cost_B": 0.3315,
+            "cost_C_pred": 0.3315
+          }
+        ]
+      }
+    },
+    "n_db_chain": {
+      "lanes": {
+        "lane-T-1311": [
+          "T-1311",
+          "T-1312"
+        ]
+      },
+      "calibration": [
+        {
+          "task_id": "T-1311",
+          "K": 10,
+          "K_E": 2,
+          "K_W": 7,
+          "S_hat": 27996,
+          "E_tokens": 257,
+          "W_tokens": 127465,
+          "peak_context": 47100,
+          "cost_usd": 0.3096778,
+          "model": "claude-sonnet-5",
+          "edit_tool_seen": true
+        },
+        {
+          "task_id": "T-1312",
+          "K": 12,
+          "K_E": 3,
+          "K_W": 8,
+          "S_hat": 28177,
+          "E_tokens": 2935,
+          "W_tokens": 38713,
+          "peak_context": 34220,
+          "cost_usd": 0.24024949999999995,
+          "model": "claude-sonnet-5",
+          "edit_tool_seen": true
+        }
+      ],
+      "prediction": {
+        "r_hat": 1.5251,
+        "total_B": 0.5499,
+        "total_C_pred": 0.8387,
+        "tasks": [
+          {
+            "task_id": "T-1311",
+            "lane": "lane-T-1311",
+            "pos": 0,
+            "H_prev": null,
+            "rho": 0,
+            "cost_B": 0.3097,
+            "cost_C_pred": 0.3097
+          },
+          {
+            "task_id": "T-1312",
+            "lane": "lane-T-1311",
+            "pos": 1,
+            "H_prev": 47100,
+            "rho": 1,
+            "cost_B": 0.2402,
+            "cost_C_pred": 0.529
+          }
+        ]
+      }
+    },
+    "s17_m_mixed": {
+      "lanes": {
+        "lane-T-17101": [
+          "T-17101",
+          "T-17102"
+        ],
+        "lane-T-17103": [
+          "T-17103"
+        ]
+      },
+      "calibration": [
+        {
+          "task_id": "T-17101",
+          "K": 10,
+          "K_E": 2,
+          "K_W": 8,
+          "S_hat": 27985,
+          "E_tokens": 18288,
+          "W_tokens": 172839,
+          "peak_context": 51794,
+          "cost_usd": 0.37329090000000004,
+          "model": "claude-sonnet-5",
+          "edit_tool_seen": true
+        },
+        {
+          "task_id": "T-17103",
+          "K": 11,
+          "K_E": 2,
+          "K_W": 8,
+          "S_hat": 28165,
+          "E_tokens": 4590,
+          "W_tokens": 86901,
+          "peak_context": 40626,
+          "cost_usd": 0.3366905,
+          "model": "claude-sonnet-5",
+          "edit_tool_seen": true
+        },
+        {
+          "task_id": "T-17102",
+          "K": 14,
+          "K_E": 5,
+          "K_W": 9,
+          "S_hat": 28240,
+          "E_tokens": 18020,
+          "W_tokens": 87634,
+          "peak_context": 39484,
+          "cost_usd": 0.33847999999999995,
+          "model": "claude-sonnet-5",
+          "edit_tool_seen": true
+        }
+      ],
+      "prediction": {
+        "r_hat": 1.2987,
+        "total_B": 1.0485,
+        "total_C_pred": 1.3616,
+        "tasks": [
+          {
+            "task_id": "T-17101",
+            "lane": "lane-T-17101",
+            "pos": 0,
+            "H_prev": null,
+            "rho": 0,
+            "cost_B": 0.3733,
+            "cost_C_pred": 0.3733
+          },
+          {
+            "task_id": "T-17102",
+            "lane": "lane-T-17101",
+            "pos": 1,
+            "H_prev": 51794,
+            "rho": 1,
+            "cost_B": 0.3385,
+            "cost_C_pred": 0.6516
+          },
+          {
+            "task_id": "T-17103",
+            "lane": "lane-T-17103",
+            "pos": 0,
+            "H_prev": null,
+            "rho": 0,
+            "cost_B": 0.3367,
+            "cost_C_pred": 0.3367
+          }
+        ]
+      }
+    },
+    "s17_n_db_chain": {
+      "lanes": {
+        "lane-T-17101": [
+          "T-17101",
+          "T-17102"
+        ]
+      },
+      "calibration": [
+        {
+          "task_id": "T-17101",
+          "K": 12,
+          "K_E": 4,
+          "K_W": 8,
+          "S_hat": 27988,
+          "E_tokens": 56865,
+          "W_tokens": 187613,
+          "peak_context": 53131,
+          "cost_usd": 0.4128039000000001,
+          "model": "claude-sonnet-5",
+          "edit_tool_seen": true
+        },
+        {
+          "task_id": "T-17102",
+          "K": 12,
+          "K_E": 3,
+          "K_W": 9,
+          "S_hat": 28216,
+          "E_tokens": 37498,
+          "W_tokens": 208708,
+          "peak_context": 53544,
+          "cost_usd": 0.4329762,
+          "model": "claude-sonnet-5",
+          "edit_tool_seen": true
+        }
+      ],
+      "prediction": {
+        "r_hat": 1.373,
+        "total_B": 0.8458,
+        "total_C_pred": 1.1613,
+        "tasks": [
+          {
+            "task_id": "T-17101",
+            "lane": "lane-T-17101",
+            "pos": 0,
+            "H_prev": null,
+            "rho": 0,
+            "cost_B": 0.4128,
+            "cost_C_pred": 0.4128
+          },
+          {
+            "task_id": "T-17102",
+            "lane": "lane-T-17101",
+            "pos": 1,
+            "H_prev": 53131,
+            "rho": 1,
+            "cost_B": 0.433,
+            "cost_C_pred": 0.7485
+          }
+        ]
+      }
+    },
+    "s17_w_two_files": {
+      "lanes": {
+        "lane-T-17101": [
+          "T-17101"
+        ],
+        "lane-T-17103": [
+          "T-17103"
+        ]
+      },
+      "calibration": [
+        {
+          "task_id": "T-17103",
+          "K": 10,
+          "K_E": 1,
+          "K_W": 7,
+          "S_hat": 28165,
+          "E_tokens": 0,
+          "W_tokens": 82191,
+          "peak_context": 42782,
+          "cost_usd": 0.32350470000000003,
+          "model": "claude-sonnet-5",
+          "edit_tool_seen": true
+        },
+        {
+          "task_id": "T-17101",
+          "K": 15,
+          "K_E": 4,
+          "K_W": 11,
+          "S_hat": 27985,
+          "E_tokens": 56853,
+          "W_tokens": 276631,
+          "peak_context": 56342,
+          "cost_usd": 0.5042251,
+          "model": "claude-sonnet-5",
+          "edit_tool_seen": true
+        }
+      ],
+      "prediction": {
+        "r_hat": 1.0,
+        "total_B": 0.8277,
+        "total_C_pred": 0.8277,
+        "tasks": [
+          {
+            "task_id": "T-17101",
+            "lane": "lane-T-17101",
+            "pos": 0,
+            "H_prev": null,
+            "rho": 0,
+            "cost_B": 0.5042,
+            "cost_C_pred": 0.5042
+          },
+          {
+            "task_id": "T-17103",
+            "lane": "lane-T-17103",
+            "pos": 0,
+            "H_prev": null,
+            "rho": 0,
+            "cost_B": 0.3235,
+            "cost_C_pred": 0.3235
+          }
+        ]
+      }
+    },
+    "w_two_files": {
+      "lanes": {
+        "lane-T-1310": [
+          "T-1310"
+        ],
+        "lane-T-1320": [
+          "T-1320"
+        ]
+      },
+      "calibration": [
+        {
+          "task_id": "T-1310",
+          "K": 10,
+          "K_E": 2,
+          "K_W": 7,
+          "S_hat": 27926,
+          "E_tokens": 1336,
+          "W_tokens": 20185,
+          "peak_context": 31583,
+          "cost_usd": 0.18530159999999998,
+          "model": "claude-sonnet-5",
+          "edit_tool_seen": true
+        },
+        {
+          "task_id": "T-1320",
+          "K": 11,
+          "K_E": 4,
+          "K_W": 5,
+          "S_hat": 27871,
+          "E_tokens": 9438,
+          "W_tokens": 51313,
+          "peak_context": 39861,
+          "cost_usd": 0.3337537,
+          "model": "claude-sonnet-5",
+          "edit_tool_seen": true
+        }
+      ],
+      "prediction": {
+        "r_hat": 1.0,
+        "total_B": 0.5191,
+        "total_C_pred": 0.5191,
+        "tasks": [
+          {
+            "task_id": "T-1310",
+            "lane": "lane-T-1310",
+            "pos": 0,
+            "H_prev": null,
+            "rho": 0,
+            "cost_B": 0.1853,
+            "cost_C_pred": 0.1853
+          },
+          {
+            "task_id": "T-1320",
+            "lane": "lane-T-1320",
+            "pos": 0,
+            "H_prev": null,
+            "rho": 0,
+            "cost_B": 0.3338,
+            "cost_C_pred": 0.3338
+          }
+        ]
+      }
+    }
+  },
+  "completed_runs_only": true
+}

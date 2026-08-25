@@ -1,0 +1,8 @@
+iso,run_id,spec,arm,rep,attempt,status,cost_usd,wall_s,accepted,cli_version,model,exclusion_reason,notes
+2026-08-25T07:46:50.931442+09:00,m_mixed_B_rep1,m_mixed,B,1,1,completed,1.0856214999999998,93.5,1,2.1.220 (Claude Code),,,........................                                                 [100%] 24 passed in 0.56s 
+2026-08-25T07:48:47.135604+09:00,s17_m_mixed_B_rep1,s17_m_mixed,B,1,1,completed,1.0484613999999999,115.9,1,2.1.220 (Claude Code),,,.............                                                            [100%] 13 passed in 0.61s 
+2026-08-25T07:50:27.650355+09:00,ct_library_B_rep1,ct_library,B,1,1,completed,1.00762,100.4,1,2.1.220 (Claude Code),,,...................                                                      [100%] 19 passed in 0.26s 
+2026-08-25T07:51:36.978059+09:00,n_db_chain_B_rep1,n_db_chain,B,1,1,completed,0.5499273,69.2,1,2.1.220 (Claude Code),,,.......                                                                  [100%] 7 passed in 1.06s 
+2026-08-25T07:53:06.032015+09:00,w_two_files_B_rep1,w_two_files,B,1,1,completed,0.5190553,89.0,1,2.1.220 (Claude Code),,,.................                                                        [100%] 17 passed in 0.12s 
+2026-08-25T07:54:19.458181+09:00,s17_w_two_files_B_rep1,s17_w_two_files,B,1,1,completed,0.8277298,73.3,1,2.1.220 (Claude Code),,,.........                                                                [100%] 9 passed in 0.33s 
+2026-08-25T07:56:34.590816+09:00,s17_n_db_chain_B_rep1,s17_n_db_chain,B,1,1,completed,0.8457801,135.0,1,2.1.220 (Claude Code),,,.......                                                                  [100%] 7 passed in 1.56s 
