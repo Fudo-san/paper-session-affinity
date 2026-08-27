@@ -103,6 +103,31 @@ def is_run_valid(out_dir: Path, n_tasks: int) -> bool:
     return n_call >= n_tasks
 
 
+def find_split_pairs(specs: list[dict], reps: int, base: Path) -> list[tuple[str, int, str]]:
+    """片アームだけ完了している対を探す。
+
+    スケジュールはアーム主体（1反復内で全仕様の第1アーム → 全仕様の第2アーム）なので、
+    利用上限が反復の途中で来ると「B は完了・C は未了」の対が残る。そのまま
+    --skip-done で再開すると、完了済みの B は飛ばされ C だけが次の窓で走り、
+    **5時間離れた B と C が対になる**。その対だけ時間帯・サービス状態と交絡する。
+
+    protocol の ABBA は反復ごとのアーム順反転で交絡を扱う設計であり、
+    対の内部が窓をまたぐことは想定していない。黙って進めてはならない。
+    """
+    split: list[tuple[str, int, str]] = []
+    for spec in specs:
+        n_tasks = len(json.loads(
+            Path(spec["plan"]).read_text(encoding="utf-8"))["tasks"])
+        for rep in range(1, reps + 1):
+            done = {
+                arm: is_run_valid(base / spec["spec_id"] / arm / f"rep{rep}", n_tasks)
+                for arm in ("B", "C")
+            }
+            if done["B"] != done["C"]:
+                split.append((spec["spec_id"], rep, "B" if done["B"] else "C"))
+    return split
+
+
 def load_specs(path: Path) -> list[dict]:
     """spec 定義を読む。
 
@@ -177,6 +202,9 @@ def main() -> int:
     ap.add_argument("--workdir", default="/tmp/paper_runs")
     ap.add_argument("--dry-run", action="store_true",
                     help="スケジュールと隔離だけ行い、モデルを呼ばない")
+    ap.add_argument("--allow-split-pairs", action="store_true",
+                    help="片アームだけ完了している対があっても続行する。"
+                         "対が窓をまたぐ交絡を承知した上でのみ指定する")
     ap.add_argument("--skip-done", action="store_true",
                     help="有効な結果（cost>0）が既にある run を飛ばして再開する")
     ap.add_argument("--label", default="",
@@ -222,6 +250,28 @@ def main() -> int:
         print("\n=== 実行順（dry-run） ===")
         for i, u in enumerate(schedule, 1):
             print(f"  {i:>3}. {u['spec']['spec_id']:<16} arm={u['arm']} rep={u['rep']}")
+
+    # --- 対が窓をまたいでいないか（再開時のみ意味を持つ）-----------------------
+    if args.skip_done:
+        base_dir = ROOT / "runs" / args.label if args.label else ROOT / "runs"
+        split = find_split_pairs(specs, args.reps, base_dir)
+        if split:
+            print("\n[WARN] 片アームだけ完了している対がある（前回が反復の途中で止まった）:",
+                  file=sys.stderr)
+            for spec_id, rep, done_arm in split:
+                print(f"    {spec_id} rep{rep}: {done_arm} のみ完了", file=sys.stderr)
+            print("\n  このまま進めると、完了済みアームは飛ばされ、もう一方だけが"
+                  "別の窓で走る。\n  その対だけ時間帯・サービス状態と交絡する"
+                  "（ABBA は対の内部が割れることを想定していない）。", file=sys.stderr)
+            print("\n  取りうる対応は2つ:", file=sys.stderr)
+            print("    (a) 対ごとやり直す — 上に挙げた完了済み run のディレクトリを"
+                  "削除してから再実行する", file=sys.stderr)
+            print("    (b) 割れたまま進める — --allow-split-pairs を付ける。"
+                  "その場合は交絡を Limitations に記載すること", file=sys.stderr)
+            if not args.allow_split_pairs:
+                print("\n[ABORT] どちらにするか決めていないので止める。", file=sys.stderr)
+                return 3
+            print("\n  --allow-split-pairs 指定により続行する。", file=sys.stderr)
 
     last_run_at: dict[tuple[str, int], float] = {}   # (spec_id, rep) -> 直前 run の終了時刻
     for i, unit in enumerate(schedule, 1):
