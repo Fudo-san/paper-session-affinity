@@ -190,6 +190,14 @@ def prepare_worktree(spec: dict, arm: str, rep: int, workdir: Path) -> Path:
     if wt.exists():
         subprocess.run(["git", "-C", spec["repo"], "worktree", "remove", "--force", str(wt)],
                        capture_output=True)
+        # `worktree remove` は「登録済みの worktree」しか消せない。登録が無く
+        # ディレクトリだけ残っている場合（prune 後や中断後に起きる）は失敗し、
+        # 続く `add` が fatal: already exists で落ちる。2026-08-28 に S6 の
+        # rep3 で3回発生した。実体が残っていたら直接消す。
+        if wt.exists():
+            shutil.rmtree(wt, ignore_errors=True)
+    # 逆に、登録だけ残って実体が無い場合も `add` が失敗する。毎回 prune しておく。
+    subprocess.run(["git", "-C", spec["repo"], "worktree", "prune"], capture_output=True)
     subprocess.run(["git", "-C", spec["repo"], "worktree", "add", "-f",
                     str(wt), spec["commit"]], check=True, capture_output=True)
     return wt
