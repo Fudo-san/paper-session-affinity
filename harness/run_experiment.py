@@ -151,13 +151,26 @@ def build_schedule(specs: list[dict], reps: int, seed: int) -> list[dict]:
     同一 spec の同一 rep で B と C を対にし、その順序を反復ごとに反転させる
     （ABBA）。仕様の実行順は seed 固定でランダム化する。
 
-    **アーム主体で並べる**（2026-08-02 変更）。以前は spec 主体で B と C を隣接させて
-    いたため、A5 汚染回避の cooldown が毎回まるごと sleep になっていた。
-    1 rep 内で「全仕様の第1アーム → 全仕様の第2アーム」の順に流せば、ある仕様の
-    B と C の間に他仕様の実行が挟まり、待ち時間が実作業で埋まる。
-    cooldown 判定は経過時間で見ているので、自然な間隔が足りていれば sleep しない。
+    **仕様主体で並べる**（2026-08-28 に再変更。Amendment A-5）。
 
-    アームと時間帯の交絡は rep ごとのアーム順反転（ABBA）が担う。
+    2026-08-02 に一度アーム主体（全仕様の第1アーム → 全仕様の第2アーム）へ変えた。
+    当時の理由は「A5 対策の cooldown が毎回まるごと sleep になる」ことだった。
+    しかし本実験の第1・第2窓で、**利用上限が来ると必ず対が割れる**ことが判明した。
+    先行アームだけが全仕様分完了し、後続アームが未了のまま窓が終わるためである。
+    アーム順を反転（ABBA）しても鏡像で同じことが起きた（rep1 は B が5対、
+    rep2 は C が3対だけ残った）。事前登録 exclusion_rules §3 により対ごと
+    再実行が要るので、そのたびに完了済みアームを捨てることになる。
+
+    仕様主体に戻せば、上限は**対と対の間**に落ちる。対の内部は割れない。
+    副次的に、対内の B と C の間隔が「他仕様6本分」から「隣接」へ縮まり、
+    対応付けの質が上がる（時間帯・サービス状態の差が小さくなる）。
+
+    A5 対策は cooldown ではなく **run ごとの nonce** が担う。nonce は
+    プロンプト先頭に入るのでプレフィックスが最初のトークンから食い違い、
+    TTL に関係なくキャッシュ共有が原理的に成立しない。したがって隣接実行でも
+    汚染しない。cooldown は 0 で運用する（12分待つと B/C 隣接と両立しない）。
+
+    アームと時間帯の交絡は rep ごとのアーム順反転（ABBA）が引き続き担う。
     """
     rng = random.Random(seed)
     units: list[dict] = []
@@ -165,8 +178,8 @@ def build_schedule(specs: list[dict], reps: int, seed: int) -> list[dict]:
         order = list(specs)
         rng.shuffle(order)
         arms = ("B", "C") if rep % 2 == 1 else ("C", "B")
-        for arm in arms:
-            for spec in order:
+        for spec in order:
+            for arm in arms:
                 units.append({"spec": spec, "arm": arm, "rep": rep})
     return units
 
