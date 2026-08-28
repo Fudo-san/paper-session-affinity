@@ -37,7 +37,7 @@ for attempt in $(seq 1 "$MAX"); do
   python3 -u harness/run_experiment.py \
     --specs benchmarks/specs.json \
     --reps "$REP" --label main --stream-json \
-    --skip-done --cooldown-min 12 --workdir /tmp/paper_main
+    --skip-done --cooldown-min "${COOLDOWN_MIN:-0}" --workdir /tmp/paper_main
   rc=$?
 
   if [ "$rc" -eq 0 ]; then
