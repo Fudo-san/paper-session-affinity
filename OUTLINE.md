@@ -1,5 +1,10 @@
-# 論文アウトライン（作業用スケルトン）
+# 論文アウトライン（構成履歴＋現行索引）
 
+> **2026-09-02 整合注記**: 本書の `【未定】` / `【データ待ち】` は当時の設計履歴であり、
+> 現在の進捗判定には使わない。現在地は `STATUS.md`、判定規則は `protocol/`、
+> 結果は `analysis/e2_results_main.json`、公開方針は `PUBLICATION_PLAN.md` が正本。
+> 現行ドラフトは §1〜§9 と Abstract まで揃っている。
+>
 > 目的: 実験に使うものを本体リポジトリから隔離して置くための土台。
 > 記法: 【確定】=方針が固まった項目（一行メモ）／【未定】=タイトルのみ／
 > 【データ待ち】=実験後に埋める／【要文献確認】=カットオフ後で未検証。
@@ -31,43 +36,47 @@
 | §6.3 | 層1（統制スイート）は**既存タスクカードを流用**（T-1310/1311/1312/1320・html_text）。新規作成しない。層2（NL2Repo-Bench）は予算が許す場合のみ |
 | 執筆・実験の流れ | **Week5（§4.3 適応スケジューラ実装）を削除**。計装 → パイロット → 本実験 → 執筆へ短絡 |
 
-### この切り方で成立する主張
+### この切り方で成立した主張（S6 後に更新）
 
-「新規手法の提案」ではなく **「コストモデルと、その予測が成立することの実証」** として位置づける。
+「新規手法の提案」ではなく **「商用 CLI のキャッシュ経済を測り、単純な
+セッション親和性方針の限界を事前登録評価で示した測定研究」** として位置づける。
 自立する経験的貢献は次の3点:
 
 1. 商用API上のMASコード生成の**コスト分解モデル**と損益分岐条件の導出（`H*_warm = e/(K·α_r)`）。
-2. **実測による検証**: resume warm で費用 **1/12.7**（予測と完全一致）、および
-   **公称TTLは下限保証**（6.4分ギャップでも warm）＝ TTLはスケジューリング可能な資源。
-3. **レーン継続(C)が呼び出しごと新規セッション(B)に対して優位**であることの実証。
+2. **キャッシュ機構の実測**: resume warm の履歴 read、CLI 固定文脈、cross-session 汚染経路、
+   TTL の実効生存、初回 resume 書き直しの非制御性を再現可能な測定として残した。
+3. **レーン継続(C)の限界の実証**: 時間・品質は非劣性だが費用削減は不成立で、
+   CT 型競合では過剰直列化の代償が支配した。H4b も符号不一致で不成立だった。
 
 D はこの上に載る次稿の主題とする。
 
 ---
 
-## 0. 仮タイトル・メタ情報
+## 0. タイトル・メタ情報（2026-09-02 選定）
 
-- タイトル 【未定】
-- 著者 / 所属 / 投稿先 【未定】
-- 一文の主張（core thesis）【2026-07-28 改訂・スコープ凍結に整合】
+- タイトル: **The Economics of Session Affinity in Multi-Agent Code Generation: A Preregistered Study of a Commercial Coding-Agent CLI**
+- 著者 / 所属: **本人確認待ち**（Git の author 設定を公開名の同意とみなさない）
+- 投稿先: **arXiv `cs.SE`**（`cs.AI` cross-list 候補）
+- 成果物: **GitHub 公開リポジトリ + Zenodo DOI + arXiv preprint**
+- 一文の主張（core thesis）【S6 後に更新】
   推論基盤を変更できない商用コーディングエージェント上のMASコード生成について、
-  セッション親和性とキャッシュ経済のコスト分解モデルを導出し、その予測（損益分岐・
-  キャッシュ挙動・TTLの実効生存）を実測で検証し、レーン継続（write-scope連結成分）が
-  呼び出しごと新規セッションに対して優位となる条件を実証する。
+  セッション親和性とキャッシュ経済を実測し、観測可能量によるコストモデルと
+  write-scope 連結成分によるレーン継続を事前登録評価した結果、時間・品質の非劣性は
+  保ったが費用削減とモデルの符号予測は成立せず、単純な親和性だけでは不十分だと示した。
   - 旧thesis（適応スケジューリング手法の提案）は**次稿の主題**。本稿で検証したモデルが
     その目的関数となる（モデル検証→手法設計の順は方法論的必然）。
 
 ---
 
-## 1. Introduction → **ドラフトv0.1: drafts/sec1_introduction.md**（第5段落のみデータ待ち）
+## 1. Introduction → **ドラフトv0.3: drafts/sec1_introduction.md**（結果反映済み）
 
 - 問題設定: 並列MASは「時間をトークンで買う」トレードオフ 【確定】
 - 貢献（Contributions）4点 【確定】
-  1. 商用API上のMASコード生成のコスト分解モデル
-  2. 依存＋書き込み範囲＋セッション親和性を考慮した実行モデル
-  3. 実運用に基づく実証評価（トークン・時間・品質）
-  4. 負の結果（RTK型助言注入・再帰分解がなぜ効率を悪化させるか）
-- リサーチクエスチョン（RQ1〜RQ5）の提示 【確定】（詳細は §6）
+  1. 商用 CLI のキャッシュ経済の実測
+  2. 観測可能量によるコスト分解モデル
+  3. レーン継続の事前登録 B/C 評価
+  4. 測定で棄却された仮説と C′ の縮退（RTK/RecursiveMAS は未測定なので主張しない）
+- リサーチクエスチョン（RQ1〜RQ4）の提示 【確定】（RQ5 は park、詳細は §6）
 
 ## 2. Background & Related Work → **調査済みv0.1: drafts/sec2_novelty_matrix.md**
 
@@ -95,11 +104,9 @@ D はこの上に載る次稿の主題とする。
     → 同一 spec で C の直後に B を走らせると B が不当に安くなる**実験汚染経路**。S6 で離隔が必要
   - モデル切替: **「全損」は過大主張。部分損失（書き直し 36〜46%、cost は同一モデルの2〜2.5倍）**
     （M3 n=2）。モデル均質制約の根拠は維持
-  - resume 6.4分ギャップ: 依然warm → 公称TTLは下限保証（※旧・単一セッション連続方式の測定。
-    cold境界を過大評価するバイアスあり。M2 で fresh-session 方式により測り直す）
-  - 残: **M2 cold境界のみ**（10/15/30/60分×3・時間帯分散）【データ待ち】
+  - resume は約10.2分まで warm → 公称TTLは下限保証。M2 の測定値は §3 と §8 に反映済み
 
-## 4. 実行モデル（提案手法）
+## 4. 実行モデル → **ドラフト済み: drafts/sec4_execution_model.md**
 
 - 4.1 スケジューリング問題の定式化（DAG先行制約＋排他資源制約＋セッション/モデル切替コスト）【確定・方針】
 - 4.2 レーン継続ヒューリスティック（write-scope連結成分）＝ベースラインC 【確定】
@@ -107,21 +114,25 @@ D はこの上に載る次稿の主題とする。
 - 4.4 失敗時のセッション破棄意味論・レーン長上限・モデル均質制約 【確定・方針】
 - 4.5 pause/resume との整合 【確定・方針】
 
-## 5. Implementation
+## 5. Implementation → **ドラフト済み: drafts/sec5_implementation.md**
 
 - 5.1 既存フレームワーク（旧agent-framework）上の実装 【確定・基盤】
-- 5.2 計装（calls.jsonl / run_manifest.json / 影gitによる実write-set / stream-jsonの実read-set）【確定・設計済み】
+- 5.2 計装（calls.jsonl / run_manifest.json / stream-json の per-turn usage）【実装・記述済み】
+- 5.4 影gitによる実write-setは未実装。scope_drift / precision / recall を取得しなかった事実を §6・§8 に開示済み
 - 5.3 決定論優先の設計原則 【確定】
 
-## 6. Evaluation
+## 6. Evaluation → **設計正本: protocol/ / 結果ドラフト: drafts/sec6_results.md**
 
-- 6.1 RQと仮説 【方向仮説ドラフト済み: drafts/sec6_hypotheses.md（数値はパイロット後に凍結）】
+> `drafts/sec6_hypotheses.md` は凍結前の旧スコープ（A/D/H5）を含む履歴資料であり、
+> 統合原稿へ直接コピーしない。§6.1〜§6.5 は `protocol/` から起こす。
+
+- 6.1 RQと仮説 【`protocol/` で FROZEN、N=14】
   - RQ1 トークンコスト削減幅
   - RQ2 並列速度優位の保持
   - RQ3 品質への影響（非劣性）
   - RQ4 コストモデルの検証（損益分岐の実在）
-  - RQ5 アブレーション
-  - 各RQの定量仮説（数値）【未定】
+  - RQ5 アブレーション 【park】
+  - RQ1〜RQ4 の定量仮説・ゲート 【確定・判定済み】
 - 6.2 比較アーム 【確定・2026-07-28 に B/C へ限定】
   - A 単一エージェント・単一継続セッション 【対象外。参照点として言及のみ／予算余裕時に追加】
   - **B 現行MAS・呼び出しごと新規セッション 【本稿対象】**
@@ -132,61 +143,50 @@ D はこの上に載る次稿の主題とする。
   - 層2: **NL2Repo-Bench**（arXiv:2512.12730, GitHub公開, 104タスク・隠しpytest）から
     Easy/Medium を10〜15件層化抽出 — 第三者仕様・外的妥当性・CodeTeamとの参照比較
   - SketchEval は不採用（類似度ベース評価が実行ベース設計と不整合）
-  - 自作スイートの具体仕様 【データ待ち・Week 6】/ 抽出規則 【パイロット後】
-- 6.4 指標 【確定】（実測トークン・費用・壁時計時間・pytest成功率・受入基準達成率・scope_drift・
-  修正サイクル数・宣言write-scopeのprecision/recall）
-- 6.5 統計設計 【確定】
+  - 本実験は統制スイート7仕様を使用。NL2Repo-Bench は park
+- 6.4 指標 【主要指標は取得済み】（費用・壁時計時間・受入全通過率・トークン内訳）。
+  scope_drift と write-scope precision/recall は未取得であることを §6.6 に開示
+- 6.5 統計設計 【FROZEN・適用済み】
   - 同一仕様を全条件で実行する対応付き設計、仕様内で実行順ランダム化
-  - 反復数はパイロットの分散から決定
-  - 対応付き置換検定 / ブートストラップCI / 混合効果モデル
-  - 品質は非劣性マージンを事前登録 【マージン値: 未定】
-  - 除外・再実行規則の事前登録 【未定】
+  - 反復数はパイロットの分散から N=14 に決定
+  - 対応付き置換検定 / bootstrap CI
+  - 非劣性マージン: 時間 15%、品質 10pp
+  - 除外・再実行規則: `protocol/exclusion_rules.md` で凍結
 
-## 7. Negative Results（探索的）
+## 7. Negative Results → **ドラフト済み: drafts/sec7_negative.md**
 
-- RTK型助言注入の実測 【データ待ち】（過去ログは探索的扱い・同一条件再実験まで主張化しない）
-- RecursiveMAS の文脈重複による悪化 【データ待ち】
+- A1/A6/M7 で3つの機構仮説を棄却し、C′ の縮退を記述
+- RTK型助言注入と RecursiveMAS は未測定なので主張しない
 
-## 8. Threats to Validity / Limitations
+## 8. Threats to Validity / Limitations → **ドラフト済み: drafts/sec8_threats.md**
 
 - ベンダー側キャッシュ挙動の不透明性・時期依存 【確定・記載方針】
 - モデル/CLIバージョンドリフト 【確定・統制方針】
 - 単一言語（Python）・仕様の著者バイアス 【確定・記載方針】
 - コスト計測がベンダー報告値依存 【確定・記載方針】
 
-## 9. Conclusion 【未定】
+## 9. Conclusion → **ドラフト済み: drafts/sec9_conclusion.md**
 
-## Abstract 【未定】（最後に書く）
+## Abstract → **英語版＋日本語作業訳: drafts/abstract.md**
 
 ---
 
-## 実験環境レイアウト（隔離して保存する対象）
+## 実験環境レイアウト（現行）
 
 ```
 paper-session-affinity/
 ├── OUTLINE.md                  ← 本ファイル
-├── drafts/                     Stage 1 ドラフト（結果非依存の本文）
-│   ├── sec1_introduction.md       【v0.1済み】
-│   ├── sec3_cost_model.md         【v0.1済み・論文の背骨】
-│   └── sec6_hypotheses.md         【v0.1済み・数値は空欄】
-├── protocol/                   実験プロトコル（事前登録する規則）
-│   ├── rqs_hypotheses.md          【未定】
-│   ├── exclusion_rules.md         【未定】
-│   └── non_inferiority.md         【未定】
-├── benchmarks/                 仕様スイート（W/N/M/Contended/Scope-error）
-│   └── ...                        【データ待ち】隠しテストは別管理
-├── harness/                    計装・ドライバ・採点器
-│   ├── calls_logger            【確定・設計済み】
-│   ├── baseline_run.py（単体アームA）【未定】
-│   ├── judge.py（受入基準の審判LLM）【未定】
-│   └── audit採点（audit.py流用）  【確定・流用可】
-├── probes/                     キャッシュ挙動の定点観測
-│   └── cache_probe（fresh済 / resume未）【一部確定】
-├── runs/                       実験ラン出力（calls.jsonl等）【データ待ち】
-│   └── <spec>/<arm>/rep<k>/
-├── analysis/                   統計・図表
-│   └── ...                        【データ待ち】
-└── run_ledger.csv              全ランの状態台帳 【データ待ち】
+├── STATUS.md                   作業状況の正本
+├── PUBLICATION_PLAN.md         公開先・版・ゲートの正本
+├── drafts/                     §1〜§9 + Abstract
+├── protocol/                   FROZEN v1.0 + Amendment A-1〜A-6
+├── benchmarks/                 本実験7仕様と固定 plan
+├── harness/                    計装・実験driver・完走支援
+├── probes/                     M1〜M7の測定コードと結果
+├── runs/main/                  196ランの生データ
+├── analysis/                   E1/E2・統計・確定JSON
+├── run_ledger_main.csv         本実験の追記型台帳
+└── REPRODUCTION.md             第三者向け再現手順
 ```
 
 ---
@@ -211,14 +211,11 @@ paper-session-affinity/
 
 ## いま確定していること / まだ空なこと（早見表）
 
-確定: core thesis、貢献4点、**対象アーム B/C（2026-07-28 凍結）**、ベンチ形状クラス、
-      指標一式、統計の枠組み、計装スキーマ、fresh時のキャッシュ非効（実測）、
-      resume warm の 1/12.7（実測）、公称TTLは下限保証（実測）、隔離レイアウト、執筆順序、
-      **コストモデルの損益分岐条件（導出済み `H*_warm = e/(K·α_r)`）**。
+確定: タイトル、core thesis、貢献4点、対象アーム B/C、7仕様、N=14、指標、判定規則、
+      196ラン、E1/E2、§1〜§9、Abstract、再現手順、GitHub/Zenodo/arXiv の役割分担。
 
-未定（本稿で埋める）: 論文タイトル、Abstract、RQの定量仮説（RQ1〜RQ4）、非劣性マージン値、
-      除外規則、ベンチ具体仕様（既存タスクカードから選定）、真のcold境界（15/30/60分＝次のP1）、
-      Results/Discussion/Conclusion、関連研究の具体（CoAgent/CodeTeam要確認）。
+未定（公開前に人が決める）: 著者表示名、所属、ORCID、LICENSE、GitHub URL、Zenodo DOI、
+      arXiv ID。未完了作業は本文統合、引用解決、新着文献再確認、公開前権利・機微情報監査。
 
 park（本稿では埋めない・2026-07-28 スコープ凍結）: **適応スケジューラ設計（§4.3・アームD）**、
       RQ5アブレーション、アームA実行、層2 NL2Repo-Bench（予算次第）。

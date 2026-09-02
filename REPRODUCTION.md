@@ -122,3 +122,15 @@ python3 harness/progress.py               # 進捗
 以降の変更は §7 Amendment Log に A-1〜A-6 として記録してある。
 とくに A-6（停止条件からの再開）は、**B と C の比較値を見る前に**判断・記録した。
 `git log` の順序で確認できる。
+
+## 7. 公開版との対応
+
+公開物は `PUBLICATION_PLAN.md` の役割分担に従う。
+
+- GitHub: 更新可能な開発正本
+- Git tag/release `v1.0.0-preprint`: 論文が参照する版
+- Zenodo: 上記 release の不変 snapshot と DOI
+- arXiv: 論文本文。本文中または metadata から Zenodo DOI と GitHub tag を参照
+
+公開前に、tag の commit、Zenodo snapshot、本文記載の commit、分析結果 JSON の SHA-256 を
+同一の artifact manifest に記録する。URL や DOI の `TBD` が残る間は release-ready ではない。

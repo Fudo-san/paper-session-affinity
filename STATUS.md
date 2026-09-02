@@ -1,12 +1,13 @@
-# 現在地（2026-08-25）— 再開時はまずこれを読む
+# 現在地（2026-09-02）— 再開時はまずこれを読む
 
-> `GAPS_2026-08-04.md` は**この時点より古い**。A11・CT・R1・R2・R3・R8 は完了済み。
-> 本書が現在の正本。`GAPS_2026-08-04.md` の §D（クリティカルパス）と §E（分析）は
-> 依然として有効なので、そちらも読むこと。
+> 本書が作業状況の正本。判定規則は `protocol/`、確定値は
+> `analysis/e2_results_main.json`、公開先と版管理は `PUBLICATION_PLAN.md` を正本とする。
+> `GAPS_2026-07-31.md`、`GAPS_2026-08-04.md` と `OUTLINE.md` 内の古い状態ラベルは
+> 設計履歴であり、現在の TODO ではない。
 
 ## 一行で
 
-**S6（本実験）の準備がすべて終わった。残るは S6 の実行 → 執筆 → 再現パッケージ。**
+**S6と凍結分析は完了し、§1〜§9・Abstract・再現手順の素材は揃った。残るのは単一原稿への統合、文献最終確認、公開前監査、GitHub/Zenodo/arXiv への公開である。**
 
 ## 完了したもの（再実行しないこと）
 
@@ -19,34 +20,29 @@
 | R1 r̂ の確定 | ✅ | `analysis/model_predictions.json`（中央値 1.299、範囲 1.000〜1.558）。較正は `runs/calib`（B のみ・7仕様・$5.88） |
 | R2 E1 集計 | ✅ | `analysis/e1_aggregate.py`（除外規則の機械化） |
 | R3 E2 判定 | ✅ | `analysis/e2_tests.py`（H1〜H4b・ゲート構造） |
-| R8 Amendment Log | ✅ | `protocol/rqs_hypotheses.md` §7 に A-1〜A-4 |
+| S6 本実験 | ✅ | 7仕様 × 2アーム × 14反復 = 196ラン、98/98 pair、除外0、総費用 $121.26 |
+| R8 Amendment Log | ✅ | `protocol/rqs_hypotheses.md` §7 に A-1〜A-6 |
 | R9 task_id 欠落 | ✅ | 並列実行下の競合だった（`fail-20260825-01`）。引数渡しへ修正＋回帰テスト |
-| §1 の貢献の並べ替え | ✅ | v0.2。測定研究を主・方針評価を従 |
+| 凍結分析 | ✅ | `analysis/e1_dataset_main.json` / `analysis/e2_results_main.json`。中心主張は不成立 |
+| 本文素材 | ✅ | `drafts/sec1_introduction.md`〜`drafts/sec9_conclusion.md` と `drafts/abstract.md`。統合・引用解決は未完 |
+| 再現手順 | ✅ | `REPRODUCTION.md`。分析再実行、実験再実行、限界を分離 |
 
 **分析テスト 29 件・フレームワーク 48 件がいずれも緑。**
 
-## 次にやること
+## 次にやること（順序固定）
 
-### 1. S6 本実験（最優先）
+1. **本文を1本へ統合する**: `drafts/` の §1〜§9 と Abstract を LaTeX 原稿へまとめ、
+   表・引用・用語・節番号を通しで検査する。著者表示名と所属は本人確認まで空欄を維持する。
+2. **新規性を公開直前に再確認する**: 2026-07-31 以後の関連研究を検索し、§2 の
+   「存在しない」という断定を必要なら弱める。引用未解決のまま投稿しない。
+3. **公開前監査を通す**: 生データの機微情報、第三者コード/出力の再配布権、LICENSE、
+   絶対パス、生成物と本文の数値一致を確認する。
+4. **GitHub と Zenodo を固定する**: 公開 GitHub リポジトリを更新可能な正本、
+   `v1.0.0-preprint` の Zenodo snapshot/DOI を不変な引用対象とする。
+5. **arXiv へ投稿する**: primary category は `cs.SE`、cross-list 候補は `cs.AI`。
+   arXiv、Zenodo、GitHub の相互リンクと版番号を一致させる。
 
-```bash
-cd /home/fudo1/project/paper-session-affinity
-python3 harness/run_experiment.py --specs benchmarks/specs.json \
-  --reps 14 --label main --stream-json
-```
-
-- **規模**: 7仕様 × 2アーム × 14反復 = **196ラン**、概算 **$220**、14窓・4〜5日
-- **1窓 = 1反復（14ラン）で自分から止める。** 上限に当たると対が割れる
-- **同じ対（同一 spec の B と C）は必ず同じ窓に収める。** 反復が別窓なのは可
-- 中断したら同じコマンドに `--skip-done` を付けて再開
-- 実行後: `python3 analysis/e1_aggregate.py main` → `python3 analysis/e2_tests.py main`
-
-### 2. 執筆（S6 と並行可能）
-
-未着手の節: **§4 実行モデル / §5 Implementation / §7 負の結果 / §8 Threats / §9 / Abstract**。
-§4・§5 は結果に依存しないので S6 の前でも書ける。
-
-### 3. 再現パッケージ
+公開先、リリース順、停止ゲートの詳細は `PUBLICATION_PLAN.md` を参照。
 
 ## 絶対に忘れてはいけない制約
 
@@ -55,8 +51,8 @@ python3 harness/run_experiment.py --specs benchmarks/specs.json \
 2. **r̂ は確定済み。** 実測を見てから予測を作り直すことは禁止（§3.8.4）。
 3. **分析スクリプトは実データで調整しない。** 検証は合成データのみ（`analysis/tests/`）。
 4. **部分成立は部分成立のまま報告する。** スピンしない（§4）。
-5. **効果は帰無の公算が高い。** 検出力は d=20% 用で、実効果は 6〜8% 程度と見込まれる
-   （`GAPS_2026-08-04.md` §E1）。§1 v0.2 は帰無でも成立する構成にしてある。
+5. **観測済みの負の結果を上書きしない。** 費用差中央値は C−B = +5.5% で H1 は不成立。
+   時間と品質の非劣性だけが成立した。「改善手法」ではなく測定研究として報告する。
 
 ## 作業上の落とし穴（記録済み。再発させない）
 
