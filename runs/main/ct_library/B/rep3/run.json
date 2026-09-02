@@ -1,0 +1,19 @@
+{
+  "run_id": "ct_library_B_rep3",
+  "spec": "ct_library",
+  "arm": "B",
+  "rep": 3,
+  "iso": "2026-08-28T21:34:11.662134+09:00",
+  "cli_version": "2.1.247 (Claude Code)",
+  "seed": 20260801,
+  "usage_actual": {
+    "input_tokens": 80,
+    "output_tokens": 10235,
+    "cache_read_tokens": 1461843,
+    "cache_creation_tokens": 56371,
+    "cost_usd": 0.6254206
+  },
+  "accepted": true,
+  "verify_tail": "...................                                                      [100%]\n19 passed in 5.65s\n",
+  "wall_s": 248.3
+}

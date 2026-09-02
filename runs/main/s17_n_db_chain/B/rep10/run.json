@@ -1,0 +1,19 @@
+{
+  "run_id": "s17_n_db_chain_B_rep10",
+  "spec": "s17_n_db_chain",
+  "arm": "B",
+  "rep": 10,
+  "iso": "2026-08-30T18:54:08.407542+09:00",
+  "cli_version": "2.1.247 (Claude Code)",
+  "seed": 20260801,
+  "usage_actual": {
+    "input_tokens": 48,
+    "output_tokens": 5433,
+    "cache_read_tokens": 827285,
+    "cache_creation_tokens": 42685,
+    "cost_usd": 0.39409800000000006
+  },
+  "accepted": true,
+  "verify_tail": ".......                                                                  [100%]\n7 passed in 52.69s\n",
+  "wall_s": 478.7
+}

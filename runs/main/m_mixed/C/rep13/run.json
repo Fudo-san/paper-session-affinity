@@ -1,0 +1,19 @@
+{
+  "run_id": "m_mixed_C_rep13",
+  "spec": "m_mixed",
+  "arm": "C",
+  "rep": 13,
+  "iso": "2026-09-02T17:29:39.984386+09:00",
+  "cli_version": "2.1.247 (Claude Code)",
+  "seed": 20260801,
+  "usage_actual": {
+    "input_tokens": 72,
+    "output_tokens": 12408,
+    "cache_read_tokens": 1343318,
+    "cache_creation_tokens": 103821,
+    "cost_usd": 0.8132016
+  },
+  "accepted": true,
+  "verify_tail": "........................                                                 [100%]\n24 passed in 19.60s\n",
+  "wall_s": 179.0
+}

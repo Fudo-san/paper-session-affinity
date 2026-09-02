@@ -1,0 +1,19 @@
+{
+  "run_id": "m_mixed_C_rep5",
+  "spec": "m_mixed",
+  "arm": "C",
+  "rep": 5,
+  "iso": "2026-08-29T13:35:50.870713+09:00",
+  "cli_version": "2.1.247 (Claude Code)",
+  "seed": 20260801,
+  "usage_actual": {
+    "input_tokens": 44,
+    "output_tokens": 9172,
+    "cache_read_tokens": 706561,
+    "cache_creation_tokens": 25433,
+    "cost_usd": 0.3382712
+  },
+  "accepted": false,
+  "verify_tail": "nfo ============================\nFAILED tests/nightly/test_reader_states_api.py::test_get_returns_none_for_unknown_item\nFAILED tests/nightly/test_reader_states_api.py::test_set_then_get_round_trip\nFAILED tests/nightly/test_reader_states_api.py::test_partial_update_preserves_other_fields\nFAILED tests/nightly/test_reader_states_api.py::test_states_are_isolated_per_item\n4 failed, 20 passed in 30.00s\n",
+  "wall_s": 197.5
+}

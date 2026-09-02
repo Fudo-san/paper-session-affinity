@@ -1,0 +1,19 @@
+{
+  "run_id": "w_two_files_B_rep13",
+  "spec": "w_two_files",
+  "arm": "B",
+  "rep": 13,
+  "iso": "2026-08-31T01:22:56.854391+09:00",
+  "cli_version": "2.1.247 (Claude Code)",
+  "seed": 20260801,
+  "usage_actual": {
+    "input_tokens": 40,
+    "output_tokens": 11899,
+    "cache_read_tokens": 663541,
+    "cache_creation_tokens": 41019,
+    "cost_usd": 0.41925420000000013
+  },
+  "accepted": true,
+  "verify_tail": ".................                                                        [100%]\n17 passed in 0.14s\n",
+  "wall_s": 156.8
+}
