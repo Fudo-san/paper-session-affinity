@@ -10,8 +10,8 @@ import sys
 from datetime import datetime
 from pathlib import Path
 
-ROOT = Path("/home/fudo1/project/paper-session-affinity")
-sys.path.insert(0, str(ROOT / "analysis"))
+ROOT = Path(__file__).resolve().parent.parent
+sys.path.insert(0, str(Path(__file__).resolve().parent))
 from stats import bca_ci, paired_permutation_p  # noqa: E402
 
 d = json.loads((ROOT / "analysis" / "e1_dataset_main.json").read_text(encoding="utf-8"))

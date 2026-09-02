@@ -31,6 +31,7 @@
 from __future__ import annotations
 
 import json
+import os
 import statistics as st
 import sys
 from pathlib import Path
@@ -173,7 +174,9 @@ def main() -> int:
     lanes_by_spec = {}
     for s in specs:
         plan = json.loads(Path(s["plan"]).read_text(encoding="utf-8"))
-        sys.path.insert(0, "/home/fudo1/project/旧agent-framework")
+        sys.path.insert(0, os.environ.get(
+            "PAPER_HARNESS_REPO",
+            str(Path(__file__).resolve().parents[2] / "旧agent-framework")))
         from fwcore.lanes import build_lanes  # noqa: E402
 
         class _T:

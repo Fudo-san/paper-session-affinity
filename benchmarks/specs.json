@@ -5,7 +5,7 @@
       "shape": "CT",
       "repo": "/home/fudo1/project/square-media",
       "commit": "6f5b695",
-      "plan": "/home/fudo1/project/paper-session-affinity/benchmarks/plans/ct_library.plan.json",
+      "plan": "benchmarks/plans/ct_library.plan.json",
       "verify": [
         "python3",
         "-m",
@@ -22,7 +22,7 @@
       "shape": "N",
       "repo": "/home/fudo1/project/square-media",
       "commit": "d4449a0",
-      "plan": "/home/fudo1/project/paper-session-affinity/benchmarks/plans/n_db_chain.plan.json",
+      "plan": "benchmarks/plans/n_db_chain.plan.json",
       "verify": [
         "python3",
         "-m",
@@ -38,7 +38,7 @@
       "shape": "W",
       "repo": "/home/fudo1/project/square-media",
       "commit": "d4449a0",
-      "plan": "/home/fudo1/project/paper-session-affinity/benchmarks/plans/w_two_files.plan.json",
+      "plan": "benchmarks/plans/w_two_files.plan.json",
       "verify": [
         "python3",
         "-m",
@@ -54,7 +54,7 @@
       "shape": "M",
       "repo": "/home/fudo1/project/square-media",
       "commit": "d4449a0",
-      "plan": "/home/fudo1/project/paper-session-affinity/benchmarks/plans/m_mixed.plan.json",
+      "plan": "benchmarks/plans/m_mixed.plan.json",
       "verify": [
         "python3",
         "-m",
@@ -72,7 +72,7 @@
       "shape": "N",
       "repo": "/home/fudo1/project/square-media",
       "commit": "3be3676",
-      "plan": "/home/fudo1/project/paper-session-affinity/benchmarks/plans/s17_n_db_chain.plan.json",
+      "plan": "benchmarks/plans/s17_n_db_chain.plan.json",
       "verify": [
         "python3",
         "-m",
@@ -88,7 +88,7 @@
       "shape": "W",
       "repo": "/home/fudo1/project/square-media",
       "commit": "3be3676",
-      "plan": "/home/fudo1/project/paper-session-affinity/benchmarks/plans/s17_w_two_files.plan.json",
+      "plan": "benchmarks/plans/s17_w_two_files.plan.json",
       "verify": [
         "python3",
         "-m",
@@ -104,7 +104,7 @@
       "shape": "M",
       "repo": "/home/fudo1/project/square-media",
       "commit": "3be3676",
-      "plan": "/home/fudo1/project/paper-session-affinity/benchmarks/plans/s17_m_mixed.plan.json",
+      "plan": "benchmarks/plans/s17_m_mixed.plan.json",
       "verify": [
         "python3",
         "-m",

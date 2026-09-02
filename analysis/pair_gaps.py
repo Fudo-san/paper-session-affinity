@@ -7,7 +7,7 @@ import json
 from datetime import datetime
 from pathlib import Path
 
-ROOT = Path("/home/fudo1/project/paper-session-affinity")
+ROOT = Path(__file__).resolve().parent.parent
 RUNS = ROOT / "runs" / "main"
 specs = [s["spec_id"] for s in json.loads(
     (ROOT / "benchmarks" / "specs.json").read_text(encoding="utf-8"))["specs"]]

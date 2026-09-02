@@ -11,12 +11,18 @@ plan へ組み立てる。**新規タスクは作らない。**
 from __future__ import annotations
 
 import json
+import os
 import sys
 from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
 ROOT = HERE.parent
-REPO = str(Path.home() / "project" / "square-media")
+# 再現パッケージ用: 対象リポジトリとハーネスの場所は環境変数で上書きできる。
+# 既定はワークスペースの隣接配置（<workspace>/square-media）。
+# 第三者は PAPER_TARGET_REPO / PAPER_HARNESS_REPO で自分の配置を指す。
+WORKSPACE = Path(__file__).resolve().parents[2]
+REPO = os.environ.get("PAPER_TARGET_REPO", str(WORKSPACE / "square-media"))
+HARNESS = os.environ.get("PAPER_HARNESS_REPO", str(WORKSPACE / "旧agent-framework"))
 BASE_COMMIT = "d4449a0"   # 4カードすべてが「テスト有・実装無」で揃う唯一の点（SHAPES.md）
 
 # --- タスク定義（受入テストの契約から起こした中立な記述） -------------------
@@ -277,7 +283,7 @@ def to_plan(spec: dict) -> dict:
 
 def verify_lanes(spec: dict, plan: dict) -> tuple[bool, str]:
     """意図した形状に実際になるかを fwcore.lanes で検証する。"""
-    sys.path.insert(0, str(Path.home() / "project" / "旧agent-framework"))
+    sys.path.insert(0, HARNESS)
     from fwcore.lanes import build_lanes  # noqa: E402
 
     class T:
@@ -313,7 +319,7 @@ def main() -> int:
         out_specs.append({
             "spec_id": spec["spec_id"], "shape": spec["shape"],
             "repo": REPO, "commit": spec.get("commit", BASE_COMMIT),
-            "plan": str(p), "verify": spec["verify"],
+            "plan": str(p.relative_to(ROOT)), "verify": spec["verify"],
             "tasks_per_lane": spec["expect_lanes"]["max_tasks_per_lane"],
         })
 

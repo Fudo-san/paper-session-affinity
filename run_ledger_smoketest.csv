@@ -1,0 +1,15 @@
+iso,run_id,spec,arm,rep,attempt,status,cost_usd,wall_s,accepted,cli_version,model,exclusion_reason,notes
+2026-09-02T20:09:51.630357+09:00,m_mixed_B_rep1,m_mixed,B,1,1,dry_run,,,,2.1.247 (Claude Code),,,dry-run（モデル未呼び出し）
+2026-09-02T20:09:51.763753+09:00,m_mixed_C_rep1,m_mixed,C,1,1,dry_run,,,,2.1.247 (Claude Code),,,dry-run（モデル未呼び出し）
+2026-09-02T20:09:51.936714+09:00,s17_m_mixed_B_rep1,s17_m_mixed,B,1,1,dry_run,,,,2.1.247 (Claude Code),,,dry-run（モデル未呼び出し）
+2026-09-02T20:09:52.074467+09:00,s17_m_mixed_C_rep1,s17_m_mixed,C,1,1,dry_run,,,,2.1.247 (Claude Code),,,dry-run（モデル未呼び出し）
+2026-09-02T20:09:52.335602+09:00,ct_library_B_rep1,ct_library,B,1,1,dry_run,,,,2.1.247 (Claude Code),,,dry-run（モデル未呼び出し）
+2026-09-02T20:09:52.462507+09:00,ct_library_C_rep1,ct_library,C,1,1,dry_run,,,,2.1.247 (Claude Code),,,dry-run（モデル未呼び出し）
+2026-09-02T20:09:52.728336+09:00,n_db_chain_B_rep1,n_db_chain,B,1,1,dry_run,,,,2.1.247 (Claude Code),,,dry-run（モデル未呼び出し）
+2026-09-02T20:09:52.849734+09:00,n_db_chain_C_rep1,n_db_chain,C,1,1,dry_run,,,,2.1.247 (Claude Code),,,dry-run（モデル未呼び出し）
+2026-09-02T20:09:52.977132+09:00,w_two_files_B_rep1,w_two_files,B,1,1,dry_run,,,,2.1.247 (Claude Code),,,dry-run（モデル未呼び出し）
+2026-09-02T20:09:53.093688+09:00,w_two_files_C_rep1,w_two_files,C,1,1,dry_run,,,,2.1.247 (Claude Code),,,dry-run（モデル未呼び出し）
+2026-09-02T20:09:53.210681+09:00,s17_w_two_files_B_rep1,s17_w_two_files,B,1,1,dry_run,,,,2.1.247 (Claude Code),,,dry-run（モデル未呼び出し）
+2026-09-02T20:09:53.314388+09:00,s17_w_two_files_C_rep1,s17_w_two_files,C,1,1,dry_run,,,,2.1.247 (Claude Code),,,dry-run（モデル未呼び出し）
+2026-09-02T20:09:53.418682+09:00,s17_n_db_chain_B_rep1,s17_n_db_chain,B,1,1,dry_run,,,,2.1.247 (Claude Code),,,dry-run（モデル未呼び出し）
+2026-09-02T20:09:53.521590+09:00,s17_n_db_chain_C_rep1,s17_n_db_chain,C,1,1,dry_run,,,,2.1.247 (Claude Code),,,dry-run（モデル未呼び出し）

@@ -25,6 +25,7 @@ from __future__ import annotations
 import argparse
 import csv
 import json
+import os
 import random
 import shutil
 import subprocess
@@ -35,7 +36,10 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent          # paper-session-affinity/
-FRAMEWORK = Path.home() / "project" / "旧agent-framework"
+# ハーネス（MAS フレームワーク）の場所。再現時は PAPER_HARNESS_REPO で指す。
+# 既定はワークスペースの隣接配置。
+FRAMEWORK = Path(os.environ.get(
+    "PAPER_HARNESS_REPO", str(ROOT.parent / "旧agent-framework")))
 LEDGER = ROOT / "run_ledger.csv"
 # 対象リポジトリの実在スプリントと衝突させないための実験専用 ID。
 SPRINT_ID = "sprint_exp"
