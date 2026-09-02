@@ -19,6 +19,21 @@
 反復数 N=14 はパイロット（`runs/PILOT_RESULT_2026-08-02.md`）から
 事前登録の式で算出した。パイロットの権限は N の決定のみである（§6）。
 
+### 報告しない副次指標（不在の明示）
+
+事前登録 §2 は副次指標として
+「トークン内訳・scope_drift・修正サイクル数・write-scope の precision/recall」を挙げ、
+**報告のみ・主張の根拠にしない**と定めている。
+
+このうち **scope_drift と write-scope の precision/recall は取得していない。**
+宣言された write-scope と実際の書き込みを突き合わせる計装（影git）を
+実装しなかったためである（§5.4）。**取得していないので報告しない。**
+主要判定（H1〜H4b）はいずれもこれらに依存しないため、判定への影響は無い。
+
+トークン内訳（input / output / cache_read / cache_creation）と
+per-turn の軌跡（`num_turns` / `peak_context_tokens` / `turns[]`）は
+全 run で取得済みであり、`runs/main/*/*/rep*/calls.jsonl` に含まれる。
+
 ## 6.7 主要評価: RQ1（費用）
 
 **H1 は成立しない。しかも予測と符号が逆である。**
