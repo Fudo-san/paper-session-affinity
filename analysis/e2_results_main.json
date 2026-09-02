@@ -1,0 +1,104 @@
+{
+  "label": "main",
+  "generated_by": "analysis/e2_tests.py",
+  "n_pairs": 98,
+  "alpha": 0.05,
+  "H1_cost": {
+    "n": 98,
+    "median_relative_diff": 0.0551,
+    "mean_abs_diff_usd": 0.0465,
+    "p_value": 0.0047,
+    "ci95_abs_diff_usd": [
+      -0.0173,
+      0.0581
+    ],
+    "significant": false,
+    "substantial_reduction": false,
+    "direction": "C_more_expensive"
+  },
+  "H2_time": {
+    "median_T_B": 280.85,
+    "median_T_C": 292.8,
+    "ratio_point": 1.0425,
+    "ratio_ci_upper": 1.1335,
+    "delta_time": 0.15,
+    "non_inferior": true
+  },
+  "H3_quality": {
+    "pass_rate_B_pct": 100,
+    "pass_rate_C_pct": 99.0,
+    "diff_pp": -1.0,
+    "ci90_lower_pp": 0.0,
+    "delta_q_pp": 10.0,
+    "non_inferior": true
+  },
+  "H4b_model": {
+    "tolerance": 0.25,
+    "specs": [
+      {
+        "spec": "ct_library",
+        "n_pairs": 14,
+        "r_observed": 1.4909,
+        "r_hat": 1.5575,
+        "rel_error": -0.0428,
+        "within_tolerance": true
+      },
+      {
+        "spec": "m_mixed",
+        "n_pairs": 14,
+        "r_observed": 1.006,
+        "r_hat": 1.1806,
+        "rel_error": -0.1479,
+        "within_tolerance": true
+      },
+      {
+        "spec": "n_db_chain",
+        "n_pairs": 14,
+        "r_observed": 0.9571,
+        "r_hat": 1.5251,
+        "rel_error": -0.3724,
+        "within_tolerance": false
+      },
+      {
+        "spec": "s17_m_mixed",
+        "n_pairs": 14,
+        "r_observed": 1.0205,
+        "r_hat": 1.2987,
+        "rel_error": -0.2142,
+        "within_tolerance": true
+      },
+      {
+        "spec": "s17_n_db_chain",
+        "n_pairs": 14,
+        "r_observed": 1.0736,
+        "r_hat": 1.373,
+        "rel_error": -0.2181,
+        "within_tolerance": true
+      },
+      {
+        "spec": "s17_w_two_files",
+        "n_pairs": 14,
+        "r_observed": 0.9021,
+        "r_hat": 1.0,
+        "rel_error": -0.0979,
+        "within_tolerance": true
+      },
+      {
+        "spec": "w_two_files",
+        "n_pairs": 14,
+        "r_observed": 1.0334,
+        "r_hat": 1.0,
+        "rel_error": 0.0334,
+        "within_tolerance": true
+      }
+    ],
+    "within_tolerance_count": 6,
+    "n_specs": 7,
+    "majority_within": true,
+    "sign_agreement": false,
+    "verdict": false
+  },
+  "central_claim_supported": false,
+  "decision_rule": "RQ1有意 ∧ 中央値-20%以下 ∧ RQ2非劣性 ∧ RQ3非劣性 の全成立時のみ",
+  "note": "部分成立は部分成立のまま報告する（§4）。スピンしない。"
+}
