@@ -146,11 +146,29 @@ def main() -> int:
         return 1
     ds = json.loads(ds_path.read_text(encoding="utf-8"))
 
+    # 停止条件は既定で判定を止める。`exclusion_rules.md` §3 は
+    # 「停止し、原因を調査してから再開する。**再開時は Amendment Log に記録する**」
+    # と定めており、記録済みの再開判断がある場合にだけ通す口を用意する。
+    # 閾値そのものは書き換えない（データを見た後にコードを緩める形を避けるため）。
+    # 通した場合は Amendment ID を判定結果に必ず刻む。
+    ack = None
+    for i, a in enumerate(sys.argv):
+        if a == "--acknowledge-stop" and i + 1 < len(sys.argv):
+            ack = sys.argv[i + 1]
     if ds.get("stop_conditions"):
-        print("*** E1 が停止条件を検出している。判定を出さない。 ***")
+        if not ack:
+            print("*** E1 が停止条件を検出している。判定を出さない。 ***")
+            for s in ds["stop_conditions"]:
+                print(f"  - {s}")
+            print("\n  再開するには exclusion_rules §3 に従って原因を調査し、"
+                  "Amendment Log へ記録したうえで")
+            print("  `--acknowledge-stop <Amendment ID>` を付けて実行すること。")
+            return 2
+        print("*** 停止条件あり。記録済みの再開判断により続行する。 ***")
         for s in ds["stop_conditions"]:
             print(f"  - {s}")
-        return 2
+        print(f"  → 根拠: protocol/rqs_hypotheses.md §7 {ack}")
+        print()
 
     pairs = ds["pairs"]
     if len(pairs) < 2:
