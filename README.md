@@ -24,6 +24,10 @@ We tested that idea against a commercial coding-agent CLI under a frozen protoco
 
 **Lane continuation is neither slower nor lower-quality — but it is not cheaper.**
 
+![Per-specification distribution](paper/figures/fig2_per_spec.png)
+
+*Only the contended specification separates from zero. The other six straddle it.*
+
 One more thing worth knowing: the effect is driven almost entirely by a single
 workload shape. Excluding the *contended* specification (tasks with no dependency
 but overlapping write scopes), the median difference becomes **−1.4% (p = 0.90)** —
