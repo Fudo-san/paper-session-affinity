@@ -1,0 +1,56 @@
+# REUSE 対応表（https://reuse.software/spec/）
+#
+# ファイルへライセンスヘッダを直接挿入せず、ここで一括指定する。
+# 理由: `protocol/` と `runs/` は事前登録の証跡であり、内容のハッシュが
+# 変わると「データを見る前に固定した」ことの証明が壊れる。
+# 凍結物には触れず、外部の対応表で指定する方針を採る。
+
+version = 1
+SPDX-PackageName = "paper-session-affinity"
+SPDX-PackageSupplier = "The authors of this repository"
+SPDX-PackageDownloadLocation = "TBD — 公開時に確定"
+
+# ---------------------------------------------------------------------------
+# コード: MIT
+# ---------------------------------------------------------------------------
+
+[[annotations]]
+path = ["analysis/**.py", "harness/**.py", "harness/**.sh",
+        "benchmarks/**.py", "probes/**.py"]
+precedence = "aggregate"
+SPDX-FileCopyrightText = "2026 The authors of this repository"
+SPDX-License-Identifier = "MIT"
+
+# ---------------------------------------------------------------------------
+# 文書: CC BY 4.0
+# ---------------------------------------------------------------------------
+
+[[annotations]]
+path = ["*.md", "drafts/**.md", "benchmarks/**.md", "probes/**.md",
+        "runs/**.md", "paper/**.bib"]
+precedence = "aggregate"
+SPDX-FileCopyrightText = "2026 The authors of this repository"
+SPDX-License-Identifier = "CC-BY-4.0"
+
+# ---------------------------------------------------------------------------
+# 凍結物: CC BY 4.0（ヘッダを入れないため、ここでのみ指定する）
+#
+# protocol/ は 2026-07-31 に FROZEN v1.0 として凍結した事前登録である。
+# runs/ と run_ledger_main.csv は追記のみ・改変禁止の実測データである。
+# いずれもファイル内容を変更してはならない。
+# ---------------------------------------------------------------------------
+
+[[annotations]]
+path = ["protocol/**", "runs/**.json", "runs/**.jsonl",
+        "run_ledger*.csv", "analysis/*.json", "benchmarks/**.json"]
+precedence = "aggregate"
+SPDX-FileCopyrightText = "2026 The authors of this repository"
+SPDX-License-Identifier = "CC-BY-4.0"
+
+# ---------------------------------------------------------------------------
+# 適用範囲の注記
+#
+# 本表はプロバイダのモデル出力の権利を再許諾しない。詳細は
+# THIRD_PARTY_NOTICES.md を参照。再現レベル2 に必要な外部リポジトリは
+# 本リポジトリに含まれず、公開もしないため、本表の対象外である。
+# ---------------------------------------------------------------------------

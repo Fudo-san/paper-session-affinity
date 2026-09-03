@@ -1,0 +1,278 @@
+{
+  "note": "S6 実験中に worktree 内で作られた stash。モデルが書いたコードを含む。square-media 側の git オブジェクトであり、論文リポには含まれない。参照が無く gc で失われるためタグで保全した。",
+  "repo": "square-media",
+  "tag_prefix": "exp-s6/",
+  "count": 23,
+  "commits": [
+    {
+      "sha": "ccdd320f6e6e63bfcead73fc7b383c3545742290",
+      "sha8": "ccdd320f",
+      "date": "2026-08-28T08:05:33+09:00",
+      "message": "On (no branch): CT-A-check-preexisting",
+      "task": "CT-A",
+      "files": [
+        "src/library/builder.py | 1 +",
+        "src/library/schema.py  | 7 +++++++"
+      ],
+      "tag": "exp-s6/2026-08-28-CT-A-ccdd320f"
+    },
+    {
+      "sha": "28d1f9316b63d2901bafe83503b25d0fce9c1ce1",
+      "sha8": "28d1f931",
+      "date": "2026-08-28T19:18:03+09:00",
+      "message": "On (no branch): T-17101-check",
+      "task": "T-17101",
+      "files": [
+        "src/db.py | 13 +++++++++++++"
+      ],
+      "tag": "exp-s6/2026-08-28-T-17101-28d1f931"
+    },
+    {
+      "sha": "49edf979eebb5754ada23da3101c191e4db84e0b",
+      "sha8": "49edf979",
+      "date": "2026-08-28T19:23:39+09:00",
+      "message": "On (no branch): ct-a-wip-check",
+      "task": "CT-A",
+      "files": [
+        "src/library/builder.py | 1 +",
+        "src/library/schema.py  | 7 +++++++"
+      ],
+      "tag": "exp-s6/2026-08-28-CT-A-49edf979"
+    },
+    {
+      "sha": "0cc01acb4dfd2f8b3a073287373aaec065b46798",
+      "sha8": "0cc01acb",
+      "date": "2026-08-28T20:59:19+09:00",
+      "message": "On (no branch): T-17101-check-preexisting",
+      "task": "T-17101",
+      "files": [
+        "src/db.py | 14 ++++++++++++++"
+      ],
+      "tag": "exp-s6/2026-08-28-T-17101-0cc01acb"
+    },
+    {
+      "sha": "40d577a25424f9bddc58a2c46e7a0545a78e4851",
+      "sha8": "40d577a2",
+      "date": "2026-08-29T02:13:27+09:00",
+      "message": "On (no branch): T-1311-check-pretest",
+      "task": "T-1311",
+      "files": [
+        "src/db.py | 19 +++++++++++++++++++"
+      ],
+      "tag": "exp-s6/2026-08-29-T-1311-40d577a2"
+    },
+    {
+      "sha": "936d5f2ab41c4a66fbb911c99a98ec94b5dcda8f",
+      "sha8": "936d5f2a",
+      "date": "2026-08-29T08:56:41+09:00",
+      "message": "On (no branch): CT-A-wip-check",
+      "task": "CT-A",
+      "files": [
+        "src/library/builder.py | 1 +",
+        "src/library/schema.py  | 7 +++++++"
+      ],
+      "tag": "exp-s6/2026-08-29-CT-A-936d5f2a"
+    },
+    {
+      "sha": "44a9cbbd42c5dc21891cc8eee2f1e8e191e81a02",
+      "sha8": "44a9cbbd",
+      "date": "2026-08-29T17:48:07+09:00",
+      "message": "On (no branch): ct-a-wip-check",
+      "task": "CT-A",
+      "files": [
+        "src/library/builder.py | 1 +",
+        "src/library/schema.py  | 7 +++++++"
+      ],
+      "tag": "exp-s6/2026-08-29-CT-A-44a9cbbd"
+    },
+    {
+      "sha": "d72e7b3de92be397f5d399c4ab75e7aa0c54c972",
+      "sha8": "d72e7b3d",
+      "date": "2026-08-29T18:15:43+09:00",
+      "message": "On (no branch): T-17103-check-preexisting",
+      "task": "T-17103",
+      "files": [
+        "src/db.py                  | 13 +++++++++++",
+        "src/llm/safe_llm_runner.py | 56 +++++++++++++++++++++++++++++++++++-----------"
+      ],
+      "tag": "exp-s6/2026-08-29-T-17103-d72e7b3d"
+    },
+    {
+      "sha": "8ddd3da9067724eb41791887da066ac97379f527",
+      "sha8": "8ddd3da9",
+      "date": "2026-08-29T22:47:05+09:00",
+      "message": "On (no branch): CT-A-wip-check",
+      "task": "CT-A",
+      "files": [
+        "src/library/builder.py | 1 +",
+        "src/library/schema.py  | 7 +++++++"
+      ],
+      "tag": "exp-s6/2026-08-29-CT-A-8ddd3da9"
+    },
+    {
+      "sha": "eb0dd746e88bdc4ec76e1b91d2a84e439f7b83ac",
+      "sha8": "eb0dd746",
+      "date": "2026-08-29T23:19:49+09:00",
+      "message": "On (no branch): T-17101-wip-check",
+      "task": "T-17101",
+      "files": [
+        "src/db.py | 13 +++++++++++++"
+      ],
+      "tag": "exp-s6/2026-08-29-T-17101-eb0dd746"
+    },
+    {
+      "sha": "1373ffeabf4457527a2877c91530d70daea5777b",
+      "sha8": "1373ffea",
+      "date": "2026-08-29T23:31:10+09:00",
+      "message": "On (no branch): T-17101-check-pre-existing",
+      "task": "T-17101",
+      "files": [
+        "src/db.py                  | 13 +++++++++",
+        "src/llm/safe_llm_runner.py | 68 ++++++++++++++++++++++++++++++++++++----------"
+      ],
+      "tag": "exp-s6/2026-08-29-T-17101-1373ffea"
+    },
+    {
+      "sha": "97578efc12f744a86cd36438ec6c125006e736cf",
+      "sha8": "97578efc",
+      "date": "2026-08-30T04:22:41+09:00",
+      "message": "On (no branch): ct-a-wip-check",
+      "task": "CT-A",
+      "files": [
+        "src/library/builder.py | 1 +",
+        "src/library/schema.py  | 7 +++++++"
+      ],
+      "tag": "exp-s6/2026-08-30-CT-A-97578efc"
+    },
+    {
+      "sha": "a9ae39084ab34bcc07e48bde6062e5d440506ecb",
+      "sha8": "a9ae3908",
+      "date": "2026-08-30T04:42:28+09:00",
+      "message": "On (no branch): T-17101-check-baseline",
+      "task": "T-17101",
+      "files": [
+        "src/db.py | 13 +++++++++++++"
+      ],
+      "tag": "exp-s6/2026-08-30-T-17101-a9ae3908"
+    },
+    {
+      "sha": "63d642acc59e487d110e88db5d9884b4f8997532",
+      "sha8": "63d642ac",
+      "date": "2026-08-30T04:59:06+09:00",
+      "message": "On (no branch): CT-A-check-preexisting",
+      "task": "CT-A",
+      "files": [
+        "src/library/builder.py | 1 +",
+        "src/library/schema.py  | 7 +++++++"
+      ],
+      "tag": "exp-s6/2026-08-30-CT-A-63d642ac"
+    },
+    {
+      "sha": "393bf0003b28d56020bc5ff63b74302e1d2f9221",
+      "sha8": "393bf000",
+      "date": "2026-08-30T14:02:10+09:00",
+      "message": "On (no branch): CT-A-wip-check",
+      "task": "CT-A",
+      "files": [
+        "src/library/builder.py | 1 +",
+        "src/library/schema.py  | 7 +++++++"
+      ],
+      "tag": "exp-s6/2026-08-30-CT-A-393bf000"
+    },
+    {
+      "sha": "2e4559e74964b336d68e1874020d2a78592290c9",
+      "sha8": "2e4559e7",
+      "date": "2026-08-30T14:57:34+09:00",
+      "message": "On (no branch): T-1311-wip-check",
+      "task": "T-1311",
+      "files": [
+        "src/db.py | 19 +++++++++++++++++++"
+      ],
+      "tag": "exp-s6/2026-08-30-T-1311-2e4559e7"
+    },
+    {
+      "sha": "b6b70cf17084adbc3498f15874fc689fbd17ac61",
+      "sha8": "b6b70cf1",
+      "date": "2026-08-30T15:05:21+09:00",
+      "message": "On (no branch): CT-A-wip-check",
+      "task": "CT-A",
+      "files": [
+        "src/library/builder.py | 1 +",
+        "src/library/schema.py  | 7 +++++++"
+      ],
+      "tag": "exp-s6/2026-08-30-CT-A-b6b70cf1"
+    },
+    {
+      "sha": "71fe216da574bf4a5cdddb830be8c96ea145206e",
+      "sha8": "71fe216d",
+      "date": "2026-08-30T19:18:03+09:00",
+      "message": "On (no branch): T-17103-wip-check",
+      "task": "T-17103",
+      "files": [
+        "src/db.py                  | 57 +++++++++++++++++++++++++++++++++++++++++",
+        "src/llm/safe_llm_runner.py | 63 +++++++++++++++++++++++++++++++++++-----------"
+      ],
+      "tag": "exp-s6/2026-08-30-T-17103-71fe216d"
+    },
+    {
+      "sha": "2e30d49730031f5f461373b0395c5ac960021c4f",
+      "sha8": "2e30d497",
+      "date": "2026-08-30T19:33:08+09:00",
+      "message": "On (no branch): ct-a-verify-preexisting",
+      "task": "CT-A",
+      "files": [
+        "src/library/builder.py | 1 +",
+        "src/library/schema.py  | 7 +++++++"
+      ],
+      "tag": "exp-s6/2026-08-30-CT-A-2e30d497"
+    },
+    {
+      "sha": "081a4ee985b505be998b3ebfa5dd28056b5fb1ae",
+      "sha8": "081a4ee9",
+      "date": "2026-08-30T20:03:45+09:00",
+      "message": "On (no branch): CT-A-check-preexisting",
+      "task": "CT-A",
+      "files": [
+        "src/library/builder.py | 1 +",
+        "src/library/schema.py  | 7 +++++++"
+      ],
+      "tag": "exp-s6/2026-08-30-CT-A-081a4ee9"
+    },
+    {
+      "sha": "82f28f8c3f8a476f3fe91ef954ceeaef755be508",
+      "sha8": "82f28f8c",
+      "date": "2026-08-31T00:42:52+09:00",
+      "message": "On (no branch): T-17101-verify-preexisting-failure",
+      "task": "T-17101",
+      "files": [
+        "src/db.py                  | 14 ++++++++++++++",
+        "src/llm/safe_llm_runner.py | 43 +++++++++++++++++++++++++++++++++++--------"
+      ],
+      "tag": "exp-s6/2026-08-31-T-17101-82f28f8c"
+    },
+    {
+      "sha": "5fc1c85447398af215056b89a95cd7681c84d872",
+      "sha8": "5fc1c854",
+      "date": "2026-09-02T17:38:08+09:00",
+      "message": "On (no branch): CT-A-wip-check",
+      "task": "CT-A",
+      "files": [
+        "src/library/builder.py | 1 +",
+        "src/library/schema.py  | 7 +++++++"
+      ],
+      "tag": "exp-s6/2026-09-02-CT-A-5fc1c854"
+    },
+    {
+      "sha": "b7bf115818b73c227e7e02fcabb274cf41f24a8d",
+      "sha8": "b7bf1158",
+      "date": "2026-09-02T17:51:02+09:00",
+      "message": "On (no branch): T-17103-wip-check",
+      "task": "T-17103",
+      "files": [
+        "src/db.py                  | 13 +++++++++",
+        "src/llm/safe_llm_runner.py | 71 +++++++++++++++++++++++++++++++++++-----------"
+      ],
+      "tag": "exp-s6/2026-09-02-T-17103-b7bf1158"
+    }
+  ]
+}
