@@ -1,3 +1,5 @@
+> **統合前の旧稿（2026-09-04に更新停止）。** 現行本文は [paper/main.tex](../paper/main.tex)、閲覧版は [PDF](../paper/main.pdf)。本ファイルには撤回・訂正済みの数値や説明が含まれる。修正点は [訂正記録](../paper/revision/CHANGELOG.md)を参照。元のバイト列は `paper/revision/original/` に保存。
+
 # §3 Cost Model（ドラフト v0.2）
 
 > 状態: Stage 1（データ収集前に確定できる理論部）。本文は実験結果に依存しない。

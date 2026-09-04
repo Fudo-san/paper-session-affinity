@@ -1,3 +1,5 @@
+> **統合前の旧稿（2026-09-04に更新停止）。** 現行本文は [paper/main.tex](../paper/main.tex)、閲覧版は [PDF](../paper/main.pdf)。本ファイルには撤回・訂正済みの数値や説明が含まれる。修正点は [訂正記録](../paper/revision/CHANGELOG.md)を参照。元のバイト列は `paper/revision/original/` に保存。
+
 # §1 Introduction（ドラフト v0.3 — 2026-09-02 結果反映）
 
 > 状態: S6 の凍結判定を反映済み。引用が必要な箇所は未解決のまま残す。

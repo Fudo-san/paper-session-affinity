@@ -1,13 +1,13 @@
 # 公開計画と文書整合の正本
 
-更新日: 2026-09-02  
+更新日: 2026-09-04  
 状態: **公開方式は選定済み／外部公開は未実施**
 
 ## 1. 選定結果
 
 | 対象 | 選定 | 役割 |
 |---|---|---|
-| 論文タイトル | *The Economics of Session Affinity in Multi-Agent Code Generation: A Preregistered Study of a Commercial Coding-Agent CLI* | 負の結果を隠さず、測定研究として位置づける |
+| 論文タイトル | *The Economics of Session Affinity in Multi-Agent Code Generation: A Measurement Study of a Commercial Coding-Agent CLI* | 負の結果を隠さず、測定研究として位置づける |
 | Preprint | arXiv、primary `cs.SE` | ソフトウェア工学上の実証研究として公開 |
 | Cross-list | `cs.AI` 候補 | MAS・agent研究の読者へ到達させる。最終可否は arXiv 側の分類に従う |
 | 更新可能な正本 | 公開 GitHub repository `paper-session-affinity` | issue、訂正、後続版を管理 |
@@ -37,47 +37,24 @@ Git の `user.name` や `user.email` は commit 用のローカル設定であ�
 
 矛盾した場合は次の順で解決する。
 
-1. `protocol/` — 凍結した判定規則と Amendment Log
-2. `analysis/e2_results_main.json` — 機械判定された確定値
-3. `drafts/sec6_results.md` — 数値の論文向け説明
-4. `drafts/sec8_threats.md` — 限界と感度分析
-5. `drafts/sec1_introduction.md` / `drafts/abstract.md` / `drafts/sec9_conclusion.md` — 要約
-6. `STATUS.md` — 作業状態
-7. `OUTLINE.md` / `GAPS_*.md` — 構成履歴・当時の判断
+1. `protocol/` と `analysis/PRE_ANALYSIS_DECISIONS.md` — 凍結した宣言・判断
+2. `analysis/e1_dataset_main.json` / `analysis/e2_results_main.json` — 保持する旧出力
+3. `paper/revision/results.json` / `ANALYSIS_PLAN.md` / `CHANGELOG.md` — 宣言と実装の不一致を開示した訂正結果
+4. `paper/main.tex` — 現行本文。表・数値は訂正JSONから生成
+5. `STATUS.md` — 現在の作業状態
+6. `drafts/` / `GAPS_*.md` — 歴史資料
 
-要約文書の数字を個別に直さず、先に E2 の出力と §6 を確認してから同期する。
-
-### 今回解消した食い違い
-
-| 論点 | 古い記述 | 現行判断 |
-|---|---|---|
-| 実験状態 | S6 実行前 / データ待ち | 196ラン・98 pairで完走、E2確定済み |
-| 中心主張 | C が B より安い | H1不成立。C は費用中央値 +5.5% |
-| 成立した部分 | 未定 | 時間・品質の非劣性のみ成立 |
-| コストモデル | 予測成立を想定 | 大きさ6/7は許容内だが符号不一致で H4b 不成立 |
-| §7 | RTK / RecursiveMAS の悪化を予定 | 両者は未測定で主張しない。実測で棄却した仮説だけを書く |
-| §9 / Abstract | 未着手 | 個別ドラフト作成済み |
-| 公開先 | 未定 | GitHub + Zenodo DOI + arXiv `cs.SE` を選定 |
-
-`GAPS_*.md` は当時の判断を保存する履歴資料なので本文を現在形へ書き換えず、冒頭の
-SUPERSEDED表示と正本リンクで隔離する。
-
-### まだ統合時に解消すべきもの
-
-| 場所 | 状態 | 処置 |
-|---|---|---|
-| `drafts/sec6_hypotheses.md` | 凍結前の A/D/H5 を含む旧稿 | 本文へ直接使わず、`protocol/` から §6.1〜§6.5 を作る |
-| `drafts/sec3_cost_model.md` 末尾 | E/H 分布等が「データ待ち」のまま | 較正JSONから埋めるか、未報告として §8 と整合させる |
-| `drafts/sec2_novelty_matrix.md` | 調査基準日が 2026-07-31 | 公開直前検索後に断定と引用を更新する |
-| Introduction | `［要引用］` が残る | BibTeX と本文引用を同時に確定する |
-| repository全体 | 日本語節別Markdownのみ | arXiv向け英語LaTeXへ統合し、生成PDFを照合する |
+旧E2を上書きせず、旧値・訂正値・追加分析の三者を区別する。
+統合改訂稿v0.2は日本語本文と英語要旨。投稿用の英語本文は別工程。
+関連文献9件の書誌と引用範囲を一次資料で確認し、CoCoderのAPI費用評価を反映した。
+この引用監査は網羅的な新着文献検索の完了を意味しない。
 
 ## 4. 公開前ゲート
 
 次の全項目が揃うまで公開しない。
 
 - [ ] 著者表示名・所属・ORCID の本人確認
-- [ ] §1〜§9 と Abstract を単一 LaTeX 原稿へ統合
+- [x] §1〜§9 と Abstract を単一 LaTeX 原稿へ統合
 - [ ] `［要引用］`、`TBD`、未解決の節番号・図表参照をゼロにする
 - [ ] 2026-07-31 以後の新着文献を再検索し、新規性の断定を再検査
 - [ ] 生データに秘密・個人情報・非公開リポジトリ内容がないことを確認
@@ -86,7 +63,7 @@ SUPERSEDED表示と正本リンクで隔離する。
 - [ ] `CITATION.cff` を著者名・DOI・release URL 確定後に追加
 - [ ] 絶対パスは「実験記録として保持」か「可搬化」のどちらかをファイルごとに決める
 - [ ] 196 run / 98 pair / dropped 0 / model / CLI / $121.26 が本文と artifact で一致
-- [ ] 分析テスト29件と凍結分析を clean checkout で再実行
+- [ ] リリース候補の clean checkout で分析テスト33件と凍結分析を再実行（作業ツリーでの検証は完了）
 - [ ] commit、release tag、E2 JSON、paper source の SHA-256 manifest を生成
 
 ### 現時点の監査結果
@@ -97,7 +74,7 @@ SUPERSEDED表示と正本リンクで隔離する。
 - `calls.jsonl`: usage、モデル、session_id、task_id、時間等の構造化計測値で、prompt/response
   本文のキーはない。ただし session_id を公開してよいかは最終監査で再確認する
 - repository remote: 未設定
-- LICENSE: 未設定
+- LICENSE: MIT / CC BY 4.0 のファイルは存在。最終再配布監査は未完
 
 ## 5. リリース順
 
@@ -135,5 +112,5 @@ SUPERSEDED表示と正本リンクで隔離する。
 ## 8. 現時点で外部操作をしない理由
 
 remote 作成、公開化、Zenodo deposit、arXiv submission は第三者から見える不可逆性の高い操作である。
-著者情報・権利・LICENSE が未確定のため、本書では方式の選定と公開ゲートの固定までを行い、
+著者情報と最終的な再配布権の確認が未完のため、本書では方式の選定と公開ゲートの固定までを行い、
 実際の公開は人の最終確認後に行う。

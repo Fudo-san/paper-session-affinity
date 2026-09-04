@@ -1,106 +1,55 @@
-% 参考文献。すべて §2 の新規性マトリクス（drafts/sec2_novelty_matrix.md）に対応する。
-% arXiv ID は本文の記載と一致させること。未精読のものは note に明記する。
-
-@misc{coagent,
-  title        = {{CoAgent}},
-  note         = {MAS の並行制御。fork-and-merge と LLM の意味理解で実競合と
-                  無害な読み書き干渉を区別する。事後の競合解決であり、
-                  コスト・セッション経済は対象外},
-  eprint       = {2606.15376},
-  archivePrefix= {arXiv},
-  primaryClass = {cs.SE},
-  year         = {2026}
-}
-
-@misc{codeteam,
-  title        = {{CodeTeam}},
-  note         = {Architect 複数案を CTO が選定し、ファイル所有権・公開IF・依存制約を
-                  機械検証可能な契約へ正規化する。依存対応スケジューラと Git 協調。
-                  本研究の最近傍。トークンコストと実行時間を報告していない
-                  （2026-07-05 に評価節を精読して確認）},
-  eprint       = {2606.22082},
-  archivePrefix= {arXiv},
-  primaryClass = {cs.SE},
-  year         = {2026}
-}
-
-@misc{dyntaskmas,
-  title        = {{DynTaskMAS}},
-  note         = {動的タスクグラフと非同期並列実行。実行時間 21--33\% 減、
-                  資源利用率 +35.4\%。最適化対象は時間とスループットであり、
-                  トークン費用・キャッシュ・書き込み競合は扱わない。ICAPS'25},
-  eprint       = {2503.07675},
-  archivePrefix= {arXiv},
-  primaryClass = {cs.AI},
-  year         = {2025}
-}
-
-@misc{tokenomics,
-  title        = {{Tokenomics}: Token Consumption of {LLM} Multi-Agent Systems across the {SDLC}},
-  note         = {SDLC 段階別のトークン消費の定量化。Code Review が 59.4\%、
-                  入力が 53.9\%。計測のみで最適化はしない。本稿 §1 の動機の引用元},
-  eprint       = {2601.14470},
-  archivePrefix= {arXiv},
-  primaryClass = {cs.SE},
-  year         = {2026}
-}
-
-@misc{tokeneconomics,
-  title        = {Token Economics of Agentic {AI}},
-  note        = {エージェント AI のトークン経済の二面（計算・経済）の調査。
-                  具体的なスケジューリングは扱わない},
-  eprint       = {2605.09104},
-  archivePrefix= {arXiv},
-  primaryClass = {cs.AI},
-  year         = {2026}
-}
-
 @misc{dontbreakcache,
-  title        = {Don't Break the Cache},
-  note         = {商用 API 3社での長期エージェントタスクのキャッシュ戦略の評価
-                  （フル / システムのみ / 動的除外）。41--80\% 削減。
-                  本稿 §3 の最近傍だが単一エージェント・評価のみで、
-                  スケジューリング・実行順制御・タスク割当の提案は無い},
-  eprint       = {2601.06007},
-  archivePrefix= {arXiv},
-  primaryClass = {cs.LG},
-  year         = {2026}
+ author={Elias Lumer and Faheem Nizar and Akshaya Jangiti and Kevin Frank and Anmol Gulati and Mandar Phadate and Vamse Kumar Subbiah},
+ title={Don't Break the Cache: An Evaluation of Prompt Caching for Long-Horizon Agentic Tasks},
+ year={2026}, howpublished={arXiv:2601.06007, version 2},
+ note={\url{https://arxiv.org/abs/2601.06007v2}}
 }
-
-@misc{agentopt,
-  title        = {{AgentOpt} v0.1},
-  note         = {クライアント側最適化としてのモデル選択と予算配分。
-                  最良／最悪モデル構成のコスト差 13--32 倍。単一エージェント
-                  パイプラインであり、セッション親和性・キャッシュ・書き込み競合は扱わない},
-  eprint       = {2604.06296},
-  archivePrefix= {arXiv},
-  primaryClass = {cs.AI},
-  year         = {2026}
+@misc{cmv,
+ author={Cosmo Santoni},
+ title={Contextual Memory Virtualisation: {DAG}-Based State Management and Structurally Lossless Trimming for {LLM} Agents},
+ year={2026}, howpublished={arXiv:2602.22402, version 1},
+ note={\url{https://arxiv.org/abs/2602.22402v1}}
 }
-
-@misc{agentservesim,
-  title        = {{AGENTSERVESIM}},
-  note         = {マルチインスタンスのサービング層におけるセッション親和性ルーティング
-                  （cache hit 96.26\% vs 92.6--93.0\%）。推論基盤を所有する前提であり、
-                  本稿は閉じた商用 API のクライアント側を扱う},
-  eprint       = {2606.09613},
-  archivePrefix= {arXiv},
-  primaryClass = {cs.DC},
-  year         = {2026}
+@misc{cocoder,
+ author={Xu Yang and Lunyiu Nie and Ethan Chandra and Stanislav Gannutin and Fangru Lin and Swarat Chaudhuri},
+ title={When Parallelism Pays Off: Cohesion-Aware Task Partitioning for Multi-Agent Coding},
+ year={2026}, howpublished={arXiv:2606.00953, version 1},
+ note={\url{https://arxiv.org/abs/2606.00953v1}}
 }
-
-@misc{phipsonsmyth,
-  title        = {Permutation p-values should never be zero},
-  author       = {Phipson, Belinda and Smyth, Gordon K.},
-  note         = {置換検定の p 値に用いた +1 補正の根拠。
-                  Statistical Applications in Genetics and Molecular Biology 9(1)},
-  year         = {2010}
+@misc{sglang,
+ author={Lianmin Zheng and Liangsheng Yin and Zhiqiang Xie and Chuyue Sun and Jeff Huang and Cody Hao Yu and Shiyi Cao and Christos Kozyrakis and Ion Stoica and Joseph E. Gonzalez and Clark Barrett and Ying Sheng},
+ title={{SGLang}: Efficient Execution of Structured Language Model Programs},
+ year={2024}, howpublished={arXiv:2312.07104, version 2},
+ note={\url{https://arxiv.org/abs/2312.07104v2}}
 }
-
-@misc{efrontibshirani,
-  title        = {An Introduction to the Bootstrap},
-  author       = {Efron, Bradley and Tibshirani, Robert J.},
-  note         = {BCa 信頼区間（バイアス補正と加速度）の出典},
-  publisher    = {Chapman \& Hall},
-  year         = {1993}
+@misc{parrot,
+ author={Chaofan Lin and Zhenhua Han and Chengruidong Zhang and Yuqing Yang and Fan Yang and Chen Chen and Lili Qiu},
+ title={Parrot: Efficient Serving of {LLM}-based Applications with Semantic Variable},
+ year={2024}, howpublished={arXiv:2405.19888, version 1},
+ note={\url{https://arxiv.org/abs/2405.19888v1}}
+}
+@misc{prereg,
+ author={Michelle Vaccaro},
+ title={Preregistration for Experiments with {AI} Agents},
+ year={2026}, howpublished={arXiv:2606.11217, version 1},
+ note={\url{https://arxiv.org/abs/2606.11217v1}}
+}
+@article{phipson,
+ author={Belinda Phipson and Gordon K. Smyth},
+ title={Permutation $P$-values Should Never Be Zero: Calculating Exact $P$-values When Permutations Are Randomly Drawn},
+ journal={Statistical Applications in Genetics and Molecular Biology},
+ volume={9}, number={1}, pages={Article 39}, year={2010},
+ note={\url{https://doi.org/10.2202/1544-6115.1585}}
+}
+@book{bootstrap,
+ author={Bradley Efron and Robert J. Tibshirani},
+ title={An Introduction to the Bootstrap},
+ publisher={Chapman \& Hall}, year={1993},
+ note={\url{https://doi.org/10.1007/978-1-4899-4541-9}}
+}
+@article{clopper,
+ author={C. J. Clopper and E. S. Pearson},
+ title={The Use of Confidence or Fiducial Limits Illustrated in the Case of the Binomial},
+ journal={Biometrika}, volume={26}, number={4}, pages={404--413}, year={1934},
+ note={\url{https://doi.org/10.1093/biomet/26.4.404}}
 }

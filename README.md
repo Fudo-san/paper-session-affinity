@@ -1,150 +1,61 @@
-# The Economics of Session Affinity in Multi-Agent Code Generation
+# マルチエージェント・コード生成におけるセッション継続の費用
 
-**A Preregistered Study of a Commercial Coding-Agent CLI**
+商用コーディングエージェントCLIの挙動測定と事前指定比較。
 
-Does keeping related coding tasks in one continued session save money?
-We preregistered the answer criteria, ran 196 paired runs, and found that **it does not**.
+## 統合原稿（2026-09-04・v0.2）
 
----
+- [PDF本文](paper/main.pdf)
+- [LaTeX本文](paper/main.tex)（日本語本文・英語要旨・全9章・付録・参考文献）
+- [ビルド手順](paper/BUILD.md)
+- [改稿・訂正記録](paper/revision/CHANGELOG.md)
+- [訂正結果JSON](paper/revision/results.json)
 
-## TL;DR
+1つのPythonリポジトリ内の7仕様を、毎回新規セッションBと、編集範囲の連結成分で会話を継続するCで98対・196ラン比較した。
+費用差 `(C−B)/B` の中央値は **+5.51%**。宣言済みの相対尺度へ実装を訂正したBCa 95%区間は **[−3.18%, +10.12%]** で、事前指定の20%削減の達成条件は満たされなかった。
+時間比1.0425（片側90%上限1.1335）は許容上限1.15以内、受入全通過はB 98/98・C 97/98。通過率差の訂正後BCa片側90%下限は **−5.10ポイント**で、許容下限−10ポイントを上回る。
+「時間・品質が同じ」「会話継続は常に損」とは解釈しない。
 
-Multi-agent code generation systems call an LLM once per task. Each call re-reads the
-repository context from scratch. An obvious idea is to keep related tasks in the same
-session so the shared history is served from cache instead of being rebuilt.
+CT仕様ではCが全14対で高く、相対費用差中央値+50.6%。CTを除く副次集計は−1.4%であり、結論は課題構成に依存する。
+Cは会話継続と実行順制約を同時に変えるので、費用差を直列化単独の因果効果と呼ばない。
+モデルの費用比予測は6/7仕様で相対誤差25%以内だが方向一致は満たさず、過大予測も7/7ではなく6/7だった。
 
-We tested that idea against a commercial coding-agent CLI under a frozen protocol.
+## 旧結果との違い
 
-| Hypothesis | Result | Verdict |
-|---|---|---|
-| **H1** Cost is reduced by ≥20% | median **+5.5%** (C is *more* expensive) | **not supported** |
-| **H2** Wall-clock time is non-inferior | ratio 1.042, CI upper 1.133 < 1.15 | **supported** |
-| **H3** Acceptance pass rate is non-inferior | B 100.0% / C 99.0%, CI90 lower +0.00pp | **supported** |
-| **H4b** The cost model predicts the ratio | 6/7 within ±25%, but sign wrong for 2 | **not supported** |
+原データ、固定予測、凍結プロトコル、旧結果は変更していない。旧E1/E2は一時ディレクトリで再現確認した。
 
-**Lane continuation is neither slower nor lower-quality — but it is not cheaper.**
+- H1: 分析前文書は相対差を主としたが、旧実装はドル差を使用していた。訂正結果と旧値を本文に併記。
+- H3: 通過率差の区間に中央値を使ったため旧下限が0.00になっていた。平均を明示し−5.10へ訂正。
+- モデルの等値予測の扱い、TTLの断定、失敗時のセッション破棄の説明も原記録・実装と照合して訂正。
+- 事前指定文書はGit履歴にあるが、独立した公開登録時刻は未確認。「事前指定」と「外部登録済み」を区別する。
 
-![Per-specification distribution](paper/figures/fig2_per_spec.png)
-
-*Only the contended specification separates from zero. The other six straddle it.*
-
-One more thing worth knowing: the effect is driven almost entirely by a single
-workload shape. Excluding the *contended* specification (tasks with no dependency
-but overlapping write scopes), the median difference becomes **−1.4% (p = 0.90)** —
-the effect disappears. What we actually measured is the **cost of over-serialization
-under contention**, not a general property of session reuse.
-
-## Why this repository exists
-
-Negative results are rarely published, and preregistration is rare in
-empirical software engineering. This repository is the full record:
-the frozen decision rules, the raw measurements, the analysis code, and
-every amendment made along the way — including the mistakes.
-
-**The preregistration is verifiable by timestamp.** `protocol/` was frozen in
-commit `fefe7c4` (2026-07-31T01:55:17+09:00), before any main-experiment data existed.
-Every later change is logged in `protocol/rqs_hypotheses.md` §7 as A-1 … A-6.
-
-## What's here
-
-| Path | Contents |
-|---|---|
-| `protocol/` | Preregistered decision rules (FROZEN v1.0) and the amendment log |
-| `drafts/` | The paper, section by section |
-| `runs/main/` | **196 runs of raw measurements** (`run.json` + `calls.jsonl`) |
-| `analysis/` | E1 aggregation, E2 verdict, statistics, model predictions |
-| `harness/` | Experiment driver and per-window runner |
-| `benchmarks/` | Seven task specifications and their shape mapping |
-| `probes/` | M1–M7 cache-behaviour probes underpinning the cost model |
-
-The measurement data includes per-turn token usage (`num_turns`,
-`peak_context_tokens`, `turns[]`) for every call — rare data for a commercial CLI.
-
-## Reproducing the analysis (a few minutes, no API needed)
-
-Everything needed is in this repository.
+## 再現
 
 ```bash
-python3 analysis/e1_aggregate.py main
-python3 analysis/e2_tests.py main --acknowledge-stop A-6
-python3 -m pytest -q analysis/tests/       # 29 tests, synthetic data only
+python3 analysis/revision_audit.py
+python3 -m pytest -q analysis/tests/
+.venv-figs/bin/python paper/render_assets.py
+bash paper/build.sh
 ```
 
-`--acknowledge-stop A-6` is required by design: E1 detects a preregistered stop
-condition and refuses to produce a verdict unless a recorded resumption decision
-is named. See `protocol/rqs_hypotheses.md` §7 A-6.
+分析再現は保存データのみで可能。実験自体の再実行には商用サービス、実行フレームワーク、対象リポジトリが必要で、**後者2つは本パッケージに含まれず公開もしていない**（ライセンス未設定のため。`THIRD_PARTY_NOTICES.md` §3）。[REPRODUCTION.md](REPRODUCTION.md)を参照。
+旧E2を元のパスへ再実行すると凍結JSONを上書きするため、通常は訂正監査スクリプトの一時ディレクトリ再現を使う。
 
-Secondary analyses (permitted only as secondary by `exclusion_rules` §5):
+## ファイル構成
 
-```bash
-python3 analysis/sensitivity.py    # effect disappears without the contended spec
-python3 analysis/pair_gaps.py      # within-pair execution intervals
-python3 analysis/verify_frozen.py  # SHA-256 of the 398 frozen files
-```
-
-Re-running the **experiment** itself needs the API, the harness, and the target
-repository — see `REPRODUCTION.md`. Those two repositories are **not published**,
-so only the analysis is fully reproducible from this repository alone.
-
-## Honest limitations
-
-Read `drafts/sec8_threats.md` before drawing conclusions. The short list:
-
-- **A central claim of ours was refuted by our own measurements.** We argued that
-  cache TTL is a schedulable resource. It partly is not: the rewrite indicator ρ,
-  which roughly halves the break-even point, is determined by provider-side cache
-  state at init and **cannot be controlled from the client**.
-- One of seven specifications determines the sign of the result.
-- The infrastructure was unstable; a preregistered stop condition fired
-  (see A-6 for why the run-level rate is 13.8%, not the 61.7% E1 reports).
-- Single language, single target repository, single model and CLI version.
-- The author is not blind: the third arm was conceived *after* seeing pilot direction
-  (it was ultimately parked — see §7.5).
-
-## License
-
-| | |
+| パス | 役割 |
 |---|---|
-| Code (`analysis/` `harness/` `benchmarks/*.py` `probes/`) | **MIT** |
-| Docs and data (`drafts/` `protocol/` `runs/` `*.md` `*.csv`) | **CC BY 4.0** |
+| `paper/main.tex` | 統合本文の正本 |
+| `paper/revision/results.json` | 訂正結果と追加分析 |
+| `paper/revision/original/` | 改稿前原文とSHA-256 |
+| `drafts/` | 統合前の章別原稿（履歴。現行本文として引用しない） |
+| `protocol/` | 保存された事前指定規則と変更履歴 |
+| `analysis/e2_results_main.json` | 凍結した旧結果。訂正版と区別 |
+| `runs/main/` | 196ランの保存データ |
+| `analysis/` | 旧分析と別ファイルの訂正監査 |
+| `benchmarks/`, `harness/`, `probes/` | 仕様、実行系、機構測定 |
 
-Per-file mapping is in `REUSE.toml`. Frozen artefacts carry no license headers
-so their hashes stay verifiable.
+## 公開とライセンス
 
-**This license does not sublicense model outputs.** Provider terms — including any
-restriction on competing model development — are not lifted by CC BY.
-See `THIRD_PARTY_NOTICES.md`.
-
-CC BY asks for credit on redistribution; it does **not** compel citation for the
-use of plain facts such as costs or token counts. For academic citation, please
-use `CITATION.cff`.
-
-## Status
-
-Not yet published externally. The following are pending author confirmation
-(see `PUBLICATION_PLAN.md`):
-
-- Author name, affiliation, contact
-- Repository URL, Zenodo DOI, arXiv ID
-
----
-
-## 日本語
-
-商用コーディングエージェント CLI 上で、**関連タスクを同一セッションに載せると
-費用が下がるか**を事前登録して検証した記録である。
-
-**結論は「下がらない」。** 中央値で 5.5% 高く、事前登録の有意性条件と 20% 削減基準を
-いずれも満たさなかった。一方で時間と品質は非劣性が成立しており、
-**「遅くも粗くもならないが、安くもならない」**というのが本研究の答えである。
-
-さらに、この効果は**単一の仕様が支配している**。競合形状（依存が無いのに
-write-scope が交差する）を除くと中央値は **−1.4%（p=0.90）** となり効果が消える。
-測定できたのは「セッション再利用の一般的な性質」ではなく、
-**競合下での過剰直列化の代償**であった。
-
-事前登録は commit のタイムスタンプで検証できる。`protocol/` は
-`fefe7c4`（2026-07-31T01:55:17+09:00）で凍結しており、本実験のデータは
-その時点で1件も存在しない。以降の変更は §7 に A-1〜A-6 として記録した。
-
-**自分たちの中心的洞察が自分たちの測定で否定された経緯**も §7・§8 に残してある。
+外部公開は未実施。著者表示、所属、連絡先、公開URL、DOI、投稿版は未確定。
+コードはMIT、文書・測定データはCC BY 4.0。提供元や第三者の権利を追加許諾するものではない。
+詳細は[THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md)、[PUBLICATION_PLAN.md](PUBLICATION_PLAN.md)を参照。
