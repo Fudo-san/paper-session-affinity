@@ -1,0 +1,611 @@
+% Canonical integrated manuscript. Build: bash paper/build.sh
+% Original drafts and frozen outputs are preserved under revision/original and analysis/.
+\documentclass[a4paper,11pt]{article}
+\usepackage{fontspec}
+\usepackage{xeCJK}
+\setmainfont{DejaVu Serif}[ItalicFont={DejaVu Serif},ItalicFeatures={FakeSlant=0.2}]
+\setsansfont{DejaVu Sans}
+\setmonofont{DejaVu Sans Mono}[Scale=0.85]
+\setCJKmainfont{Noto Serif CJK JP}
+\setCJKsansfont{Noto Sans CJK JP}
+\setCJKmonofont{Noto Sans Mono CJK JP}
+\usepackage[margin=24mm,headheight=15pt]{geometry}
+\usepackage{amsmath,amssymb,booktabs,tabularx,array,graphicx}
+\usepackage{enumitem,fancyhdr,caption,xcolor}
+\usepackage[unicode,colorlinks=true,linkcolor=blue!45!black,citecolor=blue!45!black,urlcolor=blue!45!black]{hyperref}
+\usepackage{url}
+\urlstyle{same}
+\renewcommand{\figurename}{図}
+\renewcommand{\tablename}{表}
+\renewcommand{\refname}{参考文献}
+\renewcommand{\contentsname}{目次}
+\renewcommand{\abstractname}{要旨}
+\setlength{\parindent}{1em}
+\setlength{\parskip}{0.3em}
+\setlength{\emergencystretch}{3em}
+\linespread{1.12}
+\renewcommand{\topfraction}{0.95}
+\renewcommand{\textfraction}{0.05}
+\renewcommand{\floatpagefraction}{0.85}
+\setlist{nosep,leftmargin=2em}
+\captionsetup{font=small,labelfont=bf}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small セッション継続の費用：商用CLIの測定研究}
+\fancyhead[R]{\small 統合改訂稿 v0.2}
+\fancyfoot[C]{\thepage}
+\newcommand{\spec}[1]{\texttt{\detokenize{#1}}}
+\newcommand{\pct}{\%}
+\newcolumntype{Y}{>{\raggedright\arraybackslash}X}
+\input{generated/numbers.tex}
+\title{\sffamily マルチエージェント・コード生成における\\セッション継続の費用\\[0.6em]
+\large 商用コーディングエージェントCLIの挙動測定と事前指定比較\\[0.8em]
+\normalsize The Economics of Session Affinity in Multi-Agent Code Generation:\\
+A Measurement Study of a Commercial Coding-Agent CLI}
+\author{}
+\date{2026年9月4日\quad 統合改訂稿 v0.2}
+
+\begin{document}
+\maketitle
+\begin{abstract}
+関連するコーディング作業を同じ会話で続ければ、背景情報の再取得を減らせる可能性がある。
+一方、継承する履歴を処理する費用や、作業を同じ会話にまとめるための実行順制約も生じる。
+本研究では商用CLIのキャッシュ挙動を測定し、利用者側の記録に基づく費用モデルを構成した。
+短いプローブでは履歴のキャッシュ読みを確認したが、初回の書き直しを利用者側から確実に制御する方法は確立できなかった。
+次に、1つのPythonリポジトリ内の7仕様を対象に、新規セッション方式Bと、編集範囲の重なりで作業をまとめて会話を継続する方式Cを、固定モデル・固定CLIで98対、196ラン比較した。
+事前指定した20\%削減の達成条件は満たされず、対ごとの相対費用差の中央値はCで\CostMedian\%高かった。
+宣言済みの相対尺度へ実装を訂正したBCa 95\%区間は\CostCI\%であり、今回の集約中央値に対する20\%以上の削減とは整合しなかった。
+時間比は\TimeRatio、片側90\%上限は\TimeUpper{}で、許容上限1.15を下回った。
+受入全通過率はBが98/98、Cが97/98で、通過率差の計算を訂正した片側90\%下限は\QualityLower{}ポイントとなり、許容下限$-10$ポイントを上回った。
+モデルは7仕様中6仕様で費用比を相対誤差25\%以内に予測したが、方向一致の条件は満たさなかった。
+1つの競合仕様ではCが全14対で高く、その仕様を除く参考集計の中央値は$-1.4$\%だった。
+本結果は試した継続方式と課題構成に限定され、会話継続一般の優劣や、費用増加の単一の原因を確定するものではない。
+\end{abstract}
+
+\noindent\textbf{キーワード：} コーディングエージェント、セッション継続、プロンプトキャッシュ、費用計測、事前指定分析
+
+\clearpage
+\section*{Abstract}
+Continuing related coding tasks in one session may avoid repeated repository exploration, but also carries conversation history and imposes additional scheduling constraints. We characterize client-observable cache behavior in a commercial coding-agent CLI and construct and evaluate a cost model. Short probes confirm cached history reads; they do not establish a reliable client-side control for initial history rewriting. We compare fresh sessions (B) with write-scope-connected lane continuation (C) on seven task specifications within one Python repository, using a fixed model and CLI version (196 runs; 98 pairs). The pre-specified criterion of at least 20\% cost reduction is not met. The median paired relative cost difference is +\CostMedian\%; after correcting the implementation to the declared relative scale, its BCa 95\% interval is \CostCI\%, inconsistent with a reduction of at least 20\% in this aggregate estimand under the analysis assumptions. The runtime ratio is \TimeRatio{} (one-sided 90\% upper bound \TimeUpper{}; margin 1.15). Acceptance rates are 98/98 and 97/98; a corrected pass-rate-difference calculation gives a one-sided 90\% lower bound of \QualityLower{} percentage points, above the $-10$-point margin. Six of seven model predictions are within 25\% relative error, but directional agreement fails. One contended specification is more expensive under C in all 14 pairs; excluding it gives a descriptive median difference of $-1.4$\%. We preserve the original results and disclose the corrections. The findings concern the evaluated policy and workload mix, not session reuse in general or an isolated causal effect of serialization.
+
+\vspace{1em}
+\noindent\textbf{版と証拠の位置づけ。}
+本稿は章別原稿を統合し、2026年9月4日の照合で判明した分析実装・記述の不一致を訂正した版である。
+元のプロトコル、生データ、固定予測、旧分析結果は保持する。
+プロトコルは実験前のGit履歴に保存されているが、独立した公開登録時刻は確認できていない。
+したがって本稿では「事前指定」と表記し、第三者登録機関による事前登録を主張しない。
+訂正箇所と再現方法を付録\ref{app:correction}、\ref{app:reproduction}に示す。
+
+\tableofcontents
+\clearpage
+
+\section{導入}\label{sec:intro}
+複数のAIにコード作成を分担させると、個々のAIが同じリポジトリのファイル構成、関数、実装上の約束を調べ直すことがある。
+人間の仕事にたとえれば、新しい担当者に何度も背景を説明する状況に近い。
+同じ担当者に続けて仕事を頼めば説明を省けそうだが、言語モデルでは過去の会話やツール出力も次の入力に含まれ、その処理に費用がかかる。
+キャッシュはこの入力の単価を下げても、処理対象の文脈量をゼロにはしない。
+
+本研究の問いは「会話が継続できるか」ではなく、「継続による再取得の節約が、履歴を引き継ぐ費用を上回るか」である。
+対象は推論サーバやKVキャッシュを変更できない商用コーディングエージェントCLIであり、利用者が選べる実行順とセッション継続を調べる。
+KVキャッシュとは、モデルが入力を処理した中間状態を再利用するための仕組みである。本稿が直接取得するのはその内部状態ではなく、CLIが報告する読み取り・作成トークン数と費用である。
+
+既存研究は、キャッシュ方式の費用評価\cite{dontbreakcache}、文脈の保存と縮約\cite{cmv}、タスク分割による時間・品質・費用の改善\cite{cocoder}を扱っている。
+本稿はこれらの先行成果を前提とし、特定CLIでの継続境界の測定、実測に基づくモデルの検証、編集対象の重なりを利用する1つの継続方式の比較を組み合わせる。
+キャッシュ計測そのものや、関連タスクをまとめる発想が新しいとは主張しない。
+
+貢献は次の3点である。
+\begin{enumerate}
+\item 継続時の履歴読み、新規セッション間の共有の条件、固定文脈、初回書き直しについて、クライアント記録から分かる範囲と分からない範囲を整理する。
+\item 再取得の節約と履歴の運搬費用を分解し、独立したB側の較正データで固定した予測を本実験に照合する。
+\item 新規方式Bとレーン継続方式Cを事前指定の基準で比較し、費用削減基準の未達、仕様別の違い、分析実装の訂正とその影響を報告する。
+\end{enumerate}
+適応スケジューラや会話の最適な切り替え規則は開発・評価していない。
+観測結果を根拠に改善候補を挙げることと、その改善を実証することを区別する。
+
+\section{背景と関連研究}\label{sec:related}
+\subsection{商用APIのキャッシュと文脈再利用}
+Lumerら\cite{dontbreakcache}は、商用3社のAPIについて、全履歴、システムプロンプトのみ、動的なツール結果を除く方式を比較し、DeepResearch Bench上で費用と最初のトークンまでの時間を評価している。
+本稿との差は、キャッシュの有無の一般的評価ではなく、コーディングCLIの新規／継続境界と、複数タスクをまとめる実行方式を対象とする点にある。
+
+SantoniのContextual Memory Virtualisation（CMV）\cite{cmv}は、会話状態を有向非巡回グラフで管理し、保存、分岐、縮約を扱う。76のコーディングセッションによる事例評価を含み、再構築する文脈の費用も論じる。
+その観察は本稿の動機に関連するが、CMVの縮約・分岐と本稿のレーン継続は異なる介入である。本稿のB/C比較を、CMVへの直接の反証として解釈しない。
+
+\subsection{複数エージェントの作業分割}
+Co-Coder\cite{cocoder}は、依存グラフの分割とスケジューリングにより、エージェント間の文脈転送と並列性の関係を扱う。
+28課題で通過率、時間、API費用を評価し、費用削減も報告している。
+したがって「既存の協調研究は費用を測っていない」という差別化は成り立たない。
+本稿ではタスク分割方式を最適化せず、既存タスクの宣言した編集範囲からレーンを構成し、その継続方式とCLIの挙動を測る。
+
+\subsection{推論基盤側の最適化との違い}
+SGLang\cite{sglang}はRadixAttentionによるKVキャッシュ再利用などを実行基盤に組み込む。
+Parrot\cite{parrot}は要求間の関係をサービス側へ伝え、アプリケーション全体の実行を最適化する。
+本稿の利用者はそれらの内部キャッシュ配置や要求処理機構を操作できない。
+同じ「親和性」という語を使っても、操作対象と利用できる観測量が異なる。
+本結果をサービング層における親和性と負荷分散の一般的な優劣へ拡張しない。
+
+\subsection{事前指定と本稿の位置}
+エージェント実験ではモデル、プロンプト、評価指標、結果を見た後の変更などの選択肢が多く、事前登録の必要性が論じられている\cite{prereg}。
+本研究は判定規則と変更履歴を実験前から保存した。ただし公開された独立時刻証明は確認できず、実験中の運用変更と、分析後の実装訂正もある。
+そのため、事前に指定した部分と後から追加・訂正した部分を明示する。
+本稿の貢献は測定と比較の記録にあり、新しい最適化問題の計算量や最適解法を提示するものではない。
+
+\section{キャッシュ挙動の測定と費用モデル}\label{sec:model}
+\subsection{測定単位と用語}
+セッションは、履歴を引き継いで再開できる会話の単位である。
+タスクは1件の開発作業、ランは1仕様を1方式で実行して受入判定する単位とする。
+1タスクのCLI呼び出しの内部で、モデルとツールの複数回のやり取り（ターン）が発生しうる。
+短い挙動確認をプローブと呼び、本実験の196ランとは区別する。
+
+キャッシュに以前の入力が利用できる状態をwarm、その読み取りが失われる状態をcoldと呼ぶ。
+ただし、固定文脈だけが残る中間状態もある。読み取り比・作成比で機械判定した\spec{ambiguous}を、都合よくwarmやcoldへ読み替えない。
+プローブは主にCLI 2.1.220、本実験は2.1.247であり、プローブの挙動が本実験の全呼び出しで同一だったとは仮定しない。
+
+\subsection{観測したことと、その限界}
+\begin{table}[!htbp]
+\centering\small
+\begin{tabularx}{\linewidth}{>{\raggedright\arraybackslash}p{26mm}>{\raggedright\arraybackslash}p{28mm}Y}
+\toprule
+測定 & 観測 & 解釈の範囲\\
+\midrule
+M1：warm再開 & 一意な入力接頭辞で3反復。履歴読み比は全て1.0000 & 小さな追加要求で履歴のキャッシュ読みを確認。仕事全体の費用削減を意味しない。\\
+M4：新規から新規 & 3反復で入力のcache write/read内訳が一致 & この条件では共通ユーザー入力による追加割引を確認しなかった。全条件での非共有は主張しない。\\
+固定文脈・交差共有 & 新規要求でも約21.6kのcache read。継続後の別の新規要求で共有を観測 & 固定文脈の共有と、ユーザー履歴の条件付き共有を分ける。\\
+M6：履歴増加 & 2系列。後続のcache writeは新規追加分でほぼ一定 & 継承履歴が増えると毎回の書き込みも必ず増える、という見立ては支持されない。\\
+M7：追加量 & 500--16,000文字の掃引と2,000文字の6反復 & 書き直しは追加量の単調な閾値では説明できない。初期のcache readとの関連は観測的所見。\\
+M2・M3：間隔／切替 & 長間隔2件、モデル切替2件の分類はambiguous & 正確な寿命や「モデル切替で全損」を確立していない。\\
+\bottomrule
+\end{tabularx}
+\caption{機構測定の要約。詳細ログと判定単位は付録\ref{app:probes}に示す。kは千トークン。}
+\label{tab:probes}
+\end{table}
+
+M1の3反復では、継承履歴45,124、45,123、45,122トークンが、それぞれ同数のcache readとして報告された。
+再開呼び出しの費用は0.01438 USDで、直前の初期呼び出しとの費用比は中央値で約$1/11.1$だった。
+これは短いプローブ内の呼び出し比較であり、同じコーディング課題を解くB/Cの比較ではない。
+
+M7では500文字の追加で書き直しが起き、16,000文字では起きない例を得た。
+初期cache readが少ない観測と書き直しが対応したが、提供側のキャッシュ状態を独立に操作していない。
+したがって「状態が原因だと特定した」ではなく、「追加量だけでは説明できず、初期状態の指標と対応した」と述べる。
+事前の確実な制御は未確立でも、利用者側に全く情報がないわけではない。事後の観測に基づく適応は候補として残る。
+
+\subsection{説明用の分解と損益分岐}
+タスク$j$を新しく始めるときの再取得費用を$e_j$、前タスク$i$から引き継ぐ履歴を$H_i$、継続後のターン数を$K'_j$とする。
+基準入力単価を$p_{\rm in}$、キャッシュ読み・書きの単価係数を$\alpha_r,\alpha_w$とし、初回に履歴を書き直す指示変数を$\rho\in\{0,1\}$と置く。
+履歴の運搬費用は、単純化したモデルでは
+\begin{equation}
+c_{\rm carry}(i,j)\simeq p_{\rm in}\{\rho\alpha_w+(K'_j-\rho)\alpha_r\}H_i
+\label{eq:carry}
+\end{equation}
+となる。本来の作業と固定文脈の費用が方式間で等しいと近似できるなら、継続が得になる条件は
+\begin{equation}
+c_{\rm carry}(i,j)<e_j
+\quad\Longleftrightarrow\quad
+H_i<H^*_j=\frac{e_j}{p_{\rm in}\{\rho\alpha_w+(K'_j-\rho)\alpha_r\}}.
+\label{eq:breakeven}
+\end{equation}
+$e_j$はUSD、$H_i$はトークン、$p_{\rm in}$はUSD/トークンである。
+キャッシュが使えても、長い履歴を多数のターンで処理すれば費用が増えることを表す。
+
+この式は意思決定の完成形ではない。継続はターン数、出力、再探索の順序も変えうるため、共通費用の相殺は近似にすぎない。
+また書き直しの指示変数を、追加プロンプトの大きさや公称保持時間だけで確実に決めることはできない。
+再開間隔は利用者が動かせても、キャッシュ全体の状態は直接制御できない。
+
+\subsection{固定した予測の実際の計算法}\label{sec:calibration}
+モデル検証には、アームBだけを実行した7仕様各1反復の較正データを用いた。
+編集系ツール（Write、Edit、NotebookEdit、MultiEdit）が最初に現れる前を探索区間、以後を作業区間と定義する。
+各タスクの最小文脈量を$\widehat S_j$とし、探索ターン$t$でそれを超える文脈量の和を
+\begin{equation}
+\widehat E_j=\sum_{t\in\mathcal E_j}\max(0,\mathrm{context}_{jt}-\widehat S_j)
+\end{equation}
+とする。これは探索の意味を直接測った量ではなく、ツール名とトークン数による代理量である。
+
+固定した実装\spec{analysis/calibrate.py}は、B側の実測費用を土台とし、レーンの2件目以降を
+\begin{align}
+\widehat K'_j &=\max(1,K_j-K_{E,j}),\\
+\widehat C_{C,j} &= C_{B,j}-p_{\rm in}\alpha_r\widehat E_j
+ +p_{\rm in}\{\rho\alpha_w+(\widehat K'_j-\rho)\alpha_r\}\widehat H_i
+\label{eq:implemented}
+\end{align}
+で予測する。ここで$\rho=1$に固定し、$\widehat H_i$は直前タスクのB側較正での最大文脈量を使う。
+レーン先頭は$\widehat C_{C,j}=C_{B,j}$で、仕様内を合算して$\widehat r_s=\sum_j\widehat C_{C,j}/\sum_j C_{B,j}$を得る。
+説明用の式と実装の近似を区別し、実装が継続による累積履歴を逐次シミュレーションしているとは書かない。
+
+較正実装の単価は、記録された\spec{claude-sonnet-5}に対し100万トークン当たり入力3.00、出力15.00、cache read 0.30、cache write 3.75 USDである。
+これは当該予測コードの固定定数で、現在のサービス価格の案内ではない。
+出力費用を含むB側実測費用を基礎にしているが、継続による出力の変化や別のキャッシュ作成料金は明示的に予測しない。
+予測ファイルは本実験前のコミット\spec{4fbb713}に保存されており、本稿の訂正で再較正していない。
+
+\section{比較する実行方式}\label{sec:execution}
+\subsection{共通の制約とレーンの定義}
+タスク間の先行関係を守り、宣言された編集対象が直接重なるタスクを同時に実行しない。
+方式Bはこの実行中タスクとの直接の重なりを確認し、各タスクを新規セッションで呼ぶ。
+方式Cは同じ共通制約に加え、編集範囲が重なるタスクを辺で結んだ無向グラフの連結成分をレーンとする。
+連結成分とは、直接または他のタスクを経由してつながったまとまりである。
+同一レーンは同時に1タスクだけとし、2件目以降を前のセッションIDで再開する。別レーン間の並列性は残す。
+
+\subsection{直接の競合と、推移的な直列化}
+依存関係がない3タスク$A,B,C$について、編集範囲$W_A,W_B,W_C$が
+\begin{equation}
+W_A\cap W_B\neq\varnothing,\qquad W_B\cap W_C\neq\varnothing,\qquad W_A\cap W_C=\varnothing
+\end{equation}
+なら、B方式は$A$と$C$を同時に実行できる。一方、C方式では3タスクが同じ連結成分なので全て順番に実行する（図\ref{fig:lanes}）。
+「直接重なるタスクは同時に走れない」ことから「連結成分内は全部順番にしても追加の代償がない」とは導けない。
+
+\begin{figure}[!htbp]
+\centering
+\includegraphics[width=.92\linewidth]{figures/revision_lane_structure.pdf}
+\caption{CTの構造を示す模式図。タスクA--B、B--Cに編集範囲の重なりがあるが、A--Cにはない。棒の長さは模式的で、実測の所要時間ではない。タスク名A/B/Cと方式名B/Cを区別する。}
+\label{fig:lanes}
+\end{figure}
+
+この比較は会話継続とレーン内直列化を同時に変える複合的な介入である。
+したがって方式Cの費用差を、直列化だけ、あるいはキャッシュだけの因果効果として分離できない。
+同じスケジュールで新規／継続だけを変える追加アームは、本研究では評価していない。
+
+\subsection{失敗・切替・中断の扱い}
+モデル不一致時にはセッションの継承をやめる処理がある。モデルを混在させる比較は本実験の対象外である。
+一方、実装を照合すると、タスク失敗を判定する前にも取得済みセッションIDが記録される。
+そのため「失敗時には必ずセッションを破棄する」という旧稿の説明は採用しない。
+先行タスク失敗時の依存先ブロックは行うが、失敗文脈からの継続を全経路で防ぐ保証は評価していない。
+ラン全体の受入不合格と、途中のタスク例外も区別する。
+レーン長の上限、適応的な分割、長い中断後のキャッシュ保持保証は実装・評価の成果として主張しない。
+
+\section{実装・実験方法}\label{sec:method}
+\subsection{対象・仕様・規模}
+実行基盤は既存のマルチエージェント・フレームワーク、実験対象はPythonの\spec{square-media}リポジトリである。
+7つの独立したリポジトリを比較したわけではない。
+対象を、受入テストがあり実装が未完成な3つのコミット（\spec{d4449a0}、\spec{3be3676}、\spec{6f5b695}）に固定した。
+各ランは別のGit worktreeで実行し、他ランの生成物を引き継がない。
+
+\begin{table}[!htbp]
+\centering\small
+\begin{tabularx}{\linewidth}{lclY}
+\toprule 仕様 & 形状 & レーン内のタスク数 & 役割\\\midrule
+\spec{w_two_files} & W & $1+1$ & 継続対象がない対照\\
+\spec{n_db_chain} & N & $2$ & 依存関係ですでに直列\\
+\spec{m_mixed} & M & $2+1+1$ & 依存鎖と独立作業の混合\\
+\spec{s17_w_two_files} & W & $1+1$ & 別系列の対照\\
+\spec{s17_n_db_chain} & N & $2$ & 別系列の依存鎖\\
+\spec{s17_m_mixed} & M & $2+1$ & 別系列の混合\\
+\spec{ct_library} & CT & $3$ & 依存なし・編集範囲の推移的な重なり\\
+\bottomrule
+\end{tabularx}
+\caption{7仕様の構成。Wの差はセッション再利用の効果ではなく、独立に実行したランの変動も含む。}
+\label{tab:specs}
+\end{table}
+
+各仕様を2方式で14反復し、98対・196ランを取得した。反復数はパイロットと事前指定の手順に基づく。
+本実験の期間は2026年8月28日から9月2日で、記録されたモデルIDは\spec{claude-sonnet-5}、CLIは2.1.247である。
+モデル名は当該ログの識別子として記載する。
+最終データセットに欠測対・事後の外れ値除外はないが、その完成までに中断・再実行は発生した。
+
+\subsection{順序・時間間隔・キャッシュ共有の抑制}
+\spec{build_schedule}は乱数種20260801で仕様順を並べ替え、奇数反復をB先行、偶数反復をC先行にする。
+アーム順そのものを各対で無作為抽出する設計ではない。
+保存された終了時刻から\spec{wall_s}を引いて開始時刻を復元すると、B先行49対、C先行49対で、全98対が計画の先行方式と一致した。
+
+実験途中に、全仕様の片方式を先に実行する順序から、仕様ごとに両方式を隣接して実行する順序へ変更した（A-5）。
+利用上限で比較の片側だけが残る状況への対応であり、費用判定の閾値を変更したものではない。
+実際の先行ラン終了から後続ラン開始までの間隔は中央値\GapSeconds{}秒、最大\GapMax{}分で、10分以上離れた対は11対だった。
+終了時刻と丸めた所要時間からの推定なので、サブ秒値は精密な待機時間の測定ではない。
+
+各ランのプロンプトに固有文字列（nonce）を置き、別ランのユーザー入力接頭辞が一致しにくいようにした。
+同一ラン内ではその文字列を維持する。
+この措置は固定システム文脈の共有やサービス側の時間変動を除去しない。
+順序の均衡だけでキャッシュ状態の交絡がなくなったとはせず、離隔対を除く感度分析も報告する。
+
+\subsection{記録と費用・品質の定義}
+CLI呼び出しごとの\spec{calls.jsonl}に、タスクID、セッションID、継続の有無、モデル、CLI版、入出力とキャッシュのトークン数、費用、ターン数を保存した。
+\spec{--output-format stream-json --verbose}から取得したターン情報も残す。
+総費用は提供側が報告したUSD費用をラン内で合計した値であり、請求書との独立照合はしていない。
+訂正時にはデータセットと\spec{run.json}の費用が一致することを確認した。
+
+時間はランの投入から受入判定までの経過時間であり、モデルの推論時間だけではない。
+品質は受入テストが全て通ったランを1、それ以外を0とする二値である。
+個々のテストの平均通過率、コードの保守性、人間による品質採点はこの指標に含まれない。
+宣言した編集範囲と実際の書き込みの一致率、範囲逸脱、LLM審判による採点は測定していない。
+
+\subsection{中断と停止条件}
+旧集計はインフラ中断イベント121件を196ランで割り、61.7\%として20\%の停止条件を検出した。
+A-6は、繰り返し中断された同一ランをまとめると27/196（13.8\%）であると記録し、比較値の判定前に再開を決めた。
+本稿はA-6の根拠と、旧集計が停止を検出した事実の両方を残す。
+イベント比率とラン比率は異なる指標であり、どちらかを無説明で消さない。
+利用上限、ローカル遮断の誤検知、worktree不整合、実行順変更などの運用上の介入があり、その個別の影響を分離評価していない。
+
+\section{評価と結果}\label{sec:results}
+\subsection{評価対象と事前指定の条件}
+対$i$の相対費用差を$d_i=(C_i-B_i)/B_i$とする。負ならCが安い。
+主要な点推定は全98対の$\mathrm{median}(d_i)$であり、仕様別中央値の中央値ではない。
+同数反復の7仕様を含む固定構成の集約値として解釈する。
+
+\begin{table}[!htbp]
+\centering\small
+\begin{tabularx}{\linewidth}{p{20mm}Y Y}
+\toprule 仮説 & 問い・推定対象 & 事前指定の達成条件\\\midrule
+H1 費用 & 対ごとの相対差、中央値 & 両側符号反転検定$p<0.05$、BCa 95\%区間が0を跨がない、かつ中央値$\leq-20$\%\\
+H2 時間 & $\mathrm{median}(T_C)/\mathrm{median}(T_B)$ & 片側BCa上限$<1.15$。実装は90\%を採用\\
+H3 受入 & $p_C-p_B$ & 片側90\%下限$>-10$ポイント\\
+H4b 予測 & 仕様別の総費用比$r_s$ & 予測との相対誤差25\%以内が過半数、かつ全仕様で優劣の方向一致\\
+\bottomrule
+\end{tabularx}
+\caption{判定の要約。H1の相対尺度は分析前文書の決定Aに基づく。H2/H3の許容差は運用上の判断値である。}
+\end{table}
+
+符号反転検定の統計量は平均、費用の実質性と区間の対象は中央値である。
+再標本数10,000、乱数種20260802とし、検定の$p$値は$(b+1)/(10{,}000+1)$で計算する\cite{phipson}。
+BCaはバイアス補正と加速度を用いるブートストラップ区間である\cite{bootstrap}。
+検定と区間が異なる統計量を扱うため、$p<0.05$でも中央値の区間が0を跨ぐことは矛盾ではない。
+独立性と符号交換可能性を仮定した分析であり、決定的な交互順序から無作為化推論が自動的に成立するとはしない。
+
+\subsection{改稿時に判明した実装不一致}
+旧E2のH1は、相対差を主とする分析前文書に反してドル差を検定・区間へ渡していた。
+H3は通過率差の区間を求める際、関数の既定の中央値を使っていた。
+後者では98対中97対が差0のため、中央値の分布が0に集中し、下限0.00ポイントが出力された。
+これは通過率差の区間ではない。
+
+旧コードと旧JSONは変更せず、訂正コード\spec{analysis/revision_audit.py}でH1を相対差、H3を平均差へ明示的に修正した。
+元のE1/E2は一時ディレクトリへの再実行でJSON全体の一致を確認し、凍結対象398ファイルのハッシュ一致も確認した。
+訂正は結果を知った後の作業であり、その日時と影響を隠さない。
+
+\subsection{費用：20\%削減の達成条件は満たされなかった}
+\begin{table}[!htbp]
+\centering
+\begin{tabular}{lr}
+\toprule 指標 & 結果\\\midrule
+相対費用差の中央値 & $+\CostMedian$\%\\
+訂正後の相対差平均による検定 & $p=\CostP$\\
+訂正後の相対差中央値のBCa 95\%区間 & $\CostCI$\%\\
+Cが安い対 & 44/98\\
+総費用 B / C & \TotalB{} / \TotalC{} USD\\
+総費用の増加率 & $+\TotalIncrease$\%\\
+旧ドル差の検定 & $p=0.0047$\\
+旧ドル差中央値のBCa 95\%区間 & $[-0.0173,\,+0.0581]$ USD\\
+\bottomrule
+\end{tabular}
+\caption{全体の費用結果。総費用の比と対ごとの比の中央値は別の統計量である。}
+\label{tab:cost}
+\end{table}
+訂正後も中央値は削減方向ではなく、95\%区間は0を跨ぐため、H1の複合的な達成条件は満たされない。
+一方、区間の下端は$-20$\%より上にあるため、分析上の仮定の下では、今回の集約中央値について20\%以上の削減とは整合しない。
+これは「効果が全くない」「全ての仕様で削減できない」という結論ではない。
+図\ref{fig:distribution}に、値が広く分散し、Cが安い比較も多数あることを示す。
+
+\begin{figure}[!htbp]
+\centering\includegraphics[width=.86\linewidth]{figures/revision_distribution.pdf}
+\caption{全98対の相対費用差。破線は中央値、点線は20\%削減の達成基準。各比較の変動と集約結果を区別する。}
+\label{fig:distribution}
+\end{figure}
+
+\subsection{仕様別とCT除外の感度分析}
+\begin{table}[!htbp]
+\centering\small
+\input{generated/spec_rows.tex}
+\caption{仕様別の費用（USD）と対ごとの相対差。B/Cの中央値同士から相対差中央値を再計算することはできない。各仕様14対。}
+\label{tab:per_spec}
+\end{table}
+
+\spec{ct_library}では相対費用差中央値が$+50.6$\%で、Cが全14対で高かった。
+他の6仕様では相対差中央値が$-7.9$\%から$+12.1$\%に分布した。
+CTを除く副次集計84対では中央値$-1.4$\%、訂正後の相対尺度の$p=0.4950$、BCa 95\%区間$[-5.10,+6.44]$\%だった。
+旧稿の$p=0.90$はドル差による値であり、相対尺度の結果と混在させない。
+
+全体の中央値の符号が仕様構成に敏感であることは言えるが、CTを除いた値を主要な結果へ差し替えない。
+CTは1仕様なので、形状一般の効果とその具体的な課題内容を分離できない。
+図\ref{fig:per_spec}では全観測を仕様別に示す。
+
+\begin{figure}[!htbp]
+\centering\includegraphics[width=.95\linewidth]{figures/revision_per_spec.pdf}
+\caption{仕様別の全観測と箱ひげ図。CTの14対は全て0より大きい。他仕様では正負の値が混在する。}
+\label{fig:per_spec}
+\end{figure}
+
+\subsection{時間と受入テスト}
+時間の中央値はBが280.85秒、Cが292.80秒で、比は\TimeRatio{}だった。
+対応を保ったブートストラップによる片側90\%上限\TimeUpper{}は1.15を下回り、指定した時間の非劣性基準を満たした。
+これは時間が同じという証明ではなく、採用した15\%の許容差についての判断である。
+
+受入全通過はBが98/98、Cが97/98で、差は\QualityDiff{}ポイントだった。
+通過率差として平均を用いた訂正後の片側90\%BCa下限は\QualityLower{}ポイントで、$-10$ポイントの基準を満たす。
+この許容差は比較的広く、1件しか不一致がないデータから品質全般の同等性を保証しない。
+補助確認として、B成功・C失敗の確率の片側90\%Clopper--Pearson上限を反転した保守的な通過率差下限は\QualityExact{}ポイントだった（付録\ref{app:supplement}）。
+
+\subsection{モデル予測の一致と不一致}
+仕様$s$の実測比は$r_s=\sum_i C_{si}/\sum_i B_{si}$であり、表\ref{tab:per_spec}の相対差中央値とは異なる。
+\begin{table}[!htbp]
+\centering\small
+\input{generated/model_rows.tex}
+\caption{固定した予測との比較。相対誤差は$(r_s-\widehat r_s)/\widehat r_s$。等値の予測1.0000は増加の予測ではない。}
+\label{tab:model}
+\end{table}
+大きさの条件は6/7で満たすが、方向一致は成立しない。
+旧コードは「$r>1$か」という二値比較で方向を判定し、等値を減少側と同じ分類にしていた。
+その規則での不一致は\spec{n_db_chain}と\spec{w_two_files}である。
+増加・等値・減少を分ける3値の記述では、それらに\spec{s17_w_two_files}も加わる。
+旧稿の「2仕様とも値下がりを予測できなかった」という説明は、旧コードの不一致集合と一致していなかった。
+どちらの扱いでも全仕様の一致を満たさず、H4b不成立の結論は変わらない。
+
+予測が実測を上回るのは7仕様中6仕様であり、全7仕様ではない（図\ref{fig:model}）。
+この方向の偏りは、較正が各仕様1反復、$\rho=1$固定、探索区間の代理量、累積履歴の近似などを点検する理由になる。
+ただし、偏りの原因や補正可能性を確立したわけではない。
+比が1に近ければ大きさが近くても方向を外すため、予測誤差25\%以内を意思決定の正しさと同一視しない。
+
+\begin{figure}[!htbp]
+\centering\includegraphics[width=.83\linewidth]{figures/revision_model.pdf}
+\caption{予測と実測。橙の予測点が青の実測点より右にある過大予測は6/7仕様。破線の1.0は両方式の総費用が等しい境界。}
+\label{fig:model}
+\end{figure}
+
+\subsection{中心主張と追加分析}
+「時間と品質を許容範囲に保ち、費用を20\%以上削減する」という中心主張は、全ゲートを満たした場合だけ成立する。
+訂正前後とも費用の条件を満たさず、中心主張は支持されない。
+時間と受入の非劣性のみを、マージン付きで報告する。
+
+改稿時の追加分析として、7仕様それぞれの14対を仕様内で復元抽出するブートストラップを行った。
+プールした中央値のpercentile 95\%区間は\StratifiedCI\%だった。
+仕様ごとの反復構成を保っても、この分析の範囲では20\%削減と整合しない。
+これは固定7仕様に条件づけた追加分析であり、リポジトリ母集団の区間ではない。
+10分以上離れた11対を除く87対でも中央値は$+6.0$\%、訂正したBCa区間は$[-3.27,+8.95]$\%で、費用削減の達成条件を満たさなかった。
+
+\section{支持されなかった見立て}\label{sec:negative}
+\subsection{キャッシュ共有を単純な二択で捉えない}
+当初は、別セッションで同じ入力を送れば共有できるか、全く共有できないかという二択で考えた。
+実際には固定文脈が共有され、新規から新規と、継続後の新規とで観測が異なった。
+したがって「新規セッションにはキャッシュ利得がない」という一般的な説明は採らない。
+比較実験ではその条件依存性を踏まえ、nonceと実行順の記録を用いた。
+
+\subsection{履歴の増大と書き直しの関係}
+M6では、継承履歴が増えても後続ターンのcache writeが新規追加分で一定の系列を得た。
+履歴が長いことと、毎回その全量を書き直すことは同じではない。
+M7は追加プロンプト量だけで初回書き直しを説明する見立ても支持しなかった。
+一方、履歴をcache readで繰り返し処理する費用は残る。
+機構の一部を観測できたことから、仕事全体の正味利益までを推定しない。
+
+\subsection{予算付きレーンを成果としない}
+履歴が予算を超えたら新規に切り替えるC$'$も検討したが、パイロットでは継続の費用増加が観測され、独立した本実験アームとして採用しなかった。
+少数の観測から厳密な損益分岐$H^*$を同定した、あるいはC$'$が一般にBと同じ動作になると証明した、とは言わない。
+適応スケジューラD、助言注入、他方式の再帰的協調も測定していない。
+「改善候補を考えた」ことを「改善を実証した」ことへ置き換えない。
+
+\section{妥当性と適用範囲の限界}\label{sec:limits}
+\subsection{対象の狭さと仕様への依存}
+単一言語・単一リポジトリ・単一モデル識別子・単一CLI版であり、仕様の作成・選定には著者の判断がある。
+7仕様の反復は、7つの独立したシステムへの再現実験ではない。
+特にCT仕様は1件なので、同じグラフ形状の他の課題に同じ費用差が出るとは言えない。
+実運用におけるCTの出現頻度も測っていない。
+
+\subsection{複合介入と観測できない状態}
+セッション継続と実行順制約を同時に変えているため、観測した費用差を原因別に分解できない。
+初期cache readとの対応は、内部キャッシュ機構の因果的な同定ではない。
+nonceで全共有を遮断した保証はなく、固定文脈やプロバイダ状態は残る。
+プローブと本実験のCLI版も違うため、小規模プローブの結果を本実験の全境界へそのまま移さない。
+
+\subsection{順序・運用変更と統計上の仮定}
+49対ずつの先行方式の均衡は確認したが、アーム順は反復に依存し、時間変動との独立性を保証しない。
+A-5/A-6などの変更、再実行、利用上限への対応がある。
+感度分析が集約結論を変えなくても、あらゆる交絡を排除したとは言えない。
+符号反転検定とブートストラップは、対の独立性や交換可能性の仮定に依存する。
+近接した反復のサービス状態に相関があれば、不確実性が過小評価されうる。
+
+\subsection{モデル近似と較正の量}
+較正は各仕様1反復なので、探索量や履歴量の分散を十分に推定できない。
+最初の編集以前を探索とする定義では、編集後の再探索を作業側に分類する。
+$\widehat S$は最小観測文脈であり、固定システム文脈そのものの測定値ではない。
+継続後の出力量、ツール行動、履歴の累積を十分に予測していない。
+探索／作業の境界をずらす感度分析は実施しておらず、固定予測を今回の結果に合わせて更新していない。
+
+\subsection{品質の範囲と訂正の位置づけ}
+受入テストは機械的だが、全ての品質属性を表さない。
+10ポイントの許容差は運用判断で、品質が同じであることを示す基準ではない。
+二値の不一致が少ないため、補正後のBCaでも小標本・離散分布の限界がある。
+正確二項上限を用いる補助解析も、独立で共通の不利益確率を持つという仮定の下の確認である。
+
+改稿時にH1の尺度とH3の統計量の実装不一致が判明したことは、本研究の再現性の限界でもある。
+合成テストが存在していたことだけでは、呼び出し側が正しい統計量を渡すことまで保証できなかった。
+訂正後は、通過率差、対ごとの通貨尺度の変更、等値予測の扱いを検証する合成ケースを追加した。
+訂正後の値を最初から得ていたかのように記載しない。
+
+\subsection{装置を再配布しないことによる再現の非対称}
+本研究の再現可能性は分析側と実験側で非対称である。
+196ランの計測データは同梱するため、集計・判定・図表の再実行は本パッケージだけで完結する。
+一方、実験を回した実行フレームワークと、実験された対象リポジトリはいずれもライセンスが設定されておらず、本研究では再配布しないと決めた。
+公開物に含まれるのは実験手順と仕様の記述であって、装置そのものではない。
+
+したがって第三者は、本稿の数値を独立に再取得して検証することができない。
+検証できるのは、同梱データから同じ結論が導かれるかまでである。
+判定規則を機械適用した点と事前指定文書の保存は、分析者の自由度を封じるものであり、データ生成そのものの独立検証の代わりにはならない。
+これは変更不能な商用APIを私有リポジトリ上で測る設計に共通する制約だが、共通であることは制約を消さないため、主張の範囲をここに留める。
+
+\subsection{非盲検と公開前の証拠}
+研究の設計者はパイロットの方向を見ており、C$'$の着想も観測後である。
+B側だけで較正したことはC/B比への直接の適合を避けるが、完全な盲検ではない。
+またローカルGitの日時は改変可能であり、それだけで独立した事前登録時刻を証明しない。
+本稿は保存された事前指定文書と変更履歴を開示するが、外部の登録・公開を完了したとは述べない。
+
+\section{結論}\label{sec:conclusion}
+商用コーディングエージェントCLIについて、短いプローブでキャッシュ挙動を確認し、費用モデルと特定のセッション継続方式を評価した。
+履歴のキャッシュ読みは観測できたが、それだけで作業全体の費用削減を保証するものではなかった。
+
+1リポジトリ・7仕様・98対の比較では、Cの相対費用差中央値は$+\CostMedian$\%で、事前指定した20\%削減の達成条件を満たさなかった。
+宣言済みの相対尺度に実装を訂正した95\%区間は\CostCI\%である。
+時間と受入全通過率は、明記した許容差についての非劣性基準を満たした。
+モデル予測は大きさの許容誤差だけでは方向の判断を保証せず、全仕様での方向一致を満たさなかった。
+
+CT仕様で大きな費用増加が観測され、それを除くと集約中央値の符号も変わった。
+これは課題構成への依存を示すが、直列化単独の因果効果や、CT一般の費用増加を確立しない。
+今後は、スケジュールを揃えた継続有無の比較、複数リポジトリ・CLI版での再現、事後観測を用いた切り替えなどを独立した研究で検証する必要がある。
+現時点では、会話継続全般を推奨・否定する一般則や、未評価の適応方式の優位性を主張しない。
+
+\appendix
+\section{分析訂正の履歴}\label{app:correction}
+\begin{table}[!htbp]
+\centering\small
+\begin{tabularx}{\linewidth}{p{25mm}Y Y}
+\toprule 項目 & 保存した旧結果・旧説明 & 本稿の扱い\\\midrule
+H1の尺度 & USD差の$p=0.0047$と区間 & 分析前文書の相対差へ訂正。$p=\CostP$、区間\CostCI\%。旧値は表\ref{tab:cost}に併記\\
+H3の統計量 & 中央値の下限0.00ポイント & 通過率差の平均へ訂正。下限\QualityLower{}ポイント。基準通過は維持\\
+H4bの方向 & 等値を含む二値判定を「2つの値下がり予測ミス」と説明 & 旧コードの不一致集合と3値記述を分ける。いずれも全一致せず\\
+予測の偏り & 7/7で過大予測 & 表と計算に一致する6/7へ訂正\\
+TTLの記述 & 約10.2分までwarmと断定 & 612.1秒・916.9秒の保存分類はambiguous。寿命の確定値を撤回\\
+失敗時の継続 & 必ずセッション破棄 & 実装にその一律保証がないため撤回\\
+追加の区間 & 未掲載 & 仕様内復元抽出のpercentile区間、受入の保守的二項下限を事後分析として掲載\\
+\bottomrule
+\end{tabularx}
+\caption{2026年9月4日の統合時の訂正。原データと判定閾値は変更していない。}
+\end{table}
+
+旧版は\spec{paper/revision/original/}に保存し、ファイルごとのSHA-256を\spec{manifest.json}に記録した。
+凍結結果は引き続き\path{analysis/e2_results_main.json}、訂正結果は\path{paper/revision/results.json}である。
+主要結論が変わらないことと、計算・説明に誤りがなかったことは同じではない。
+本稿は誤りを訂正し、旧結果の再現可能性を保つ。
+
+\section{機構測定の記録と未確定事項}\label{app:probes}
+\spec{probes/resume_probe_results.jsonl}には初期試行と有効な反復をともに保存している。
+M1の一意接頭辞付き3反復は、2026年7月31日02:09台のinit/resume対である。
+その前の共有接頭辞による試行と混ぜない。
+M4の3対ではcache write/read内訳が一致する一方、出力を含む総費用比には1.082の例がある。
+したがって「総費用が全て完全一致」ではなく、キャッシュ内訳の一致として報告する。
+
+長間隔プローブは612.1秒と916.9秒の2件で、保存判定はどちらも\spec{ambiguous}である。
+612.1秒のcache write/readは29,572/15,912、916.9秒では29,417/15,912だった。
+固定文脈の一部が残る状態と履歴全量の再利用を区別でき、厳密な保持時間の推定値としては扱わない。
+初期の約6.4分後の読み取り観測もあるが、同一セッションの継続測定で寿命更新の影響を含む。
+warmの機構チェックを満たすことから、H4aの長間隔・切替の全条件まで合格したとはしない。
+
+\spec{m6_results.jsonl}と\spec{m7_results.jsonl}は追加量と初期cache readの所見を支える。
+M7の12測定と、M6を含めた初回状態の例を混在した表を同じ標本数として扱わない。
+提供側のブレークポイント配置などの内部原因は、このログだけから確定できない。
+
+\section{追加分析の定義}\label{app:supplement}
+固定7仕様の層別ブートストラップでは、各仕様から14対を復元抽出し、合計98対の相対差中央値を計算する。
+これを10,000回繰り返し、線形補間した2.5・97.5百分位を用いた。
+仕様そのものを無作為に採取した設計ではないので、仕様数を増やす母集団推論とは区別する。
+
+受入について、$q=P(B\text{成功},C\text{失敗})$、$g=P(B\text{失敗},C\text{成功})$なら、通過率差は$g-q\geq-q$である。
+観測した不利益不一致は1/98なので、二項分布の片側90\%正確上限$U_q$\cite{clopper}を用いると、$-U_q$が保守的な通過率差下限となる。
+$\sum_{j=0}^{1}\binom{98}{j}U_q^j(1-U_q)^{98-j}=0.10$を解き、下限\QualityExact{}ポイントを得た。
+各対に共通の不利益確率と独立性を仮定する補助確認であり、仕様別の受入品質を保証しない。
+
+\section{再現方法と成果物}\label{app:reproduction}
+統合本文の正本は\spec{paper/main.tex}である。
+数値・表・図は訂正結果JSONと同じデータセットから生成する。\par
+生成スクリプトは\path{paper/render_assets.py}である。
+原稿と図表を作り直す手順は次のとおり。
+\begin{verbatim}
+python3 analysis/revision_audit.py
+.venv-figs/bin/python paper/render_assets.py
+bash paper/build.sh
+\end{verbatim}
+分析訂正は標準Pythonライブラリのみ、作図はNumPy/Matplotlib、PDF生成はXeLaTeX互換のTectonicと日本語Noto CJKフォントを用いる。
+ビルドスクリプトは取得済みTectonicまたはPATH上の実行ファイルを使う。未取得のTeX資材には初回のネットワークアクセスが必要となる。
+\spec{paper/BUILD.md}に環境とファイルの役割を記す。
+
+分析は保存データだけで再実行できるが、本実験の再実行には商用サービスへのアクセス、実行フレームワーク、対象リポジトリの固定版が必要である。
+本原稿のソース一式だけで196ランを再取得できるとは主張しない。
+著者表示・所属・連絡先、公開リポジトリURL、DOI、投稿先識別子は未確定のため作成していない。
+ソースとPDFをローカルに作成したことを、外部公開の完了と同一視しない。
+
+\clearpage
+\raggedright
+\bibliographystyle{plain}
+\bibliography{references}
+\end{document}

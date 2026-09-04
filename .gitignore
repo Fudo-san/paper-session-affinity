@@ -4,3 +4,14 @@ __pycache__/
 
 # 作図用 venv（再生成可能）
 .venv-figs/
+
+# Local typesetting runtime/cache; distributable PDF and sources remain tracked.
+paper/tools/
+paper/.cache/
+paper/*.aux
+paper/*.log
+paper/*.toc
+paper/*.out
+paper/*.blg
+paper/revision/smoke.*
+paper/revision/pdf-review/
