@@ -1,0 +1,19 @@
+{
+  "version": "0.2-draft",
+  "sha256": {
+    "paper/main.tex": "d66375e5c8b1167ba5efbfcf8db4ee399a911e2f24431d06c99ad9d928c634a5",
+    "paper/main.pdf": "2f94b2a9580f26b65baaf5f8d74a73a83669ecd54aa48fc7bb55e868beefad23",
+    "paper/session-affinity-v0.2-source.zip": "c8d9d1dc9c67f1d4262889c8e06c80bba1cf7ee883ecb57f2e7f1779d302ed71",
+    "paper/references.bib": "dc6edf1f4be055f26ee03e801fb506b2d66d9c2a18e3352e98432e35375b6305",
+    "paper/revision/results.json": "a9ee139f4613e36df033dd1bf71384482592337e55fb487c711c0e0d019b3d9b",
+    "paper/revision/VERIFICATION.md": "bf6b965d318c71cf628b8bb2ed9c00083a1e97cbfe214710b8321f702bd880cd",
+    "analysis/revision_audit.py": "60aeac019e785cfbfb880f34fd39f8f8493b2288ef5d9c170067e772287c5a05",
+    "paper/generated/spec_rows.tex": "4683ea75c71fc0c8c1d2a0d0c1197905da2c228d1cbdfd3572cc200daa22cfaa",
+    "paper/generated/numbers.tex": "d1eb6ed6da5c564be415b8b951149990ff570bb28e388f3e1dddc0f340b2b004",
+    "paper/generated/model_rows.tex": "9420f5ab05d2ef35c0370047f10ae850e108b9432e044ccd7c4a5c324be5b1b1",
+    "paper/figures/revision_per_spec.pdf": "b5907b59d45931646404d34eb9c8cd3e209873582a1de001b5abea43f1e8ae03",
+    "paper/figures/revision_model.pdf": "ede74c19316dfa41fbe71abef046e23afaf570f78c3134d6252b54ca3dc1f4f1",
+    "paper/figures/revision_lane_structure.pdf": "5dfde93bdf5183457565dbab4c58aa603a9adcc28a6b1bd99b861476c0a6d319",
+    "paper/figures/revision_distribution.pdf": "24465ba70d02772b440708efb89c56cc2ec880e3769c55555990cf75330d0a0d"
+  }
+}

@@ -1,0 +1,21 @@
+note: Running TeX ...
+warning: accessing absolute path `/usr/share/fonts/truetype/dejavu/DejaVuSerif.ttf`; build may not be reproducible in other environments
+warning: accessing absolute path `/usr/share/fonts/truetype/dejavu/DejaVuSerif-Bold.ttf`; build may not be reproducible in other environments
+warning: accessing absolute path `/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf`; build may not be reproducible in other environments
+warning: accessing absolute path `/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf`; build may not be reproducible in other environments
+warning: accessing absolute path `/usr/share/fonts/truetype/dejavu/DejaVuSansMono.ttf`; build may not be reproducible in other environments
+warning: accessing absolute path `/usr/share/fonts/truetype/dejavu/DejaVuSansMono-Oblique.ttf`; build may not be reproducible in other environments
+warning: accessing absolute path `/usr/share/fonts/truetype/dejavu/DejaVuSansMono-Bold.ttf`; build may not be reproducible in other environments
+warning: accessing absolute path `/usr/share/fonts/truetype/dejavu/DejaVuSansMono-BoldOblique.ttf`; build may not be reproducible in other environments
+warning: accessing absolute path `/usr/share/fonts/opentype/noto/NotoSerifCJK-Bold.ttc`; build may not be reproducible in other environments
+warning: accessing absolute path `/usr/share/fonts/opentype/noto/NotoSerifCJK-Regular.ttc`; build may not be reproducible in other environments
+warning: accessing absolute path `/usr/share/fonts/opentype/noto/NotoSansCJK-Bold.ttc`; build may not be reproducible in other environments
+warning: accessing absolute path `/usr/share/fonts/opentype/noto/NotoSansCJK-Regular.ttc`; build may not be reproducible in other environments
+note: Running BibTeX on main.aux ...
+note: Rerunning TeX because bibtex was run ...
+note: Rerunning TeX because "main.toc" changed ...
+note: Running xdvipdfmx ...
+note: Writing `main.pdf` (437.2373046875 KiB)
+note: Writing `main.log` (29.880859375 KiB)
+note: Writing `main.blg` (191 B)
+note: Skipped writing 4 intermediate files (use --keep-intermediates to keep them)

@@ -1,0 +1,24 @@
+note: Running TeX ...
+warning: accessing absolute path `/usr/share/fonts/truetype/dejavu/DejaVuSerif.ttf`; build may not be reproducible in other environments
+warning: accessing absolute path `/usr/share/fonts/truetype/dejavu/DejaVuSerif-Bold.ttf`; build may not be reproducible in other environments
+warning: accessing absolute path `/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf`; build may not be reproducible in other environments
+warning: accessing absolute path `/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf`; build may not be reproducible in other environments
+warning: accessing absolute path `/usr/share/fonts/truetype/dejavu/DejaVuSansMono.ttf`; build may not be reproducible in other environments
+warning: accessing absolute path `/usr/share/fonts/truetype/dejavu/DejaVuSansMono-Oblique.ttf`; build may not be reproducible in other environments
+warning: accessing absolute path `/usr/share/fonts/truetype/dejavu/DejaVuSansMono-Bold.ttf`; build may not be reproducible in other environments
+warning: accessing absolute path `/usr/share/fonts/truetype/dejavu/DejaVuSansMono-BoldOblique.ttf`; build may not be reproducible in other environments
+warning: accessing absolute path `/usr/share/fonts/opentype/noto/NotoSerifCJK-Bold.ttc`; build may not be reproducible in other environments
+warning: accessing absolute path `/usr/share/fonts/opentype/noto/NotoSerifCJK-Regular.ttc`; build may not be reproducible in other environments
+warning: accessing absolute path `/usr/share/fonts/opentype/noto/NotoSansCJK-Bold.ttc`; build may not be reproducible in other environments
+warning: accessing absolute path `/usr/share/fonts/opentype/noto/NotoSansCJK-Regular.ttc`; build may not be reproducible in other environments
+note: Running BibTeX on main.aux ...
+note: Rerunning TeX because bibtex was run ...
+note: Rerunning TeX because "main.aux" changed ...
+note: Running xdvipdfmx ...
+note: Writing `main.log` (29.890625 KiB)
+note: Writing `main.out` (6.306640625 KiB)
+note: Writing `main.aux` (13.1865234375 KiB)
+note: Writing `main.toc` (4.275390625 KiB)
+note: Writing `main.blg` (191 B)
+note: Writing `main.pdf` (441.0888671875 KiB)
+note: Writing `main.bbl` (2.544921875 KiB)

@@ -1,0 +1,54 @@
+cff-version: 1.2.0
+title: >-
+  The Economics of Session Affinity in Multi-Agent Code Generation:
+  A Preregistered Study of a Commercial Coding-Agent CLI
+message: >-
+  この成果物を利用する場合は、下記の推奨引用文を用いてください。
+  CC BY 4.0 は再配布時のクレジットを求めますが、費用・所要時間・トークン数
+  といった事実そのものの利用に引用を強制するものではありません。
+  学術的な引用としてお願いするものです。
+type: software
+license:
+  - MIT
+  - CC-BY-4.0
+version: v1.0.0-preprint
+date-released: "TBD"
+
+# --- 公開前に確定が必要 -----------------------------------------------------
+# PUBLICATION_PLAN.md §2 のとおり、著者表記・所属・連絡先は本人確認が要る。
+# git の user.name / user.email は commit 用のローカル設定であり、
+# 公開名・連絡先への同意とは見なさない。
+authors:
+  - name: "TBD — 公開前に確定"
+    # given-names: ""
+    # family-names: ""
+    # affiliation: ""      # Independent Researcher を使う場合も本人確認が必要
+    # orcid: ""            # 任意
+
+repository-code: "TBD — 公開時に確定"
+doi: "TBD — Zenodo deposit 後に確定"
+
+abstract: >-
+  マルチエージェント・コード生成におけるセッション継続は、リポジトリ再探索を
+  減らしうる一方、累積会話履歴を引き継ぎ、本来独立な作業を直列化しうる。
+  本研究は商用コーディングエージェント CLI のキャッシュ挙動を測定し、
+  クライアントから観測可能な量によるコスト分解モデルを導出したうえで、
+  毎回新規セッションと write-scope 連結成分によるレーン継続を、
+  7仕様・2アーム・14反復（196ラン、98対応対）の事前登録実験で比較した。
+  レーン継続は費用を削減せず（中央値 +5.5%、事前登録の有意性条件と
+  20%削減基準をいずれも満たさない）、時間と品質は非劣性が成立した。
+
+keywords:
+  - multi-agent systems
+  - code generation
+  - prompt caching
+  - preregistration
+  - negative results
+  - empirical software engineering
+
+references:
+  - type: data
+    title: "S6 main experiment raw data (196 runs, 98 pairs)"
+    notes: >-
+      runs/main/ に同梱。計測値のみで、モデルが生成したコード本文は含まない。
+      詳細は THIRD_PARTY_NOTICES.md を参照。

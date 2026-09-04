@@ -1,0 +1,106 @@
+% 参考文献。すべて §2 の新規性マトリクス（drafts/sec2_novelty_matrix.md）に対応する。
+% arXiv ID は本文の記載と一致させること。未精読のものは note に明記する。
+
+@misc{coagent,
+  title        = {{CoAgent}},
+  note         = {MAS の並行制御。fork-and-merge と LLM の意味理解で実競合と
+                  無害な読み書き干渉を区別する。事後の競合解決であり、
+                  コスト・セッション経済は対象外},
+  eprint       = {2606.15376},
+  archivePrefix= {arXiv},
+  primaryClass = {cs.SE},
+  year         = {2026}
+}
+
+@misc{codeteam,
+  title        = {{CodeTeam}},
+  note         = {Architect 複数案を CTO が選定し、ファイル所有権・公開IF・依存制約を
+                  機械検証可能な契約へ正規化する。依存対応スケジューラと Git 協調。
+                  本研究の最近傍。トークンコストと実行時間を報告していない
+                  （2026-07-05 に評価節を精読して確認）},
+  eprint       = {2606.22082},
+  archivePrefix= {arXiv},
+  primaryClass = {cs.SE},
+  year         = {2026}
+}
+
+@misc{dyntaskmas,
+  title        = {{DynTaskMAS}},
+  note         = {動的タスクグラフと非同期並列実行。実行時間 21--33\% 減、
+                  資源利用率 +35.4\%。最適化対象は時間とスループットであり、
+                  トークン費用・キャッシュ・書き込み競合は扱わない。ICAPS'25},
+  eprint       = {2503.07675},
+  archivePrefix= {arXiv},
+  primaryClass = {cs.AI},
+  year         = {2025}
+}
+
+@misc{tokenomics,
+  title        = {{Tokenomics}: Token Consumption of {LLM} Multi-Agent Systems across the {SDLC}},
+  note         = {SDLC 段階別のトークン消費の定量化。Code Review が 59.4\%、
+                  入力が 53.9\%。計測のみで最適化はしない。本稿 §1 の動機の引用元},
+  eprint       = {2601.14470},
+  archivePrefix= {arXiv},
+  primaryClass = {cs.SE},
+  year         = {2026}
+}
+
+@misc{tokeneconomics,
+  title        = {Token Economics of Agentic {AI}},
+  note        = {エージェント AI のトークン経済の二面（計算・経済）の調査。
+                  具体的なスケジューリングは扱わない},
+  eprint       = {2605.09104},
+  archivePrefix= {arXiv},
+  primaryClass = {cs.AI},
+  year         = {2026}
+}
+
+@misc{dontbreakcache,
+  title        = {Don't Break the Cache},
+  note         = {商用 API 3社での長期エージェントタスクのキャッシュ戦略の評価
+                  （フル / システムのみ / 動的除外）。41--80\% 削減。
+                  本稿 §3 の最近傍だが単一エージェント・評価のみで、
+                  スケジューリング・実行順制御・タスク割当の提案は無い},
+  eprint       = {2601.06007},
+  archivePrefix= {arXiv},
+  primaryClass = {cs.LG},
+  year         = {2026}
+}
+
+@misc{agentopt,
+  title        = {{AgentOpt} v0.1},
+  note         = {クライアント側最適化としてのモデル選択と予算配分。
+                  最良／最悪モデル構成のコスト差 13--32 倍。単一エージェント
+                  パイプラインであり、セッション親和性・キャッシュ・書き込み競合は扱わない},
+  eprint       = {2604.06296},
+  archivePrefix= {arXiv},
+  primaryClass = {cs.AI},
+  year         = {2026}
+}
+
+@misc{agentservesim,
+  title        = {{AGENTSERVESIM}},
+  note         = {マルチインスタンスのサービング層におけるセッション親和性ルーティング
+                  （cache hit 96.26\% vs 92.6--93.0\%）。推論基盤を所有する前提であり、
+                  本稿は閉じた商用 API のクライアント側を扱う},
+  eprint       = {2606.09613},
+  archivePrefix= {arXiv},
+  primaryClass = {cs.DC},
+  year         = {2026}
+}
+
+@misc{phipsonsmyth,
+  title        = {Permutation p-values should never be zero},
+  author       = {Phipson, Belinda and Smyth, Gordon K.},
+  note         = {置換検定の p 値に用いた +1 補正の根拠。
+                  Statistical Applications in Genetics and Molecular Biology 9(1)},
+  year         = {2010}
+}
+
+@misc{efrontibshirani,
+  title        = {An Introduction to the Bootstrap},
+  author       = {Efron, Bradley and Tibshirani, Robert J.},
+  note         = {BCa 信頼区間（バイアス補正と加速度）の出典},
+  publisher    = {Chapman \& Hall},
+  year         = {1993}
+}
