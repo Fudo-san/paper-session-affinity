@@ -2,12 +2,12 @@
   "version": "0.3-draft",
   "sha256": {
     "paper/main.tex": "81d74f9047ac2d535445b7c989f8ab3c79d0ddf964e2b4eabcb21c323d889222",
-    "paper/main.pdf": "ea6aa073670d34723f0a9385a5415bdef42d4b14ce9887cc39e596bf8559b38d",
-    "paper/session-affinity-v0.3.pdf": "ea6aa073670d34723f0a9385a5415bdef42d4b14ce9887cc39e596bf8559b38d",
-    "paper/session-affinity-v0.3-source.zip": "9b4a17629429c4705fd10ec152579750e7a4fe1afbdfbd5a6ad7936cdf73be9c",
+    "paper/main.pdf": "878a2b0d2e57f1d1d3608ca63d915666700cf19597dc948fdf2f982463501244",
+    "paper/session-affinity-v0.3.pdf": "878a2b0d2e57f1d1d3608ca63d915666700cf19597dc948fdf2f982463501244",
+    "paper/session-affinity-v0.3-source.zip": "af512018e3a8584f306ef159be86a3e80c38fc633196d6389778788a7d9772c3",
     "paper/references.bib": "b8d674689b0cf943d98afc2447d2884a6b351271aa7c97eb8f041bcc06436932",
     "paper/revision/v0.3/results.json": "28f9591e66430a545cb35250173bfb79760b99f1f77b88ef77fa6064d17add2b",
-    "paper/revision/v0.3/VERIFICATION.md": "db40a16a67a2bb6aeba863436401d092caba9c044df17f75a4812de97920dd83",
+    "paper/revision/v0.3/VERIFICATION.md": "8deacfed66626f0dc369a0c382dff56a3c531a2f11066ffba6b98bac8e042fd0",
     "paper/revision/v0.3/RESPONSE.md": "088c8c35317971b3eff154a19172fcba07f55cbb7820283fafab63d16b43ff1c",
     "analysis/supplement_v03.py": "d4308f31c678e143876587a8bb900d6a476df9e21d23ded402be525b12bc832e",
     "analysis/tests/test_supplement_v03.py": "29e6edbcb876ca813960cb679012b6b18642d7ba3b69077bbce0493c601dcef6",
@@ -17,11 +17,11 @@
     "paper/generated/accounting_rows.tex": "9758125246d75055ff6cbea225b3a4cc7f91ba17d95b672777bbd9f52e6ee649",
     "paper/generated/numbers.tex": "710b4b9d0ce565500e0c4e23a15614e71ee22e3bdc0a64219a3614c4b7a49ca2",
     "paper/generated/model_rows.tex": "9420f5ab05d2ef35c0370047f10ae850e108b9432e044ccd7c4a5c324be5b1b1",
-    "paper/figures/revision_controls.pdf": "0beccb1dca286a0f0e11b934f2fbbe05d88f00391100aeaa27646cacbd3bf581",
-    "paper/figures/revision_per_spec.pdf": "0712da02569f7caab51264151f8711dbe2025a050b7122513409b190bb74cc11",
-    "paper/figures/revision_model.pdf": "903ce9a11e2be612c20049a25e245e5f517eb7f03e319024841f3cbd8ea1f43b",
-    "paper/figures/revision_lane_structure.pdf": "c99ef1ef3b8023eb243ebd46faa06810d1c51110691396770d8575d03320c869",
-    "paper/figures/revision_accounting.pdf": "749163592a6b0037f35f92b5c5110d7ff380d4ffe4710f96b6487566cf5d14a7",
-    "paper/figures/revision_distribution.pdf": "f885cc4a98ffc4b1d34436461f6a6778e02fb515154a3cfdbb12fccd18f7e71f"
+    "paper/figures/revision_controls.pdf": "010e6e9ab9fa1906a673034dbb1b15da716819c4a8373c64c9affd10c331f74c",
+    "paper/figures/revision_per_spec.pdf": "d70f28bd89be55d202e155c25d4953aac08bbd7839e1cf0b1747165417552f5a",
+    "paper/figures/revision_model.pdf": "5807f7af71d9ac40ecc82232ecba86760b7f9490bb85466a8633293473de23d5",
+    "paper/figures/revision_lane_structure.pdf": "11fc69236e6261980fde1007ed0edc5b1f637982dab333f14d8da9ff59ebeced",
+    "paper/figures/revision_accounting.pdf": "110e3a8cb1652c2bbd87b9989cbcc84aad8a548e55aad1dafd1cae945f9f99c9",
+    "paper/figures/revision_distribution.pdf": "67ef5c75715589f19af2505dddf42b0268c21788f5b8b73a1609e1736e019430"
   }
 }

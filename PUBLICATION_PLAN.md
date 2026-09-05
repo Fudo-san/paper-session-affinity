@@ -63,7 +63,7 @@ Git の `user.name` や `user.email` は commit 用のローカル設定であ�
 - [ ] `CITATION.cff` を著者名・DOI・release URL 確定後に追加
 - [ ] 絶対パスは「実験記録として保持」か「可搬化」のどちらかをファイルごとに決める
 - [ ] 196 run / 98 pair / dropped 0 / model / CLI / $121.26 が本文と artifact で一致
-- [ ] リリース候補の clean checkout で分析テスト38件と凍結分析を再実行（作業ツリーでの検証は完了）
+- [ ] リリース候補の clean checkout で分析テスト38件と凍結分析を再実行（2026-09-05にcommit状態のclean cloneで通過。release tag確定後に再実行して閉じる）
 - [ ] commit、release tag、E2 JSON、paper source の SHA-256 manifest を生成
 
 ### 現時点の監査結果
