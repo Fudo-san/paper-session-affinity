@@ -15,3 +15,4 @@ paper/*.out
 paper/*.blg
 paper/revision/smoke.*
 paper/revision/pdf-review/
+paper/revision/v0.3/pdf-review/

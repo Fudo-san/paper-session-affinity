@@ -1,0 +1,103 @@
+{
+  "schema": "paper-revision/v1",
+  "date": "2026-09-04",
+  "acknowledge_stop": "A-6",
+  "frozen_file_count": 398,
+  "frozen_unchanged": true,
+  "e1_reproduced": true,
+  "e2_reproduced": true,
+  "corrections": {
+    "H1_cost": {
+      "n": 98,
+      "median_relative_diff": 0.05511035508255105,
+      "mean_relative_diff": 0.08368677576672895,
+      "p_value": 0.0012998700129987,
+      "ci95_relative_diff": [
+        -0.03179108996946077,
+        0.10122392661341914
+      ],
+      "significant": false,
+      "substantial_reduction": false
+    },
+    "H3_quality": {
+      "n": 98,
+      "pass_B": 98,
+      "pass_C": 97,
+      "diff_pp": -1.0204081632653061,
+      "ci90_lower_pp": -5.1020408163265305,
+      "non_inferior": true
+    }
+  },
+  "H2_time": {
+    "median_T_B": 280.85,
+    "median_T_C": 292.8,
+    "ratio_point": 1.0425,
+    "ratio_ci_upper": 1.1335,
+    "delta_time": 0.15,
+    "non_inferior": true
+  },
+  "totals": {
+    "B": 58.35118,
+    "C": 62.9120706,
+    "relative_difference": 0.07816278265495225,
+    "cheaper_pairs": 44,
+    "max_ledger_run_rounding_difference": 0.0
+  },
+  "supplementary": {
+    "fixed_spec_percentile_ci95": [
+      -0.021708439900235608,
+      0.08839393191724795
+    ],
+    "conservative_exact_quality_lower_pp": -3.91104131451801,
+    "no_ct": {
+      "n": 84,
+      "median_relative_diff": -0.013792916436801032,
+      "mean_relative_diff": 0.014593364436623742,
+      "p_value": 0.49495050494950504,
+      "ci95_relative_diff": [
+        -0.050962973984231975,
+        0.06435678064759477
+      ],
+      "significant": false,
+      "substantial_reduction": false
+    },
+    "near_pairs": {
+      "n": 87,
+      "median_relative_diff": 0.060113288960151924,
+      "mean_relative_diff": 0.07952801451708046,
+      "p_value": 0.0037996200379962005,
+      "ci95_relative_diff": [
+        -0.032729659873624306,
+        0.08950405673735802
+      ],
+      "significant": false,
+      "substantial_reduction": false
+    }
+  },
+  "central_claim_supported": false,
+  "H4b": {
+    "within_tolerance_count": 6,
+    "overprediction_count": 6,
+    "legacy_mismatches": [
+      "n_db_chain",
+      "w_two_files"
+    ],
+    "strict_mismatches": [
+      "n_db_chain",
+      "s17_w_two_files",
+      "w_two_files"
+    ],
+    "verdict": false
+  },
+  "timing": {
+    "first_counts": {
+      "B": 49,
+      "C": 49
+    },
+    "plan_mismatch_count": 0,
+    "gap_min": 0.001251200834910075,
+    "gap_median": 0.004542901118596395,
+    "gap_max": 38.24425237973531,
+    "distant_n": 11
+  }
+}

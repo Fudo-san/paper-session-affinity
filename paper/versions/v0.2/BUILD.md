@@ -1,4 +1,4 @@
-# 統合論文 v0.3 のビルド
+# 統合論文 v0.2 のビルド
 
 本文: `main.tex`、参考文献: `references.bib`。日本語本文・英語要旨・全9章・付録4節。
 著者名・所属・公開識別子を仮に作成していない。外部公開は別工程。
@@ -35,7 +35,6 @@ OS・フォント版・TeX資材が異なると改行やPDFバイト列が変わ
 
 ```bash
 python3 analysis/revision_audit.py
-python3 analysis/supplement_v03.py
 python3 -m pytest -q analysis/tests/
 .venv-figs/bin/python paper/render_assets.py
 bash paper/build.sh
@@ -43,14 +42,11 @@ bash paper/build.sh
 
 分析はPython標準ライブラリのみ。作図はNumPy / Matplotlib。
 `generated/*.tex`と`figures/revision_*.pdf`は数値JSONから生成済みなので、PDFだけの再生成にはPythonは不要。
-監査・追加分析の方法は `revision/ANALYSIS_PLAN.md`、結果は `revision/results.json`、v0.3追加結果は`revision/v0.3/results.json`、訂正内容は `revision/CHANGELOG.md`。
+監査・追加分析の方法は `revision/ANALYSIS_PLAN.md`、結果は `revision/results.json`、訂正内容は `revision/CHANGELOG.md`。
 
 旧E1/E2の再実行は監査スクリプトが一時ディレクトリ内で行う。旧E2を元のパスへ直接再実行して凍結結果を上書きしない。
 
 ## ソースZIP
 
-`session-affinity-v0.3-source.zip`に、本文、参考文献、生成済み数値・表、6図のPDF、ビルドスクリプト、ビルド説明、訂正記録と結果JSONを同梱。
+`session-affinity-v0.2-source.zip`に、本文、参考文献、生成済み数値・表、4図のPDF、ビルドスクリプト、ビルド説明、訂正記録と結果JSONを同梱。
 Tectonic本体、TeXキャッシュ、旧原稿、生実験データはZIPへ含めない。
-
-旧v0.2は `versions/v0.2/` に保存。v0.3 ZIPには追加分析JSONと方法、コメント回答を同梱。
-共通の旧訂正履歴に加え `revision/v0.3/RESPONSE.md` を参照。

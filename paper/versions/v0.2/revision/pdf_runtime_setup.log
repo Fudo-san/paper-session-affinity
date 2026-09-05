@@ -1,0 +1,7 @@
+WARNING: The directory '/home/fudo1/.cache/pip' or its parent directory is not owned or is not writable by the current user. The cache has been disabled. Check the permissions and owner of that directory. If executing pip with sudo, you should use sudo's -H flag.
+Collecting pymupdf
+  Downloading pymupdf-1.28.2-cp310-abi3-manylinux_2_28_x86_64.whl.metadata (26 kB)
+Downloading pymupdf-1.28.2-cp310-abi3-manylinux_2_28_x86_64.whl (25.8 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 25.8/25.8 MB 1.4 MB/s eta 0:00:00
+Installing collected packages: pymupdf
+Successfully installed pymupdf-1.28.2

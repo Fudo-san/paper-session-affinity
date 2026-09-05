@@ -1,16 +1,4 @@
-\begin{thebibliography}{10}
-
-\bibitem{ccusagecost}
-{ccusage contributors}.
-\newblock Cost modes.
-\newblock ccusage documentation, 2026.
-\newblock Accessed 2026-09-05. \url{https://ccusage.com/guide/cost-modes}.
-
-\bibitem{ccusage}
-{ccusage contributors}.
-\newblock Session usage.
-\newblock ccusage documentation, 2026.
-\newblock Accessed 2026-09-05. \url{https://ccusage.com/guide/session-reports}.
+\begin{thebibliography}{1}
 
 \bibitem{clopper}
 C.~J. Clopper and E.~S. Pearson.
@@ -33,13 +21,6 @@ Chaofan Lin, Zhenhua Han, Chengruidong Zhang, Yuqing Yang, Fan Yang, Chen Chen,
 \newblock arXiv:2405.19888, version 1, 2024.
 \newblock \url{https://arxiv.org/abs/2405.19888v1}.
 
-\bibitem{llmdprefix}
-{llm-d contributors}.
-\newblock Precise prefix cache routing.
-\newblock llm-d documentation, 2026.
-\newblock Accessed 2026-09-05.
-  \url{https://llm-d.ai/docs/well-lit-paths/foundations/precise-prefix-cache-routing}.
-
 \bibitem{dontbreakcache}
 Elias Lumer, Faheem Nizar, Akshaya Jangiti, Kevin Frank, Anmol Gulati, Mandar
   Phadate, and Vamse~Kumar Subbiah.
@@ -56,34 +37,12 @@ Belinda Phipson and Gordon~K. Smyth.
   9(1):Article 39, 2010.
 \newblock \url{https://doi.org/10.2202/1544-6115.1585}.
 
-\bibitem{agentservesim}
-Rakibul~Hasan Rajib, Mengxin Zheng, and Qian Lou.
-\newblock {AgentServeSim}: A hardware-aware simulator for multi-turn {LLM}
-  agent serving.
-\newblock arXiv:2606.09613, version 1, 2026.
-\newblock \url{https://arxiv.org/abs/2606.09613v1}.
-
-\bibitem{rayprefix}
-{Ray contributors}.
-\newblock Prefix-aware routing.
-\newblock Ray documentation, 2026.
-\newblock Accessed 2026-09-05.
-  \url{https://docs.ray.io/en/latest/serve/llm/user-guides/prefix-aware-routing.html}.
-
 \bibitem{cmv}
 Cosmo Santoni.
 \newblock Contextual memory virtualisation: {DAG}-based state management and
   structurally lossless trimming for {LLM} agents.
 \newblock arXiv:2602.22402, version 1, 2026.
 \newblock \url{https://arxiv.org/abs/2602.22402v1}.
-
-\bibitem{resumeissue}
-{taekim34}.
-\newblock Session resume (--continue) invalidates entire prompt cache, causes
-  massive rate limit consumption.
-\newblock anthropics/claude-code, GitHub issue 42338, 2026-04-02, 2026.
-\newblock Practitioner report; accessed 2026-09-05.
-  \url{https://github.com/anthropics/claude-code/issues/42338}.
 
 \bibitem{prereg}
 Michelle Vaccaro.
@@ -98,13 +57,6 @@ Xu~Yang, Lunyiu Nie, Ethan Chandra, Stanislav Gannutin, Fangru Lin, and Swarat
   multi-agent coding.
 \newblock arXiv:2606.00953, version 1, 2026.
 \newblock \url{https://arxiv.org/abs/2606.00953v1}.
-
-\bibitem{dualmap}
-Ying Yuan, Pengfei Zuo, Bo~Wang, Zhangyu Chen, Zhipeng Tan, and Zhou Yu.
-\newblock {DualMap}: Enabling both cache affinity and load balancing for
-  distributed {LLM} serving.
-\newblock arXiv:2602.06502, version 1, 2026.
-\newblock \url{https://arxiv.org/abs/2602.06502v1}.
 
 \bibitem{sglang}
 Lianmin Zheng, Liangsheng Yin, Zhiqiang Xie, Chuyue Sun, Jeff Huang, Cody~Hao
