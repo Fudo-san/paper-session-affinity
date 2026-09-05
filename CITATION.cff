@@ -11,7 +11,7 @@ type: software
 license:
   - MIT
   - CC-BY-4.0
-version: "0.2-draft"
+version: "0.3-draft"
 # Unpublished draft: no release date assigned.
 
 # --- 公開前に確定が必要 -----------------------------------------------------

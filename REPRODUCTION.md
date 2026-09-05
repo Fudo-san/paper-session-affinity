@@ -27,7 +27,8 @@
 
 ```bash
 python3 analysis/revision_audit.py
-python3 -m pytest -q analysis/tests/     # 33 tests
+python3 analysis/supplement_v03.py
+python3 -m pytest -q analysis/tests/     # 38 tests
 ```
 
 監査スクリプトは凍結ファイル398件を検証し、一時ディレクトリで旧E1/E2を再現する。
@@ -129,3 +130,9 @@ commit `fefe7c4`（2026-07-31T01:55:17+09:00）と後続履歴でローカルな
 
 公開前に、tag の commit、Zenodo snapshot、本文記載の commit、分析結果 JSON の SHA-256 を
 同一の artifact manifest に記録する。URL や DOI の `TBD` が残る間は release-ready ではない。
+
+## v0.3追加分析
+
+`analysis/supplement_v03.py` が陰性対照・符号数・実質予測・費用分解を `paper/revision/v0.3/results.json` に生成する。元の主要判定を置き換えない。
+料金項目の換算に用いる単価は既存較正の固定値。CLI報告額と一致する価格へフィットしない。
+CTタスク分解は全28ランでrun/call集計一致を確認した範囲。全仕様の費用分解は最終run.jsonを使い、追記履歴を一律合計しない。
