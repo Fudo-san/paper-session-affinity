@@ -47,10 +47,28 @@ bash paper/build.sh
 
 旧E1/E2の再実行は監査スクリプトが一時ディレクトリ内で行う。旧E2を元のパスへ直接再実行して凍結結果を上書きしない。
 
-## ソースZIP
+## ソースZIPと成果物ハッシュ
 
-`session-affinity-v0.3-source.zip`に、本文、参考文献、生成済み数値・表、6図のPDF、ビルドスクリプト、ビルド説明、訂正記録と結果JSONを同梱。
+```bash
+python3 paper/make_source_zip.py
+```
+
+`session-affinity-v0.3-source.zip`に、本文、参考文献、生成済み数値・表、6図のPDF、ビルドスクリプト、
+ビルド説明、訂正記録と結果JSONの25件を同梱する。
 Tectonic本体、TeXキャッシュ、旧原稿、生実験データはZIPへ含めない。
 
-旧v0.2は `versions/v0.2/` に保存。v0.3 ZIPには追加分析JSONと方法、コメント回答を同梱。
-共通の旧訂正履歴に加え `revision/v0.3/RESPONSE.md` を参照。
+同じスクリプトが `revision/v0.3/artifact_manifest.json` の22件をハッシュし直す。
+成果物ハッシュの正本はこの1ファイルだけとする。ZIPを作り直した後に本文やPDFを更新した場合は、
+ハッシュが古くなるのでスクリプトを再実行する。
+
+ZIP内のタイムスタンプは1980-01-01に固定し、図のPDFは`CreationDate`を出力しない。
+同じ入力から作り直せば、ZIPも図もバイト列が一致する。release manifestのSHA-256はこれを前提とする。
+実験の時刻を主張するものではなく、時計を除いているだけである。
+
+旧v0.2は `versions/v0.2/` に、独自の `manifest.json` 付きで保存。v0.3 ZIPには追加分析JSONと方法、
+コメント回答を同梱。共通の旧訂正履歴に加え `revision/v0.3/RESPONSE.md` を参照。
+
+## 目視確認用の画像
+
+`revision/v0.3/pdf-review/` の contact シートと `extracted.txt` は、組版結果を人が見るための補助で、
+PyMuPDFが要る。再生成できるので追跡しない。PDFを作り直したら中身が古くなる。

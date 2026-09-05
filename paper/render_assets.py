@@ -41,7 +41,9 @@ ordered=sorted(rows,key=lambda v:v['median_relative_diff'])
 plt.rcParams.update({'font.size':10,'axes.spines.top':False,'axes.spines.right':False,'pdf.fonttype':42,'savefig.bbox':'tight'})
 blue='#245a83'; orange='#c16a2f'; gray='#6b7280'
 def save(fig,name):
- for ext in ['pdf','png']: fig.savefig(figdir/(name+'.'+ext),dpi=180)
+ # Omit the PDF CreationDate so a rebuild is byte-identical and can be hashed in a release manifest.
+ fig.savefig(figdir/(name+'.pdf'),dpi=180,metadata={'CreationDate':None})
+ fig.savefig(figdir/(name+'.png'),dpi=180)
  plt.close(fig)
 
 rel=np.array([100*(p['cost_C']-p['cost_B'])/p['cost_B'] for p in data])
