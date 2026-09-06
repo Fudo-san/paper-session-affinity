@@ -32,3 +32,29 @@ def test_suffix_requires_all_usage_fields_and_rejects_ambiguity():
 def test_totals_accepts_iterator_without_consuming_after_first_field():
     values=[{k:1 for k in s.KEYS},{k:2 for k in s.KEYS}]
     assert s.totals(iter(values))=={k:3 for k in s.KEYS}
+
+def test_reuse_key_splits_session_reuse_from_auxiliary_model_use():
+    fresh_aux={'resumed':False,'models_used':['main','aux']}
+    resumed_single={'resumed':True,'models_used':['main']}
+    assert s.reuse_key(fresh_aux)==('fresh','aux')
+    assert s.reuse_key(resumed_single)==('resumed','single')
+    # A single entry is not auxiliary use even when the run was resumed.
+    assert s.reuse_key({'resumed':True,'models_used':['aux']})==('resumed','single')
+
+def test_reported_over_standardized_is_one_when_the_rate_card_fits():
+    acc={'B':{'cost_usd':4.0},'C':{'cost_usd':5.0},'standardized_B':4.0,'standardized_C':10.0}
+    assert s.reported_over_standardized(acc,'B')==1.0
+    assert s.reported_over_standardized(acc,'C')==0.5
+
+def test_paired_relative_keeps_rep_alignment_and_rejects_length_mismatch():
+    assert s.paired_relative([1.0,2.0],[2.0,1.0])==[1.0,-0.5]
+    try:
+        s.paired_relative([1.0],[1.0,2.0]);assert False
+    except AssertionError as e:
+        assert not str(e)
+
+def test_turn_reduction_and_cost_increase_can_hold_together():
+    """The CT pattern: fewer turns, higher cost, so per-turn cost must rise."""
+    b={'cost':3.28,'turns':201};c={'cost':4.57,'turns':153}
+    assert c['turns']<b['turns'] and c['cost']>b['cost']
+    assert (c['cost']/c['turns'])/(b['cost']/b['turns'])>1.8

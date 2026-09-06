@@ -43,6 +43,20 @@ def accounting(b,c):
     return dict(B=b,C=c,parts=parts,reported_delta=delta,reported_ratio=c['cost_usd']/b['cost_usd'],
                 standardized_B=sb,standardized_C=sc,standardized_delta=sc-sb)
 
+def reuse_key(call):
+    """How one call record is classified: session reuse x auxiliary-model use."""
+    return ('resumed' if call['resumed'] else 'fresh',
+            'aux' if len(call['models_used'])>1 else 'single')
+
+def reported_over_standardized(acc,arm):
+    """Reported cost divided by the fixed-rate conversion. 1.0 means the rate card fits."""
+    return acc[arm]['cost_usd']/acc['standardized_'+arm]
+
+def paired_relative(b,c):
+    """Per-rep relative differences for two aligned sequences."""
+    assert len(b)==len(c)
+    return [(y-x)/x for x,y in zip(b,c)]
+
 def matching_suffix(calls,usage):
     """Diagnostic only: matching nonnegative terminal sums; ambiguous => do not select."""
     matches=[i for i in range(len(calls)) if all(math.isclose(totals(calls[i:])[k],usage[k],rel_tol=0,abs_tol=1e-7) for k in KEYS)]
@@ -56,7 +70,9 @@ def main():
     v02=json.loads((ROOT/'paper/revision/results.json').read_text())
     groups={'all':pairs,'non_ct':[p for p in pairs if p['spec']!='ct_library'],
             'controls':[p for p in pairs if p['spec'] in CONTROLS],
-            'active':[p for p in pairs if p['spec'] not in CONTROLS]}
+            'active':[p for p in pairs if p['spec'] not in CONTROLS],
+            # Continuation actually happened and the shape is not a direct-conflict control.
+            'active_non_ct':[p for p in pairs if p['spec'] not in CONTROLS and p['spec']!='ct_library']}
     specs={s:summary([p for p in pairs if p['spec']==s]) for s in sorted({p['spec'] for p in pairs})}
     results={'analysis_version':'0.3-post-hoc','frozen_files_verified':len(manifest),'rates_usd_per_million':RATES,
              'groups':{s:summary(ps) for s,ps in groups.items()},'specs':specs}
@@ -98,7 +114,47 @@ def main():
                     'recorded_turn_rows':sum(len(c['turns']) for c in calls_by[('ct_library',a)]),
                     'mixed_model_calls':sum(len(c['models_used'])>1 for c in calls_by[('ct_library',a)]),
                     'input_detail_minus_result':{k:sum(sum(t[k] for t in c['turns'])-c[k] for c in calls_by[('ct_library',a)]) for k in RATES if k!='output_tokens'}} for a in ['B','C']}
+    # Auxiliary-model use vs session reuse. Counts call records, re-executions included.
+    mix=Counter();mix_spec=defaultdict(Counter)
+    for (s_,a),cs in calls_by.items():
+        for c in cs:
+            k=reuse_key(c)
+            mix[k]+=1;mix_spec[(s_,a)][k]+=1
+    results['model_mix']={'calls':sum(mix.values()),
+        'by_reuse':{r:{m:mix[(r,m)] for m in ('aux','single')} for r in ('fresh','resumed')},
+        'by_spec_arm':{f'{s_}|{a}':{f'{r}_{m}':n for (r,m),n in sorted(c.items())} for (s_,a),c in sorted(mix_spec.items())},
+        'models_seen':sorted({m for cs in calls_by.values() for c in cs for m in c['models_used']})}
+
+    # Reported cost over fixed-rate conversion. Near-constant => the residual scales, not adds.
+    results['residual_ratio']={s_:{a:reported_over_standardized(results['accounting'][s_],a)
+                                   for a in ('B','C')} for s_ in list(specs)+['all']}
+
+    # Per-rep paired differences inside CT, and the context each task actually carried.
+    preds=json.loads((ROOT/'analysis/model_predictions.json').read_text())
+    for task,record in results['ct_tasks'].items():
+        by={a:{c['rep']:c for c in calls_by[('ct_library',a)] if c['task_id']==task} for a in ('B','C')}
+        reps=sorted(set(by['B'])&set(by['C']));assert len(reps)==14
+        rel=paired_relative([by['B'][r]['cost_usd'] for r in reps],[by['C'][r]['cost_usd'] for r in reps])
+        dturn=[by['C'][r]['num_turns']-by['B'][r]['num_turns'] for r in reps]
+        record['paired']={'n':len(reps),'median_relative_diff':st.median(rel),'ci95':list(stats.bca_ci(rel)),
+                          'sign':sign_test(rel),'median_turn_delta':st.median(dturn),'turn_sign':sign_test(dturn)}
+        record['context']={a:st.median(by[a][r]['peak_context_tokens'] for r in reps) for a in ('B','C')}
+        record['per_turn_usd']={a:record[a]['cost_usd']/record['activity'][a]['reported_turns'] for a in ('B','C')}
+        record['per_turn_ratio']=record['per_turn_usd']['C']/record['per_turn_usd']['B']
+    lane=preds['specs']['ct_library']['lanes']['lane-CT-A']
+    cal={t['task_id']:t for t in preds['specs']['ct_library']['calibration']}
+    results['carry_check']={'lane':lane,'note':'peak context is a maximum, not the per-turn mean; the first task carries nothing.','rows':[]}
+    for i,task in enumerate(lane):
+        ctx=results['ct_tasks'][task]['context'];grow=ctx['C']-ctx['B']
+        row={'task':task,'context_B':ctx['B'],'context_C':ctx['C'],'observed_growth':grow,'continued':i>0}
+        if i:
+            row['assumed_carry']=cal[lane[i-1]]['peak_context']
+            row['observed_over_assumed']=grow/row['assumed_carry']
+        results['carry_check']['rows'].append(row)
+
     (out/'results.json').write_text(json.dumps(results,ensure_ascii=False,indent=2)+'\n')
     print(json.dumps({k:results[k] for k in ['groups','active_model','ct_activity','log_audit']},ensure_ascii=False,indent=2))
     print('CT accounting:',json.dumps(results['accounting']['ct_library'],indent=2))
+    print('model mix:',json.dumps(results['model_mix']['by_reuse'],ensure_ascii=False))
+    print('carry check:',json.dumps(results['carry_check']['rows'],ensure_ascii=False))
 if __name__=='__main__':main()
