@@ -141,6 +141,19 @@ def main():
         record['context']={a:st.median(by[a][r]['peak_context_tokens'] for r in reps) for a in ('B','C')}
         record['per_turn_usd']={a:record[a]['cost_usd']/record['activity'][a]['reported_turns'] for a in ('B','C')}
         record['per_turn_ratio']=record['per_turn_usd']['C']/record['per_turn_usd']['B']
+    # Sensitivity, not a refit: put the observed carry into the frozen formula and see where it lands.
+    def ct_r_hat(scale):
+        cal_={t['task_id']:t for t in preds['specs']['ct_library']['calibration']}
+        lane_=preds['specs']['ct_library']['lanes']['lane-CT-A']
+        ar,aw,unit=preds['alpha_r'],preds['alpha_w'],RATES['input_tokens']/1e6
+        tb=tc=0.0;h=None
+        for pos,tid in enumerate(lane_):
+            t=cal_[tid];rho=1 if pos else 0;cb=t['cost_usd']
+            cc=cb if h is None else (cb-t['E_tokens']*ar*unit
+                +(rho*aw+(max(1,t['K']-t['K_E'])-rho)*ar)*h*scale.get(tid,1.0)*unit)
+            tb+=cb;tc+=cc;h=t['peak_context']
+        return tc/tb
+
     lane=preds['specs']['ct_library']['lanes']['lane-CT-A']
     cal={t['task_id']:t for t in preds['specs']['ct_library']['calibration']}
     results['carry_check']={'lane':lane,'note':'peak context is a maximum, not the per-turn mean; the first task carries nothing.','rows':[]}
@@ -151,10 +164,17 @@ def main():
             row['assumed_carry']=cal[lane[i-1]]['peak_context']
             row['observed_over_assumed']=grow/row['assumed_carry']
         results['carry_check']['rows'].append(row)
+    obs_ratio=results['accounting']['ct_library']['reported_ratio']
+    frac={r['task']:r['observed_over_assumed'] for r in results['carry_check']['rows'] if 'observed_over_assumed' in r}
+    frozen,swapped=ct_r_hat({}),ct_r_hat(frac)
+    results['carry_check']['substitution']={'r_observed':obs_ratio,'r_hat_frozen':frozen,'r_hat_observed_carry':swapped,
+        'relative_error_frozen':(obs_ratio-frozen)/frozen,'relative_error_observed_carry':(obs_ratio-swapped)/swapped,
+        'note':'Substituting the observed carry into the frozen formula. Not a recalibration; the frozen prediction stands.'}
 
     (out/'results.json').write_text(json.dumps(results,ensure_ascii=False,indent=2)+'\n')
     print(json.dumps({k:results[k] for k in ['groups','active_model','ct_activity','log_audit']},ensure_ascii=False,indent=2))
     print('CT accounting:',json.dumps(results['accounting']['ct_library'],indent=2))
     print('model mix:',json.dumps(results['model_mix']['by_reuse'],ensure_ascii=False))
     print('carry check:',json.dumps(results['carry_check']['rows'],ensure_ascii=False))
+    print('carry substitution:',json.dumps(results['carry_check']['substitution'],ensure_ascii=False))
 if __name__=='__main__':main()

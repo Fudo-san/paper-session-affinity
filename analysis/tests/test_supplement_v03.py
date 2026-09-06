@@ -58,3 +58,17 @@ def test_turn_reduction_and_cost_increase_can_hold_together():
     b={'cost':3.28,'turns':201};c={'cost':4.57,'turns':153}
     assert c['turns']<b['turns'] and c['cost']>b['cost']
     assert (c['cost']/c['turns'])/(b['cost']/b['turns'])>1.8
+
+def test_frozen_prediction_is_reproduced_before_any_substitution():
+    """The sensitivity check must start from the frozen r_hat, not a refitted one."""
+    import json
+    from pathlib import Path
+    root=Path(__file__).resolve().parents[2]
+    v3=json.loads((root/'paper/revision/v0.3/results.json').read_text())
+    sub=v3['carry_check']['substitution']
+    frozen=next(r for r in v3['active_model']['rows'] if r['spec']=='ct_library')
+    assert math.isclose(sub['r_hat_frozen'],frozen['r_hat'],abs_tol=5e-5)
+    assert math.isclose(sub['relative_error_frozen'],frozen['relative_error'],abs_tol=5e-5)
+    # Shrinking the carried history lowers the prediction, so the sign of the error flips.
+    assert sub['r_hat_observed_carry']<sub['r_hat_frozen']
+    assert sub['relative_error_frozen']<0<sub['relative_error_observed_carry']
