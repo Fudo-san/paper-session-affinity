@@ -1,10 +1,10 @@
 {
   "version": "0.3-draft",
   "sha256": {
-    "paper/main.tex": "81d74f9047ac2d535445b7c989f8ab3c79d0ddf964e2b4eabcb21c323d889222",
-    "paper/main.pdf": "878a2b0d2e57f1d1d3608ca63d915666700cf19597dc948fdf2f982463501244",
-    "paper/session-affinity-v0.3.pdf": "878a2b0d2e57f1d1d3608ca63d915666700cf19597dc948fdf2f982463501244",
-    "paper/session-affinity-v0.3-source.zip": "af512018e3a8584f306ef159be86a3e80c38fc633196d6389778788a7d9772c3",
+    "paper/main.tex": "cb301f129cf2e1b9478eee97dc4fb1dd0a27ec9439534a58fa7ed9199b942151",
+    "paper/main.pdf": "b644a7e78c717cd3385bd60ccda1286a2af832756d2a4ca95952efc7dbd86b06",
+    "paper/session-affinity-v0.3.pdf": "b644a7e78c717cd3385bd60ccda1286a2af832756d2a4ca95952efc7dbd86b06",
+    "paper/session-affinity-v0.3-source.zip": "feb8a2094c2b9412407935297bf9a791ed254894c01763803c57f9f35766a0e5",
     "paper/references.bib": "b8d674689b0cf943d98afc2447d2884a6b351271aa7c97eb8f041bcc06436932",
     "paper/revision/v0.3/results.json": "28f9591e66430a545cb35250173bfb79760b99f1f77b88ef77fa6064d17add2b",
     "paper/revision/v0.3/VERIFICATION.md": "8deacfed66626f0dc369a0c382dff56a3c531a2f11066ffba6b98bac8e042fd0",

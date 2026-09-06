@@ -14,18 +14,17 @@ license:
 version: "0.3-draft"
 # Unpublished draft: no release date assigned.
 
-# --- 公開前に確定が必要 -----------------------------------------------------
-# PUBLICATION_PLAN.md §2 のとおり、著者表記・所属・連絡先は本人確認が要る。
-# git の user.name / user.email は commit 用のローカル設定であり、
-# 公開名・連絡先への同意とは見なさない。
+# 著者表記は 2026-09-07 に本人が Fudo と決めた。単一名で用いる。
+# 所属・ORCID・連絡先は未設定。git の user.name / user.email は commit 用の
+# ローカル設定であり、公開名・連絡先への同意とは見なさない。
 authors:
-  - name: "TBD — 公開前に確定"
-    # given-names: ""
-    # family-names: ""
-    # affiliation: ""      # Independent Researcher を使う場合も本人確認が必要
-    # orcid: ""            # 任意
+  - given-names: "Fudo"
+    # affiliation: ""      # 未設定。Independent Researcher を使う場合も本人確認が必要
+    # orcid: ""            # 任意。未使用
+    # email: ""            # 未設定。本人が明示的に選んだ場合のみ記載する
 
-repository-code: "TBD — 公開時に確定"
+# --- 公開時に確定 -----------------------------------------------------------
+repository-code: "TBD — GitHub 公開時に確定"
 doi: "TBD — Zenodo deposit 後に確定"
 
 abstract: >-
