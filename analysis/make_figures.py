@@ -39,8 +39,9 @@ pairs = ds["pairs"]
 
 
 def save(fig, name):
-    for ext in ("pdf", "png"):
-        fig.savefig(OUT / f"{name}.{ext}")
+    # Omit the PDF CreationDate so a rebuild is byte-identical, as in paper/render_assets.py.
+    fig.savefig(OUT / f"{name}.pdf", metadata={"CreationDate": None})
+    fig.savefig(OUT / f"{name}.png")
     plt.close(fig)
     print(f"  {name}.pdf / .png")
 
