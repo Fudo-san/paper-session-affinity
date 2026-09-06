@@ -14,10 +14,10 @@ warning: accessing absolute path `/usr/share/fonts/opentype/noto/NotoSansCJK-Reg
 note: Running BibTeX on main.aux ...
 note: Rerunning TeX because bibtex was run ...
 note: Running xdvipdfmx ...
-note: Writing `main.aux` (16.8037109375 KiB)
-note: Writing `main.toc` (4.7021484375 KiB)
-note: Writing `main.out` (6.9931640625 KiB)
-note: Writing `main.pdf` (505.3681640625 KiB)
-note: Writing `main.bbl` (4.23046875 KiB)
 note: Writing `main.blg` (191 B)
-note: Writing `main.log` (30.384765625 KiB)
+note: Writing `main.aux` (18.048828125 KiB)
+note: Writing `main.bbl` (4.23046875 KiB)
+note: Writing `main.pdf` (516.6220703125 KiB)
+note: Writing `main.out` (7.13671875 KiB)
+note: Writing `main.log` (30.4228515625 KiB)
+note: Writing `main.toc` (4.8017578125 KiB)

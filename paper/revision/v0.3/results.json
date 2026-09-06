@@ -91,6 +91,27 @@
         "ties": 0,
         "p_two_sided": 0.18821620302302766
       }
+    },
+    "active_non_ct": {
+      "n": 56,
+      "median": -0.0065247753079243406,
+      "mean": 0.02757854161227508,
+      "relative_sum": 1.5443983302874045,
+      "ci95": [
+        -0.0477164923325369,
+        0.06860027233503761
+      ],
+      "min": -0.5778476308284576,
+      "max": 0.6723475722526011,
+      "median_usd": -0.0030911000000000133,
+      "mean_usd": 0.009004528571428581,
+      "B_median": 0.6218277,
+      "sign": {
+        "negative": 29,
+        "positive": 27,
+        "ties": 0,
+        "p_two_sided": 0.8938530948350217
+      }
     }
   },
   "specs": {
@@ -916,7 +937,37 @@
           "recorded_turn_rows": 297,
           "partial_output_sum": 2475
         }
-      }
+      },
+      "paired": {
+        "n": 14,
+        "median_relative_diff": 0.4284914977159666,
+        "ci95": [
+          0.28393465586848354,
+          0.49173729502284824
+        ],
+        "sign": {
+          "negative": 0,
+          "positive": 14,
+          "ties": 0,
+          "p_two_sided": 0.0001220703125
+        },
+        "median_turn_delta": 5.5,
+        "turn_sign": {
+          "negative": 0,
+          "positive": 14,
+          "ties": 0,
+          "p_two_sided": 0.0001220703125
+        }
+      },
+      "context": {
+        "B": 43290.0,
+        "C": 52637.0
+      },
+      "per_turn_usd": {
+        "B": 0.015097932773109245,
+        "C": 0.015740962658227848
+      },
+      "per_turn_ratio": 1.0425905913598912
     },
     "CT-B": {
       "B": {
@@ -992,7 +1043,37 @@
           "recorded_turn_rows": 139,
           "partial_output_sum": 588
         }
-      }
+      },
+      "paired": {
+        "n": 14,
+        "median_relative_diff": 0.37045759438046955,
+        "ci95": [
+          0.3130792812882316,
+          0.4384652164466214
+        ],
+        "sign": {
+          "negative": 0,
+          "positive": 14,
+          "ties": 0,
+          "p_two_sided": 0.0001220703125
+        },
+        "median_turn_delta": -3.0,
+        "turn_sign": {
+          "negative": 12,
+          "positive": 0,
+          "ties": 2,
+          "p_two_sided": 0.00048828125
+        }
+      },
+      "context": {
+        "B": 44043.5,
+        "C": 64482.0
+      },
+      "per_turn_usd": {
+        "B": 0.016303984079601992,
+        "C": 0.029877988235294115
+      },
+      "per_turn_ratio": 1.8325574957273565
     },
     "CT-C": {
       "B": {
@@ -1068,7 +1149,37 @@
           "recorded_turn_rows": 94,
           "partial_output_sum": 325
         }
-      }
+      },
+      "paired": {
+        "n": 14,
+        "median_relative_diff": 0.8408033691607724,
+        "ci95": [
+          0.5892960626051802,
+          1.004947978172616
+        ],
+        "sign": {
+          "negative": 0,
+          "positive": 14,
+          "ties": 0,
+          "p_two_sided": 0.0001220703125
+        },
+        "median_turn_delta": -3.0,
+        "turn_sign": {
+          "negative": 13,
+          "positive": 1,
+          "ties": 0,
+          "p_two_sided": 0.0018310546875
+        }
+      },
+      "context": {
+        "B": 38408.5,
+        "C": 73339.5
+      },
+      "per_turn_usd": {
+        "B": 0.01806044054054054,
+        "C": 0.045460433009708735
+      },
+      "per_turn_ratio": 2.517127581005736
     }
   },
   "ct_activity": {
@@ -1094,5 +1205,140 @@
         "cache_creation_tokens": 0
       }
     }
+  },
+  "model_mix": {
+    "calls": 518,
+    "by_reuse": {
+      "fresh": {
+        "aux": 434,
+        "single": 0
+      },
+      "resumed": {
+        "aux": 0,
+        "single": 84
+      }
+    },
+    "by_spec_arm": {
+      "ct_library|B": {
+        "fresh_aux": 42
+      },
+      "ct_library|C": {
+        "fresh_aux": 14,
+        "resumed_single": 28
+      },
+      "m_mixed|B": {
+        "fresh_aux": 62
+      },
+      "m_mixed|C": {
+        "fresh_aux": 45,
+        "resumed_single": 14
+      },
+      "n_db_chain|B": {
+        "fresh_aux": 29
+      },
+      "n_db_chain|C": {
+        "fresh_aux": 14,
+        "resumed_single": 14
+      },
+      "s17_m_mixed|B": {
+        "fresh_aux": 44
+      },
+      "s17_m_mixed|C": {
+        "fresh_aux": 28,
+        "resumed_single": 14
+      },
+      "s17_n_db_chain|B": {
+        "fresh_aux": 28
+      },
+      "s17_n_db_chain|C": {
+        "fresh_aux": 14,
+        "resumed_single": 14
+      },
+      "s17_w_two_files|B": {
+        "fresh_aux": 28
+      },
+      "s17_w_two_files|C": {
+        "fresh_aux": 28
+      },
+      "w_two_files|B": {
+        "fresh_aux": 30
+      },
+      "w_two_files|C": {
+        "fresh_aux": 28
+      }
+    },
+    "models_seen": [
+      "claude-haiku-4-5-20251001",
+      "claude-sonnet-5"
+    ]
+  },
+  "residual_ratio": {
+    "ct_library": {
+      "B": 0.8187523521205622,
+      "C": 0.8316079015107075
+    },
+    "m_mixed": {
+      "B": 0.8092716909990424,
+      "C": 0.838233688741807
+    },
+    "n_db_chain": {
+      "B": 0.8121952074573384,
+      "C": 0.8542143636573007
+    },
+    "s17_m_mixed": {
+      "B": 0.8123675613823675,
+      "C": 0.8060562717290893
+    },
+    "s17_n_db_chain": {
+      "B": 0.7856976586689263,
+      "C": 0.8224125562410641
+    },
+    "s17_w_two_files": {
+      "B": 0.7821359864508883,
+      "C": 0.7868271570132047
+    },
+    "w_two_files": {
+      "B": 0.8010453799191565,
+      "C": 0.7933649595948662
+    },
+    "all": {
+      "B": 0.8043280647864153,
+      "C": 0.8204298477038312
+    }
+  },
+  "carry_check": {
+    "lane": [
+      "CT-A",
+      "CT-B",
+      "CT-C"
+    ],
+    "note": "peak context is a maximum, not the per-turn mean; the first task carries nothing.",
+    "rows": [
+      {
+        "task": "CT-A",
+        "context_B": 43290.0,
+        "context_C": 52637.0,
+        "observed_growth": 9347.0,
+        "continued": false
+      },
+      {
+        "task": "CT-B",
+        "context_B": 44043.5,
+        "context_C": 64482.0,
+        "observed_growth": 20438.5,
+        "continued": true,
+        "assumed_carry": 41409,
+        "observed_over_assumed": 0.4935762756888599
+      },
+      {
+        "task": "CT-C",
+        "context_B": 38408.5,
+        "context_C": 73339.5,
+        "observed_growth": 34931.0,
+        "continued": true,
+        "assumed_carry": 42908,
+        "observed_over_assumed": 0.8140906124731985
+      }
+    ]
   }
 }

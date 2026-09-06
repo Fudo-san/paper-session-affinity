@@ -83,6 +83,27 @@
         "ties": 0,
         "p_two_sided": 0.18821620302302766
       }
+    },
+    "active_non_ct": {
+      "n": 56,
+      "median": -0.0065247753079243406,
+      "mean": 0.02757854161227508,
+      "relative_sum": 1.5443983302874045,
+      "ci95": [
+        -0.0477164923325369,
+        0.06860027233503761
+      ],
+      "min": -0.5778476308284576,
+      "max": 0.6723475722526011,
+      "median_usd": -0.0030911000000000133,
+      "mean_usd": 0.009004528571428581,
+      "B_median": 0.6218277,
+      "sign": {
+        "negative": 29,
+        "positive": 27,
+        "ties": 0,
+        "p_two_sided": 0.8938530948350217
+      }
     }
   },
   "active_model": {
@@ -287,3 +308,5 @@ CT accounting: {
   "standardized_C": 17.1089055,
   "standardized_delta": 5.4529341
 }
+model mix: {"fresh": {"aux": 434, "single": 0}, "resumed": {"aux": 0, "single": 84}}
+carry check: [{"task": "CT-A", "context_B": 43290.0, "context_C": 52637.0, "observed_growth": 9347.0, "continued": false}, {"task": "CT-B", "context_B": 44043.5, "context_C": 64482.0, "observed_growth": 20438.5, "continued": true, "assumed_carry": 41409, "observed_over_assumed": 0.4935762756888599}, {"task": "CT-C", "context_B": 38408.5, "context_C": 73339.5, "observed_growth": 34931.0, "continued": true, "assumed_carry": 42908, "observed_over_assumed": 0.8140906124731985}]
