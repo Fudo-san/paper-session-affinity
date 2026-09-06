@@ -310,3 +310,4 @@ CT accounting: {
 }
 model mix: {"fresh": {"aux": 434, "single": 0}, "resumed": {"aux": 0, "single": 84}}
 carry check: [{"task": "CT-A", "context_B": 43290.0, "context_C": 52637.0, "observed_growth": 9347.0, "continued": false}, {"task": "CT-B", "context_B": 44043.5, "context_C": 64482.0, "observed_growth": 20438.5, "continued": true, "assumed_carry": 41409, "observed_over_assumed": 0.4935762756888599}, {"task": "CT-C", "context_B": 38408.5, "context_C": 73339.5, "observed_growth": 34931.0, "continued": true, "assumed_carry": 42908, "observed_over_assumed": 0.8140906124731985}]
+carry substitution: {"r_observed": 1.4908700861353357, "r_hat_frozen": 1.5574963279807865, "r_hat_observed_carry": 1.359709786427423, "relative_error_frozen": -0.04277778422234121, "relative_error_observed_carry": 0.09646198109122278, "note": "Substituting the observed carry into the frozen formula. Not a recalibration; the frozen prediction stands."}

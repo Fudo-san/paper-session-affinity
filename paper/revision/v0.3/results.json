@@ -1339,6 +1339,14 @@
         "assumed_carry": 42908,
         "observed_over_assumed": 0.8140906124731985
       }
-    ]
+    ],
+    "substitution": {
+      "r_observed": 1.4908700861353357,
+      "r_hat_frozen": 1.5574963279807865,
+      "r_hat_observed_carry": 1.359709786427423,
+      "relative_error_frozen": -0.04277778422234121,
+      "relative_error_observed_carry": 0.09646198109122278,
+      "note": "Substituting the observed carry into the frozen formula. Not a recalibration; the frozen prediction stands."
+    }
   }
 }
