@@ -1,28 +1,35 @@
 # 公開計画と文書整合の正本
 
-更新日: 2026-09-05
-状態: **公開方式は選定済み／外部公開は未実施**
+更新日: 2026-09-07
+状態: **GitHub 公開を先行させる／外部公開は未実施**
 
 ## 1. 選定結果
 
 | 対象 | 選定 | 役割 |
 |---|---|---|
 | 論文タイトル | *The Economics of Session Affinity in Multi-Agent Code Generation: A Measurement Study of a Commercial Coding-Agent CLI* | 負の結果を隠さず、測定研究として位置づける |
-| Preprint | arXiv、primary `cs.SE` | ソフトウェア工学上の実証研究として公開 |
-| Cross-list | `cs.AI` 候補 | MAS・agent研究の読者へ到達させる。最終可否は arXiv 側の分類に従う |
-| 更新可能な正本 | 公開 GitHub repository `paper-session-affinity` | issue、訂正、後続版を管理 |
-| 不変アーカイブ | Zenodo | `v1.0.0-preprint` snapshot に DOI を付与 |
+| 更新可能な正本 | 公開 GitHub repository `paper-session-affinity` | **先行して公開する。** issue、訂正、後続版を管理 |
+| 不変アーカイブ | Zenodo | GitHub 公開後。`v1.0.0-preprint` snapshot に DOI を付与 |
+| Preprint | arXiv、primary `cs.SE` | **保留。** endorsement を確保できないため現時点では投稿しない |
+| Cross-list | `cs.AI` 候補 | arXiv 投稿が可能になった場合の候補。最終可否は arXiv 側の分類に従う |
 | 査読会議・誌 | preprint 後に選定 | 新着文献確認と英語原稿の完成後に別判断する |
 
 GitHub、Zenodo、arXiv は競合する選択肢ではない。GitHub は変化する作業正本、Zenodo は
 論文が参照する固定 artifact、arXiv は読まれる論文本文を担当する。
 
+arXiv は新規投稿者に対し、当該カテゴリの既存投稿者による endorsement を求める。所属機関の
+メールアドレスによる自動免除の対象でなく、推薦者の当てもないため、2026-09-07 に本人が
+**arXiv を保留し GitHub 公開を先行させる**と決めた。arXiv を取り下げたのではなく、
+endorsement を得る手段ができた時点で再開する。Zenodo は endorsement も実名も要求しない
+ので、GitHub 公開後にそのまま進められる。
+
 ## 2. 公開メタ情報
 
 - Title: 上記で固定
-- Author display name: **TBD — 本人確認が必要**
-- Affiliation: **TBD — `Independent Researcher` を使う場合も本人確認が必要**
-- ORCID: 任意。本人が使用する場合のみ設定
+- Author display name: **Fudo**（2026-09-07 に本人が決定。単一名で用いる）
+- Affiliation: **未設定**。`Independent Researcher` を使う場合も本人確認が必要
+- ORCID: 任意。未使用
+- 連絡先メール: **未設定**。本人が明示的に選ばない限り論文 metadata に記載しない
 - Repository URL: **TBD — 現在 remote 未設定**
 - Release tag: `v1.0.0-preprint`
 - Zenodo DOI: **TBD — deposit 後に確定**
@@ -53,7 +60,11 @@ Git の `user.name` や `user.email` は commit 用のローカル設定であ�
 
 次の全項目が揃うまで公開しない。
 
-- [ ] 著者表示名・所属・ORCID の本人確認
+- [x] 著者表示名の確定（2026-09-07: `Fudo`。`main.tex` と `CITATION.cff` に反映済み）
+- [ ] 所属・ORCID・連絡先メールの要否を確定（現在いずれも未設定）
+- [ ] **push 前**: commit 履歴の著者情報を確定する。全 commit が個人メールを保持しており、
+      public 化後は書き換えても取り消せない
+- [ ] **push 前**: `runs/**/calls.jsonl` の `session_id`（255ファイル）を公開してよいか確定する
 - [x] §1〜§9 と Abstract を単一 LaTeX 原稿へ統合
 - [ ] `［要引用］`、`TBD`、未解決の節番号・図表参照をゼロにする
 - [ ] 2026-07-31 以後の新着文献を再検索し、新規性の断定を再検査
@@ -79,12 +90,15 @@ Git の `user.name` や `user.email` は commit 用のローカル設定であ�
 ## 5. リリース順
 
 1. 本文統合・引用・権利監査を完了し、候補 commit を固定する。
-2. GitHub の公開 repository を作り `origin` を設定する。
-3. Zenodo 連携または deposit を準備し、Git tag/release `v1.0.0-preprint` を作る。
-4. Zenodo snapshot の DOI と Git commit/tag を照合する。
-5. arXiv に TeX source と必要ファイルを投稿し、Zenodo DOI と GitHub の exact tag を参照する。
-6. arXiv ID を GitHub/Zenodo の metadata へ追記する。snapshot 自体は置き換えず、新版は新しい
+2. **push 前に commit 履歴の著者情報を確定する。** 全 commit が個人のメールアドレスを
+   保持しており、public 化すると恒久的に露出する。push 後の書き換えでは取り消せない。
+3. GitHub の公開 repository を作り `origin` を設定して push する。
+4. Git tag/release `v1.0.0-preprint` を作る。
+5. Zenodo 連携または deposit を行い、snapshot の DOI と Git commit/tag を照合する。
+6. DOI を `CITATION.cff` と README へ反映する。snapshot 自体は置き換えず、新版は新しい
    release/version として発行する。
+7. arXiv は endorsement を確保できた場合のみ。TeX source を投稿し、Zenodo DOI と GitHub の
+   exact tag を参照する。取得した arXiv ID を GitHub/Zenodo の metadata へ追記する。
 
 ## 6. 運用根拠
 
@@ -109,11 +123,16 @@ Git の `user.name` や `user.email` は commit 用のローカル設定であ�
 数値修正が必要になった場合は既存 release を上書きせず、`v1.0.1-preprint` のように新しい版を
 作り、変更理由を明記する。
 
-## 8. 現時点で外部操作をしない理由
+## 8. 外部操作の扱い
 
-remote 作成、公開化、Zenodo deposit、arXiv submission は第三者から見える不可逆性の高い操作である。
-著者情報と最終的な再配布権の確認が未完のため、本書では方式の選定と公開ゲートの固定までを行い、
-実際の公開は人の最終確認後に行う。
+remote 作成、public 化、Zenodo deposit、arXiv submission は第三者から見える不可逆性の高い
+操作である。著者名は確定したが、所属・連絡先・commit 履歴の著者情報・session_id の公開可否が
+未決のため、実際の公開は人の最終確認後に行う。
+
+アカウント作成と repository 作成はブラウザ操作を要するので本人が行う。担当AIが行うのは
+push 直前までの準備、すなわち著者名の反映、履歴の書き換え、`origin` 設定、tag 作成、
+manifest 生成、clean checkout での再現までとする。push そのものは、その時点で改めて
+本人の指示を得てから実行する。
 
 ## 9. v0.3後の投稿先候補（2026-09-05）
 
