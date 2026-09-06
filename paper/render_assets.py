@@ -117,7 +117,12 @@ newmacros.update({'ActiveNonCTMedian':f"{100*anc['median']:+.2f}",'ActiveNonCTCI
  'CTATurnUp':f"{cta['turn_sign']['positive']}",
  'ResidualRatioB':f"{rr['B']:.3f}",'ResidualRatioC':f"{rr['C']:.3f}",
  'CarryShareB':f"{100*carry['CT-B']['observed_over_assumed']:.0f}",
- 'CarryShareC':f"{100*carry['CT-C']['observed_over_assumed']:.0f}"})
+ 'CarryShareC':f"{100*carry['CT-C']['observed_over_assumed']:.0f}",
+ 'SubHatFrozen':f"{v3['carry_check']['substitution']['r_hat_frozen']:.4f}",
+ 'SubHatObserved':f"{v3['carry_check']['substitution']['r_hat_observed_carry']:.4f}",
+ 'SubErrFrozen':f"{100*v3['carry_check']['substitution']['relative_error_frozen']:+.1f}",
+ 'SubErrObserved':f"{100*v3['carry_check']['substitution']['relative_error_observed_carry']:+.1f}",
+ 'ResidualDirSpecs':f"{sum(v3['residual_ratio'][k]['B']<v3['residual_ratio'][k]['C'] for k in v3['specs'])}"})
 
 with (out/'numbers.tex').open('a') as f:f.write(macro_lines(newmacros))
 # CTの機構表: ターン・文脈・ターン単価・対応差を1枚に並べる
