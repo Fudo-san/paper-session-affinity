@@ -54,9 +54,10 @@ A Measurement Study of a Commercial Coding-Agent CLI}
 相対費用差中央値は$+\CostMedian$\%、BCa 95\%区間は\CostCI\%で、事前指定した20\%削減の達成条件は満たされなかった。
 時間と受入全通過率は、15\%と10ポイントの許容差に対する非劣性基準を満たした。
 事後分析では、継続が発生しないW形状2仕様の中央値も$-7.9$\%と$+12.1$\%に分かれ、全体の小さな正の差を継続一般の効果とする解釈に注意を促した。
-これらは少数の対照仕様による参照値であり、測定系全体のノイズ限界ではない。
 CT仕様は全14対で高く、中央値$+50.6$\%だった。CT以外ではCが安い対が44/84で、全体平均の増加はCTの大きな差に集中していた。
 CTの総ターン数は587から572へ減る一方、cache readは32.6\%、cache writeは96.8\%増えた。
+タスク別には、継続した2タスクがターン数を2〜3割減らしながら最大文脈量を46\%と91\%増やし、継続しない先頭タスクも14反復すべてで費用が増えた（中央値$\CTAMedian$\%）。
+また補助モデルの使用記録は、新規セッション\AuxFresh 件と継続セッション\AuxResumed 件で完全に分かれた。
 固定単価での換算増分はcache writeが最大項目だったが、CLI報告額との残差があり、請求内訳や継承履歴だけの費用は同定できなかった。
 継続対象5仕様のモデル予測は4件が誤差25\%以内で、5件とも過大予測だった。
 本研究は陰性対照、仕様別の異質性、残差を保持した費用分解を示す。CTは1仕様に限られ、継続と実行順制約の因果効果は分離できない。
@@ -66,7 +67,7 @@ CTの総ターン数は587から572へ減る一方、cache readは32.6\%、cache
 
 \clearpage
 \section*{Abstract}
-Continuing related coding tasks in one session can reduce repeated exploration while carrying history and adding scheduling constraints. We characterize a commercial coding-agent CLI and compare fresh sessions (B) with write-scope-connected lane continuation (C) on seven specifications in one Python repository (196 runs; 98 pairs). The median paired relative cost difference is +\CostMedian\% (BCa 95\% interval: \CostCI\%), failing the pre-specified 20\% reduction criterion. Runtime and acceptance meet non-inferiority criteria with margins of 15\% and 10 percentage points, respectively. Post-hoc analysis identifies two structural controls with no continuation: their medians are $-7.9$\% and $+12.1$\%. These offer descriptive context, not a calibrated noise threshold. The CT specification is costlier in all 14 pairs, with a median difference of +50.6\%; outside CT, C is cheaper in 44/84 pairs. The aggregate mean increase is concentrated in CT. CT's reported turn count falls from 587 to 572, while cache-read and cache-write tokens rise by 32.6\% and 96.8\%. Fixed-rate accounting assigns the largest standardized increase to cache writes, but a residual relative to CLI-reported cost prevents a complete billing decomposition or attribution to inherited history alone. Excluding two structural unity predictions, four of five model predictions are within 25\% relative error and all five overpredict. The study combines structural controls, workload heterogeneity, and residual-preserving cost accounting. A single CT specification and a bundled intervention limit causal interpretation and generalization.
+Continuing related coding tasks in one session can reduce repeated exploration while carrying history and adding scheduling constraints. We characterize a commercial coding-agent CLI and compare fresh sessions (B) with write-scope-connected lane continuation (C) on seven specifications in one Python repository (196 runs; 98 pairs). The median paired relative cost difference is +\CostMedian\% (BCa 95\% interval: \CostCI\%), failing the pre-specified 20\% reduction criterion. Runtime and acceptance meet non-inferiority criteria with margins of 15\% and 10 percentage points, respectively. Post-hoc analysis identifies two structural controls with no continuation: their medians are $-7.9$\% and $+12.1$\%. The CT specification is costlier in all 14 pairs, with a median difference of +50.6\%; outside CT, C is cheaper in 44/84 pairs. The aggregate mean increase is concentrated in CT. CT's reported turn count falls from 587 to 572, while cache-read and cache-write tokens rise by 32.6\% and 96.8\%. Per task, the two continued tasks take 21--30\% fewer turns while their peak context grows by 46\% and 91\%, and the leading task---fresh in both arms---is costlier in all 14 replications (median $\CTAMedian$\%). Auxiliary-model use separates completely: it is recorded in all \AuxFresh{} fresh calls and in none of the \AuxResumed{} resumed ones. Fixed-rate accounting assigns the largest standardized increase to cache writes, but a residual relative to CLI-reported cost prevents a complete billing decomposition or attribution to inherited history alone. Excluding two structural unity predictions, four of five model predictions are within 25\% relative error and all five overpredict. The study combines structural controls, workload heterogeneity, and residual-preserving cost accounting. A single CT specification and a bundled intervention limit causal interpretation and generalization.
 
 \vspace{1em}
 \noindent\textbf{版と証拠の位置づけ。}
@@ -357,8 +358,11 @@ BCaはバイアス補正と加速度を用いるブートストラップ区間�
 独立性と符号交換可能性を仮定した分析であり、決定的な交互順序から無作為化推論が自動的に成立するとはしない。
 
 \subsection{補助分析の位置づけ}
-本節の陰性対照、正確符号検定、継続対象5仕様のモデル評価、CT費用分解は事後の記述的分析である。
+本節の陰性対照、正確符号検定、継続対象5仕様のモデル評価、CT費用分解、および\S\ref{sec:mechanism}の機構観測は事後の記述的分析である。
 凍結したH1〜H4bの達成条件は維持し、追加分析を新しい主判定にしない。
+群分けは全98対のほかに非CT84対、陰性対照28対、継続対象70対、両方を除く56対の4通りを併記する。
+これらは同じデータの部分集合であり、有意水準を調整した多重比較として設計していない。
+どの部分集計も、事前指定した達成条件の代わりに用いない。
 費用分解には\S3の較正で固定した単価を用い、CLI報告額との残差を独立項目として保持する。
 再計算の定義とログ照合の範囲は付録\ref{app:supplement}に示す。
 
@@ -396,6 +400,9 @@ Cが安い対は44/98（44.9\%）で、差の正負だけを用いた両側正�
 \end{figure}
 
 \subsection{仕様別とCT除外の感度分析}
+本節は前節と逆向きに見えるが、対象の統計量が異なる。
+中央値は順位で決まるので仕様構成に、平均は差の大きさで決まるのでCTの大きな差に感度が高い。
+どちらも同じ98対の性質であり、一方を他方の誤りとしない。
 \begin{table}[!htbp]
 \centering\small
 \input{generated/spec_rows.tex}
@@ -411,6 +418,12 @@ CT14対を加えることで、正の差は40から54件へ増え、中央値の
 平均相対差を全98対に対する加法的寄与に分けると、CTは$+\CTMeanContribution$ポイント、非CTは$+\NonCTMeanContribution$ポイントである。
 CTは対の件数では14/98を占め、全体平均$+8.37$\%の大部分に寄与する。
 これは平均の分解であり、中央値$+5.51$\%の加法分解ではない。
+
+さらにW2仕様とCTの両方を除いた56対、すなわち直接競合ではない形状で継続が実際に起きた対では、
+中央値$\ActiveNonCTMedian$\%、BCa 95\%区間\ActiveNonCTCI\%、Cが安い対が\ActiveNonCTCheaper/56（符号検定$p=\ActiveNonCTP$）だった。
+区間は0を含み、$-20$\%も$+20$\%も含まない。
+ただし費用側には事前指定した同等性マージンがないため、これを「費用中立が示された」とは読まない。
+記述として、この範囲では大きな増減のどちらも観測されなかったということである。
 
 全体の中央値の符号が仕様構成に敏感であることは言えるが、CTを除いた値を主要な結果へ差し替えない。
 CTは1仕様なので、形状一般の効果とその具体的な課題内容を分離できない。
@@ -466,7 +479,7 @@ CTでは14ランずつの報告総費用がBの9.5434 USDからCの14.2279 USD�
 
 \begin{table}[!htbp]
 \centering\small\input{generated/accounting_rows.tex}
-\caption{CTの14ラン対の加法分解。換算額はUSD。残差を含む合計がCLI報告額と一致する。通常入力差は$-0.000018$ USD。}
+\caption{CTの14ラン対の加法分解。単位はUSD。B列・C列はトークン4項目の固定単価換算で、最終行の残差だけは換算額ではなく報告額との差引項である。4項目と残差の合計がCLI報告額と一致する。通常入力差は$-0.000018$ USD。}
 \label{tab:accounting}
 \end{table}
 固定単価での増分\CTStandardDelta{} USDのうち、cache writeが3.4398 USD（\CTWriteShare\%）、cache readが1.9302 USD（\CTReadShare\%）を占める。
@@ -495,6 +508,44 @@ CT-Aのターン数は238から316へ増え、継続する後続2タスクでは
 先頭タスクも実行順制約が変わった環境で動き、生成の変動もあるため、この差を特定原因へ割り当てない。
 \S3の$H_i$、$\rho$、$K'_j$を代理量から埋めることはモデル計算であり、この料金項目別の観測からcarry式の各項を直接測定したことにはならない。
 
+\subsection{継続に伴う機構の観測}\label{sec:mechanism}
+費用の増減がどの量の変化に対応するかを、CTの3タスクについて記述する。以下も事後分析であり、H1〜H4bの判定を置き換えない。
+
+まず、セッションの再利用と使用モデルの構成が完全に対応していた。
+新規セッションの\AuxFresh 件の呼び出しでは全てに補助モデル（\spec{claude-haiku-4-5}）の使用が記録され、継続セッションの\AuxResumed 件では1件も記録されなかった。
+call記録\CallRecords 件に例外はなく、7仕様のいずれでもこの対応は崩れない。
+したがってB側とC側で1ターンあたりの量を比べると、履歴の量だけでなくモデル構成の違いも含まれる。
+ログはモデル別の金額とトークン数を保存しないため、この2つを分離できない。
+表\ref{tab:mechanism}のターン単価比は記述として示すが、これを継承履歴の処理費用とは読まない。
+
+\begin{table}[!htbp]
+\centering\small\input{generated/ct_mechanism_rows.tex}
+\caption{CTのタスク別。ターン差と費用相対差は14反復の対応差の中央値、最大文脈は各アームの中央値。ターン単価比はモデル構成の違いを含む量であり、履歴処理の単価ではない。}
+\label{tab:mechanism}
+\end{table}
+
+継続した2タスクでは、ターン数が減り出力がほぼ変わらない一方、最大文脈量が44,044から64,482（$+46$\%）、38,408から73,340（$+91$\%）へ増えた。
+作業量の代理量が減っても費用が増えるという関係は、式\eqref{eq:carry}が扱う向きと一致する。
+ただし文脈量には固定文脈と現タスク内の履歴も含まれるので、増加分を継承履歴だけに割り当てない。
+
+継続しない先頭のCT-Aでも費用が増えた。
+14反復の対応差の中央値は\CTAMedian\%、BCa 95\%区間\CTACI\%で、ターン数は\CTATurnUp/14の反復で増え、最大文脈と出力も増えた。
+CT-AはB側でもC側でも新規セッションであり、この差を継続そのものでは説明できない。
+両アームで異なるのは実行順の制約であって、先頭タスクへ与える入力ではない。
+本稿はこれを未解決の観測として提示し、原因を特定しない。
+
+式\eqref{eq:carry}に入れる継承量$\widehat H_i$には、直前タスクのB側較正での最大文脈を用いた（\S\ref{sec:calibration}）。
+これに対し本実験で観測された文脈の増加は、CT-Bで仮定量の\CarryShareB\%、CT-Cで\CarryShareC\%にとどまった。
+仮定より小さい継承量しか観測されないことは、継続対象5仕様が全て過大予測だったこと（\S\ref{sec:model_fit}）と向きが一致する。
+ただし最大文脈は1ターンあたりの平均ではなく、継続しないCT-Aでも文脈は増えており、較正は1反復で本実験は14反復である。
+したがってこれは候補となる説明であって、モデルの検証ではない。
+
+最後に、報告費用を固定単価換算で割った比は、7仕様2アームの14点で0.78から0.85に収まった（全体でBが\ResidualRatioB、Cが\ResidualRatioC）。
+残差は加法的な誤差ではなく、ほぼ一定の比率として働いている。
+安価な補助モデルが換算に含まれないことは、この比が1を下回る向きと整合する。
+比が2アームで近いことは、\S\ref{sec:accounting}の項目シェアが残差によって大きく組み替えられる状況ではないことを示す。
+ただし残差の項目別内訳は観測できないので、シェアが保存されることの証明ではない。単価を実測総額へ合わせ直すことはしない。
+
 \subsection{時間と受入テスト}
 時間の中央値はBが280.85秒、Cが292.80秒で、比は\TimeRatio{}だった。
 対応を保ったブートストラップによる片側90\%上限\TimeUpper{}は1.15を下回り、指定した時間の非劣性基準を満たした。
@@ -505,7 +556,7 @@ CT-Aのターン数は238から316へ増え、継続する後続2タスクでは
 この許容差は比較的広く、1件しか不一致がないデータから品質全般の同等性を保証しない。
 補助確認として、B成功・C失敗の確率の片側90\%Clopper--Pearson上限を反転した保守的な通過率差下限は\QualityExact{}ポイントだった（付録\ref{app:supplement}）。
 
-\subsection{モデル予測の一致と不一致}
+\subsection{モデル予測の一致と不一致}\label{sec:model_fit}
 仕様$s$の実測比は$r_s=\sum_i C_{si}/\sum_i B_{si}$であり、表\ref{tab:per_spec}の相対差中央値とは異なる。
 \begin{table}[!htbp]
 \centering\small
@@ -539,7 +590,8 @@ CT-Aのターン数は238から316へ増え、継続する後続2タスクでは
 これは固定7仕様に条件づけた追加分析であり、リポジトリ母集団の区間ではない。
 10分以上離れた11対を除く87対でも中央値は$+6.0$\%、BCa区間は$[-3.27,+8.95]$\%で、費用削減の達成条件を満たさなかった。
 
-\section{測定から得られる含意}\label{sec:negative}
+\section{支持されなかった見立て}\label{sec:negative}
+本節は、測定の過程で採らないことにした説明と、本稿の成果に含めない事柄を挙げる。新しい主張は置かない。機構についての観測は\S\ref{sec:mechanism}に示した。
 \subsection{キャッシュ共有を単純な二択で捉えない}
 当初は、別セッションで同じ入力を送れば共有できるか、全く共有できないかという二択で考えた。
 実際には固定文脈が共有され、新規から新規と、継続後の新規とで観測が異なった。
@@ -692,8 +744,15 @@ $\min\{1,2\sum_{j=0}^{\min(n_+,n_-)}\binom{n}{j}2^{-n}\}$を用いた。今回�
 このランも主要費用と全仕様のトークン集計から除外せず、\spec{run.json}を用いる。
 CT全28ランは各3呼び出しの全行が5項目とも一致し、タスク別分解はこの検証済み範囲で行った。
 
-CTの84呼び出し中56件は代表モデルに加えて補助モデル名を持つ（B42/42、C14/42）。
-詳細なモデル別\spec{modelUsage}の数値は保存していない。
+補助モデルの使用記録は全ランで確認した。call記録\CallRecords 件のうち、新規セッションの\AuxFresh 件は全てが代表モデルに加えて補助モデル名を持ち、継続セッションの\AuxResumed 件は1件も持たない。
+7仕様のいずれでも例外はなく、CTでの内訳はB 42/42、C 14/42である。
+詳細なモデル別\spec{modelUsage}の数値は保存していないため、補助モデルが費用と所要ターンへ与えた寄与は測れない。
+このため1ターンあたりの量をアーム間で比べる記述は、履歴量とモデル構成の両方を含む。
+
+CTのタスク別対応差は、同じ反復番号のB側とC側の呼び出しを対応付けて算出した。
+最大文脈量は各アーム14反復の中央値である。継承量の照合には較正時（アームB、1反復）の最大文脈を用いており、
+本実験の反復数と一致しないので、比は概算の対比として扱う。
+報告費用と固定単価換算の比は仕様別・アーム別に算出し、残差の項目別内訳は復元していない。
 CTのB側ではターン行のcache read合計がresult集計より632,352トークン、writeが26,734トークン多い。C側は一致する。
 \spec{output_tokens_partial}は開始時点の未確定値なので費用集計に使わない。
 CLI内部の集計範囲、補助処理、料金体系をこの保存形式から一意に復元できず、残差の原因を単価差だけへ帰属させない。

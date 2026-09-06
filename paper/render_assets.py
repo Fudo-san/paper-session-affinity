@@ -107,7 +107,26 @@ newmacros={'SignP':f"{g['all']['sign']['p_two_sided']:.4f}",
  'CTFirstShare':f"{100*v3['ct_tasks']['CT-A']['reported_delta']/ct['reported_delta']:.1f}",
  'CTMeanContribution':f"{100*sp['ct_library']['relative_sum']/98:.2f}",
  'NonCTMeanContribution':f"{100*g['non_ct']['relative_sum']/98:.2f}"}
+anc=g['active_non_ct'];cta=v3['ct_tasks']['CT-A']['paired'];mixr=v3['model_mix']['by_reuse']
+rr=v3['residual_ratio']['all'];carry={r['task']:r for r in v3['carry_check']['rows']}
+newmacros.update({'ActiveNonCTMedian':f"{100*anc['median']:+.2f}",'ActiveNonCTCI':interval(anc['ci95']),
+ 'ActiveNonCTCheaper':f"{anc['sign']['negative']}",'ActiveNonCTP':f"{anc['sign']['p_two_sided']:.4f}",
+ 'AuxFresh':f"{mixr['fresh']['aux']}",'AuxResumed':f"{mixr['resumed']['single']}",
+ 'CallRecords':f"{v3['model_mix']['calls']}",
+ 'CTAMedian':f"{100*cta['median_relative_diff']:+.1f}",'CTACI':interval(cta['ci95']),
+ 'CTATurnUp':f"{cta['turn_sign']['positive']}",
+ 'ResidualRatioB':f"{rr['B']:.3f}",'ResidualRatioC':f"{rr['C']:.3f}",
+ 'CarryShareB':f"{100*carry['CT-B']['observed_over_assumed']:.0f}",
+ 'CarryShareC':f"{100*carry['CT-C']['observed_over_assumed']:.0f}"})
+
 with (out/'numbers.tex').open('a') as f:f.write(macro_lines(newmacros))
+# CTの機構表: ターン・文脈・ターン単価・対応差を1枚に並べる
+(out/'ct_mechanism_rows.tex').write_text('\\begin{tabular}{lcrrrr}\n\\toprule タスク & Cで継続 & ターン差中央値 & 最大文脈 B$\\to$C & ターン単価比 & 費用相対差中央値\\\\\\midrule\n'+''.join(
+ '\\spec{'+t+'} & '+('あり' if v3['ct_tasks'][t]['activity']['C']['resumed'] else 'なし')+' & '
+ +f"${v['paired']['median_turn_delta']:+.1f}$ & {v['context']['B']:,.0f}$\\to${v['context']['C']:,.0f} & "
+ +f"{v['per_turn_ratio']:.2f} & ${100*v['paired']['median_relative_diff']:+.1f}$\\% \\\\\n"
+ for t,v in v3['ct_tasks'].items())+'\\bottomrule\n\\end{tabular}\n')
+
 control_names=['s17_w_two_files','w_two_files','ct_library']
 (out/'control_rows.tex').write_text('\\begin{tabular}{lrrrr}\n\\toprule 仕様 & $n$ & 相対差中央値 & BCa 95\\%区間 & USD差中央値\\\\\\midrule\n'+''.join(
  '\\spec{'+s+'} & '+f"{sp[s]['n']} & ${100*sp[s]['median']:+.1f}$\\% & ${interval(sp[s]['ci95'])}$\\% & ${sp[s]['median_usd']:+.4f}$ \\\\\n" for s in control_names)+'\\bottomrule\n\\end{tabular}\n')
@@ -116,7 +135,7 @@ account_rows=[]
 for k,v in ct['parts'].items():
  tokens='---' if k=='residual' else f"${v['tokens_delta']:+,}$"
  account_rows.append(labels[k]+' & '+tokens+f" & ${v['usd_B']:.4f}$ & ${v['usd_C']:.4f}$ & ${v['usd_delta']:+.4f}$ \\\\\n")
-(out/'accounting_rows.tex').write_text('\\begin{tabular}{lrrrr}\n\\toprule 項目 & トークン差 & B換算額 & C換算額 & 差額\\\\\\midrule\n'+''.join(account_rows)+
+(out/'accounting_rows.tex').write_text('\\begin{tabular}{lrrrr}\n\\toprule 項目 & トークン差 & B & C & 差額\\\\\\midrule\n'+''.join(account_rows)+
  '\\midrule 報告費用 & --- & '+f"{ct['B']['cost_usd']:.4f} & {ct['C']['cost_usd']:.4f} & ${ct['reported_delta']:+.4f}$ \\\\\n"+'\\bottomrule\n\\end{tabular}\n')
 (out/'ct_task_rows.tex').write_text('\\begin{tabular}{lrrrrl}\n\\toprule タスク & B費用 & C費用 & 差額 & ターン数 B/C & Cで継続\\\\\\midrule\n'+''.join(
  '\\spec{'+task+'} & '+f"{v['B']['cost_usd']:.4f} & {v['C']['cost_usd']:.4f} & ${v['reported_delta']:+.4f}$ & {v['activity']['B']['reported_turns']}/{v['activity']['C']['reported_turns']} & "+('なし' if task=='CT-A' else '14/14')+' \\\\\n' for task,v in v3['ct_tasks'].items())+'\\bottomrule\n\\end{tabular}\n')

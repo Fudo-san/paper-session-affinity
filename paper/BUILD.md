@@ -54,7 +54,7 @@ python3 paper/make_source_zip.py
 ```
 
 `session-affinity-v0.3-source.zip`に、本文、参考文献、生成済み数値・表、6図のPDF、ビルドスクリプト、
-ビルド説明、訂正記録と結果JSONの25件を同梱する。
+ビルド説明、訂正記録と結果JSONの26件を同梱する。
 Tectonic本体、TeXキャッシュ、旧原稿、生実験データはZIPへ含めない。
 
 同じスクリプトが `revision/v0.3/artifact_manifest.json` の22件をハッシュし直す。
