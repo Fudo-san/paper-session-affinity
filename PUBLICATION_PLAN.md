@@ -75,7 +75,9 @@ Git の `user.name` や `user.email` は commit 用のローカル設定であ�
 - [ ] 絶対パスは「実験記録として保持」か「可搬化」のどちらかをファイルごとに決める
 - [ ] 196 run / 98 pair / dropped 0 / model / CLI / $121.26 が本文と artifact で一致
 - [ ] リリース候補の clean checkout で分析テスト38件と凍結分析を再実行（2026-09-05にcommit状態のclean cloneで通過。release tag確定後に再実行して閉じる）
-- [ ] commit、release tag、E2 JSON、paper source の SHA-256 manifest を生成
+- [x] commit、release tag、E2 JSON、paper source の SHA-256 manifest を生成
+      （`RELEASE_MANIFEST.json` 430件。`make_release_manifest.py` で再生成でき、
+      commit SHA は注釈付きタグ `v1.0.0-preprint` が本ファイルのハッシュ経由で固定する）
 
 ### 現時点の監査結果
 
@@ -111,6 +113,9 @@ Git の `user.name` や `user.email` は commit 用のローカル設定であ�
 ## 7. 同一性ガード
 
 公開単位は「現在の branch」ではなく exact Git tag とする。manifest には少なくとも次を含める。
+実装は `make_release_manifest.py` と `RELEASE_MANIFEST.json`（430件）である。
+commit SHA は manifest に書けないので、注釈付きタグの本文が manifest の SHA-256 を保持する。
+これによりタグ→commit→manifest→データという鎖になり、どの環に触れても検出できる。
 
 - Git commit SHA と tag
 - `analysis/e1_dataset_main.json`
