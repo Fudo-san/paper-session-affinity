@@ -24,7 +24,7 @@ authors:
     # email: ""            # 未設定。本人が明示的に選んだ場合のみ記載する
 
 # --- 公開時に確定 -----------------------------------------------------------
-repository-code: "TBD — GitHub 公開時に確定"
+repository-code: "https://github.com/Fudo-san/paper-session-affinity"
 doi: "TBD — Zenodo deposit 後に確定"
 
 abstract: >-

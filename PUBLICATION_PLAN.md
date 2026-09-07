@@ -30,9 +30,9 @@ endorsement を得る手段ができた時点で再開する。Zenodo は endors
 - Affiliation: **未設定**。`Independent Researcher` を使う場合も本人確認が必要
 - ORCID: 任意。未使用
 - 連絡先メール: **未設定**。本人が明示的に選ばない限り論文 metadata に記載しない
-- Repository URL: **TBD — 現在 remote 未設定**
+- Repository URL: <https://github.com/Fudo-san/paper-session-affinity>（2026-09-07 作成）
 - Release tag: `v1.0.0-preprint`
-- Zenodo DOI: **TBD — deposit 後に確定**
+- Zenodo DOI: **TBD — deposit 後に確定**。GitHub公開後に取得し、成果物の到達性をGitHubアカウントから切り離す
 - arXiv ID: **TBD — submission 後に確定**
 - Primary category: `cs.SE`
 - Cross-list candidate: `cs.AI`
@@ -84,7 +84,7 @@ Git の `user.name` や `user.email` は commit 用のローカル設定であ�
   `probes/verify_a11.py` に存在。実験記録と可搬用テンプレートを分離する必要がある
 - `calls.jsonl`: usage、モデル、session_id、task_id、時間等の構造化計測値で、prompt/response
   本文のキーはない。ただし session_id を公開してよいかは最終監査で再確認する
-- repository remote: 未設定
+- repository remote: <https://github.com/Fudo-san/paper-session-affinity>。push は本人の最終確認後
 - LICENSE: MIT / CC BY 4.0 のファイルは存在。最終再配布監査は未完
 
 ## 5. リリース順
