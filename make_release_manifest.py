@@ -44,7 +44,26 @@ def members(known):
     return sorted(set(names))
 
 
+def check():
+    """Fail if anything the manifest covers changed after it was written.
+
+    Generating the manifest and then editing a covered document leaves a stale hash;
+    that has happened twice. Run this immediately before tagging.
+    """
+    m = json.loads((ROOT / 'RELEASE_MANIFEST.json').read_text())
+    stale = [rel for rel, want in m['sha256'].items()
+             if hashlib.sha256((ROOT / rel).read_bytes()).hexdigest() != want]
+    missing = sorted(set(members(tracked())) - set(m['sha256']))
+    if stale or missing:
+        raise SystemExit(f'stale: {stale}\nnot covered: {missing}')
+    print(f"RELEASE_MANIFEST.json: {len(m['sha256'])} files match, tag {m['release_tag']}")
+
+
 if __name__ == '__main__':
+    import sys
+    if '--check' in sys.argv:
+        check()
+        raise SystemExit(0)
     names = members(tracked())
     entries = {n: hashlib.sha256((ROOT / n).read_bytes()).hexdigest() for n in names}
     groups = {'protocol': 'protocol/', 'run_records': 'runs/main/', 'paper': 'paper/'}
