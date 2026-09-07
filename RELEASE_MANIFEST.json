@@ -1,5 +1,5 @@
 {
-  "release_tag": "v1.0.0-preprint",
+  "release_tag": "v1.0.1-preprint",
   "commit": "recorded in the annotated tag, not here",
   "file_count": 430,
   "counts": {
@@ -10,10 +10,10 @@
   "sha256": {
     "CITATION.cff": "8dd5e1f038564e8a1037f497aca7ebfc7b8b5c94299c63ad5f0500db183910c8",
     "LICENSE": "edcc42c0148b5ad94173c1248437ba6f31d451f93d62c0017c86de11ca9fcb6d",
-    "PUBLICATION_PLAN.md": "7b5ffaaf57e4fa69dd2c1da76c20905b0e10052dd5f44c316ba276b99e98364b",
+    "PUBLICATION_PLAN.md": "58868a2b9292e2af6f2e9cf64d7a9a0086de38166adade5dd7a80f016fbad19e",
     "README.md": "60a1ff3494b12ffbb5ee97570751598a5a0bf4ee211a5bec0b6380fb277ec4d3",
     "REPRODUCTION.md": "30762d850bef6d9b600c2fb425cfe4889dc864bdcf3b440897bbb8d5c44c352a",
-    "THIRD_PARTY_NOTICES.md": "d2f34a3efde148c5151a65a0465b4a84379ca9f52c6e3bc7038e8eede29f552a",
+    "THIRD_PARTY_NOTICES.md": "262fde66bba2f32aacdd12308bc511d0c91e55fe85e413dfa87ffa2ab7e3068a",
     "analysis/PRE_ANALYSIS_DECISIONS.md": "0c91f250e8fb88817fca01691e6f553303ae0c1920dfa7c5775651facb0e37fa",
     "analysis/e1_dataset_main.json": "7d6aa1703970723a2bf5d9568be2f1b3900cfdb649f98a649032661cc8a38ea6",
     "analysis/e2_results_main.json": "25279c3516db2ac38b4af933c882179a0d1ed2034b91e12518d3296d7e615609",
