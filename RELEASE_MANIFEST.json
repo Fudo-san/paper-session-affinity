@@ -1,16 +1,17 @@
 {
-  "release_tag": "v1.1.1-preprint",
+  "release_tag": "v1.1.2-preprint",
   "commit": "recorded in the annotated tag, not here",
-  "file_count": 439,
+  "file_count": 440,
   "counts": {
     "protocol": 4,
     "run_records": 392,
     "paper": 31
   },
   "sha256": {
+    ".zenodo.json": "b1139c0a59746a1dde820941235227eb9ed092011b1c9682a5618c7d38247581",
     "CITATION.cff": "50c9d73c05272c0a29f4806a4bf2d27b03a0ba23d932ca868812a15a8f3063ee",
     "LICENSE": "edcc42c0148b5ad94173c1248437ba6f31d451f93d62c0017c86de11ca9fcb6d",
-    "PUBLICATION_PLAN.md": "6f3d38c865c75e7489fb75f4a67c5f6deb0793c95aa1c69f4c5e53544e14bdd2",
+    "PUBLICATION_PLAN.md": "43ec338632169aade3bba41ccd95ca9be0e74cda56225cc06482fa5daf215c62",
     "README.md": "60a1ff3494b12ffbb5ee97570751598a5a0bf4ee211a5bec0b6380fb277ec4d3",
     "REPRODUCTION.md": "30762d850bef6d9b600c2fb425cfe4889dc864bdcf3b440897bbb8d5c44c352a",
     "THIRD_PARTY_NOTICES.md": "262fde66bba2f32aacdd12308bc511d0c91e55fe85e413dfa87ffa2ab7e3068a",
