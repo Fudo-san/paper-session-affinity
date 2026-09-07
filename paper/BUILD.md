@@ -1,4 +1,4 @@
-# 統合論文 v0.3 のビルド
+# 統合論文 v0.3 のビルド（日本語版・英語版）
 
 本文: `main.tex`、参考文献: `references.bib`。日本語本文・英語要旨・全9章・付録4節。
 著者名・所属・公開識別子を仮に作成していない。外部公開は別工程。
@@ -54,7 +54,7 @@ python3 paper/make_source_zip.py
 ```
 
 `session-affinity-v0.3-source.zip`に、本文、参考文献、生成済み数値・表、6図のPDF、ビルドスクリプト、
-ビルド説明、訂正記録と結果JSONの26件を同梱する。
+ビルド説明、訂正記録と結果JSONを同梱する。日本語版と英語版の本文・表を両方含む。
 Tectonic本体、TeXキャッシュ、旧原稿、生実験データはZIPへ含めない。
 
 同じスクリプトが `revision/v0.3/artifact_manifest.json` の22件をハッシュし直す。
@@ -67,6 +67,16 @@ ZIP内のタイムスタンプは1980-01-01に固定し、図のPDFは`CreationD
 
 旧v0.2は `versions/v0.2/` に、独自の `manifest.json` 付きで保存。v0.3 ZIPには追加分析JSONと方法、
 コメント回答を同梱。共通の旧訂正履歴に加え `revision/v0.3/RESPONSE.md` を参照。
+
+## 英語版
+
+```bash
+bash paper/build.sh en
+```
+
+本文は `main_en.tex`。数値マクロ・図・参考文献は日本語版と共有し、表だけ `generated/en/` の英語版を使う。
+英語表は `render_assets.py` が日本語表から語彙表で導出し、CJK文字が1文字でも残ると生成時にassertで落ちる。
+出力PDFにはCJKフォントを埋め込まないので、日本語グリフは描画できない。
 
 ## 目視確認用の画像
 

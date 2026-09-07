@@ -12,18 +12,19 @@ import json
 import subprocess
 
 ROOT = Path(__file__).resolve().parent
-TAG = 'v1.0.1-preprint'
+TAG = 'v1.1.0-preprint'
 
 FIXED = ['analysis/e1_dataset_main.json', 'analysis/e2_results_main.json',
          'analysis/frozen_manifest.json', 'analysis/model_predictions.json',
          'analysis/PRE_ANALYSIS_DECISIONS.md', 'run_ledger_main.csv',
          'paper/main.tex', 'paper/main.bbl', 'paper/references.bib', 'paper/main.pdf',
+         'paper/main_en.tex', 'paper/main_en.bbl', 'paper/main_en.pdf',
          'paper/session-affinity-v0.3.pdf', 'paper/session-affinity-v0.3-source.zip',
          'paper/revision/results.json', 'paper/revision/v0.3/results.json',
          'paper/revision/v0.3/artifact_manifest.json',
          'CITATION.cff', 'LICENSE', 'README.md', 'REPRODUCTION.md',
          'PUBLICATION_PLAN.md', 'THIRD_PARTY_NOTICES.md']
-GLOBS = ['protocol/*.md', 'paper/generated/*.tex', 'paper/figures/revision_*.pdf',
+GLOBS = ['protocol/*.md', 'paper/generated/*.tex', 'paper/generated/en/*.tex', 'paper/figures/revision_*.pdf',
          'runs/main/**/run.json', 'runs/main/**/calls.jsonl']
 
 

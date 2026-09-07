@@ -11,5 +11,11 @@ else
   exit 1
 fi
 export XDG_CACHE_HOME="$PWD/.cache"
-"$compiler" --keep-logs --keep-intermediates main.tex > revision/build.log 2>&1
-echo "Built $PWD/main.pdf"
+doc="${1:-ja}"
+case "$doc" in
+  ja) tex=main.tex;  log=revision/build.log ;;
+  en) tex=main_en.tex; log=revision/build_en.log ;;
+  *)  echo "usage: build.sh [ja|en]" >&2; exit 2 ;;
+esac
+"$compiler" --keep-logs --keep-intermediates "$tex" > "$log" 2>&1
+echo "Built $PWD/${tex%.tex}.pdf"

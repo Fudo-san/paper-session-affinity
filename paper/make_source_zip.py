@@ -19,12 +19,12 @@ FIXED_TIME = (1980, 1, 1, 0, 0, 0)
 
 # What a third party needs to rebuild the PDF, plus the records the text refers to.
 # Raw experiment data and the Tectonic binary stay out; see BUILD.md.
-FIXED = ['main.tex', 'main.bbl', 'references.bib', 'build.sh', 'BUILD.md',
+FIXED = ['main.tex', 'main.bbl', 'main_en.tex', 'main_en.bbl', 'references.bib', 'build.sh', 'BUILD.md',
          'revision/ANALYSIS_PLAN.md', 'revision/CHANGELOG.md', 'revision/REFERENCES_REVIEW.md',
          'revision/results.json',
          f'revision/{VERSION}/ANALYSIS_PLAN.md', f'revision/{VERSION}/REFERENCES_REVIEW.md',
          f'revision/{VERSION}/RESPONSE.md', f'revision/{VERSION}/results.json']
-GLOBS = ['generated/*.tex', 'figures/revision_*.pdf']
+GLOBS = ['generated/*.tex', 'generated/en/*.tex', 'figures/revision_*.pdf']
 
 
 def members():
