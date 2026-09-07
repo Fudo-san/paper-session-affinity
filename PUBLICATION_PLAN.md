@@ -1,7 +1,7 @@
 # 公開計画と文書整合の正本
 
-更新日: 2026-09-07
-状態: **GitHub 公開を先行させる／外部公開は未実施**
+更新日: 2026-09-08
+状態: **GitHub 公開済み（2026-09-07）／Zenodo と arXiv は未実施**
 
 ## 1. 選定結果
 
@@ -62,9 +62,11 @@ Git の `user.name` や `user.email` は commit 用のローカル設定であ�
 
 - [x] 著者表示名の確定（2026-09-07: `Fudo`。`main.tex` と `CITATION.cff` に反映済み）
 - [ ] 所属・ORCID・連絡先メールの要否を確定（現在いずれも未設定）
-- [ ] **push 前**: commit 履歴の著者情報を確定する。全 commit が個人メールを保持しており、
-      public 化後は書き換えても取り消せない
-- [ ] **push 前**: `runs/**/calls.jsonl` の `session_id`（255ファイル）を公開してよいか確定する
+- [x] **push 前**: commit 履歴の著者情報を確定する
+      （2026-09-07に全78 commit を `Fudo <325978958+Fudo-san@users.noreply.github.com>` へ書き換え。
+      tree ハッシュ不変を確認済み。`refs/original` は push 後に削除した）
+- [x] **push 前**: `runs/**/calls.jsonl` の `session_id` を公開してよいか確定する
+      （同梱のまま公開した。UUIDのみでprompt/response本文を含まない。公開後の撤回はできない）
 - [x] §1〜§9 と Abstract を単一 LaTeX 原稿へ統合
 - [ ] `［要引用］`、`TBD`、未解決の節番号・図表参照をゼロにする
 - [ ] 2026-07-31 以後の新着文献を再検索し、新規性の断定を再検査
@@ -74,7 +76,8 @@ Git の `user.name` や `user.email` は commit 用のローカル設定であ�
 - [ ] `CITATION.cff` を著者名・DOI・release URL 確定後に追加
 - [ ] 絶対パスは「実験記録として保持」か「可搬化」のどちらかをファイルごとに決める
 - [ ] 196 run / 98 pair / dropped 0 / model / CLI / $121.26 が本文と artifact で一致
-- [ ] リリース候補の clean checkout で分析テスト38件と凍結分析を再実行（2026-09-05にcommit状態のclean cloneで通過。release tag確定後に再実行して閉じる）
+- [x] リリース候補の clean checkout で分析テスト43件と凍結分析を再実行
+      （tag `v1.0.0-preprint` の checkout、および公開後の GitHub からの clone で通過）
 - [x] commit、release tag、E2 JSON、paper source の SHA-256 manifest を生成
       （`RELEASE_MANIFEST.json` 430件。`make_release_manifest.py` で再生成でき、
       commit SHA は注釈付きタグ `v1.0.0-preprint` が本ファイルのハッシュ経由で固定する）
@@ -88,6 +91,16 @@ Git の `user.name` や `user.email` は commit 用のローカル設定であ�
   本文のキーはない。ただし session_id を公開してよいかは最終監査で再確認する
 - repository remote: <https://github.com/Fudo-san/paper-session-affinity>。push は本人の最終確認後
 - LICENSE: MIT / CC BY 4.0 のファイルは存在。最終再配布監査は未完
+
+## 4.1 リリース識別（2026-09-07）
+
+- Repository: <https://github.com/Fudo-san/paper-session-affinity>
+- Branch: `main` / Tag: `v1.0.0-preprint`
+- Commit: `51c40afb75cf6801b1e04e82624dbe9e63c7cec9`
+- `RELEASE_MANIFEST.json` sha256: `0399c19dc726aee63aff22a6a6c0ba66d3e9ae1a6af036b0ebfbcc686ce62532`
+  （注釈付きタグ本文に記録。タグ→commit→manifest→データの鎖になる）
+- 公開後に GitHub から clone して照合した: manifest 430件一致、テスト43件通過、凍結398件無傷、
+  `results.json`・生成物・ソースZIPの再生成が公開版と一致。
 
 ## 5. リリース順
 

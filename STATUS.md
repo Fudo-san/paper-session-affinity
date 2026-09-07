@@ -1,6 +1,6 @@
-# 現在地（2026-09-07）
+# 現在地（2026-09-08）
 
-統合改訂稿 v0.3 の LaTeX・PDF とソース一式を作成済み。外部公開は未実施。
+統合改訂稿 v0.3 を <https://github.com/Fudo-san/paper-session-affinity> で公開した（2026-09-07、tag `v1.0.0-preprint`、commit 51c40af）。Zenodo DOI と arXiv は未実施。
 
 ## 正本
 
