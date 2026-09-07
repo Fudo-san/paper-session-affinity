@@ -89,7 +89,10 @@ Git の `user.name` や `user.email` は commit 用のローカル設定であ�
   `probes/verify_a11.py` に存在。実験記録と可搬用テンプレートを分離する必要がある
 - `calls.jsonl`: usage、モデル、session_id、task_id、時間等の構造化計測値で、prompt/response
   本文のキーはない。ただし session_id を公開してよいかは最終監査で再確認する
-- repository remote: <https://github.com/Fudo-san/paper-session-affinity>。push は本人の最終確認後
+- repository remote: <https://github.com/Fudo-san/paper-session-affinity>。2026-09-07 に公開済み
+- `probes/*.jsonl`: 監査の対象から漏れていた。公開後の再走査で `m5_results.jsonl` に応答本文4件が
+  残っていたことが分かり、v1.0.1 で伏せた。経緯は `THIRD_PARTY_NOTICES.md` §3.1。
+  監査は「本実験のログ」ではなく「追跡される全ファイル」を対象にする
 - LICENSE: MIT / CC BY 4.0 のファイルは存在。最終再配布監査は未完
 
 ## 4.1 リリース識別（2026-09-07）
