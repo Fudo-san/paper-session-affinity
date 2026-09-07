@@ -7,7 +7,7 @@
 
 | 対象 | 選定 | 役割 |
 |---|---|---|
-| 論文タイトル | *The Economics of Session Affinity in Multi-Agent Code Generation: A Measurement Study of a Commercial Coding-Agent CLI* | 負の結果を隠さず、測定研究として位置づける |
+| 論文タイトル | *The Cost of Session Continuation in Multi-Agent Code Generation: A Measurement Study of a Commercial Coding-Agent CLI* | 負の結果を隠さず、測定研究として位置づける。2026-09-08に affinity から continuation へ変更（下記） |
 | 更新可能な正本 | 公開 GitHub repository `paper-session-affinity` | **先行して公開する。** issue、訂正、後続版を管理 |
 | 不変アーカイブ | Zenodo | GitHub 公開後。`v1.0.0-preprint` snapshot に DOI を付与 |
 | Preprint | arXiv、primary `cs.SE` | **保留。** endorsement を確保できないため現時点では投稿しない |
@@ -22,6 +22,22 @@ arXiv は新規投稿者に対し、当該カテゴリの既存投稿者によ�
 **arXiv を保留し GitHub 公開を先行させる**と決めた。arXiv を取り下げたのではなく、
 endorsement を得る手段ができた時点で再開する。Zenodo は endorsement も実名も要求しない
 ので、GitHub 公開後にそのまま進められる。
+
+### 題名を変更した理由（2026-09-08）
+
+当初の英語題名は *The Economics of Session Affinity...* だった。リポジトリ名 `paper-session-affinity` と
+同じく、2026-07-05の企画時の位置づけ（「単純なセッション親和性方針の限界を示す測定研究」）に由来する。
+
+しかし本文はこの語を使っていない。`main.tex` で「親和性」が現れるのは §2.3 の2箇所だけで、
+そこはサービング層の親和性ルーティングと本稿を**区別するため**に使っている。
+和文題名と柱書きは一貫して「セッション継続」であり、英語題名だけが本文の避けた語を掲げていた。
+*Economics* も、単一言語・単一リポジトリ・単一CLI版という §8.1 の限界記述に対して大きい。
+
+そこで英語題名を *The Cost of Session Continuation...* へ変更し、本文・和文題名・柱書きと語を揃えた。
+和文題名は変更していない（元から「継続」である）。
+
+リポジトリ名 `paper-session-affinity` は変更しない。既に公開済みで3つのタグから参照されており、
+改名するとURLが切れる。企画時の語を保存していること自体は、事前登録研究では記録として意味がある。
 
 ## 2. 公開メタ情報
 

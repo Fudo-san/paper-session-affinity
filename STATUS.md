@@ -35,6 +35,12 @@ Dも同日park、C′は2026-08-24のAmendment A-2で不採用。本実験開始
 日本語混入はソース・生成表・共有ファイル・図・出力PDFの4層で確認済みで、
 PDFにはCJKフォントを埋め込まないため日本語グリフは描画できない。
 
+## 題名の変更（2026-09-08）
+
+英語題名を *The Economics of Session Affinity...* から *The Cost of Session Continuation...* へ変更した。
+本文が「親和性」を §2.3 の区別目的でしか使っておらず、和文題名・柱書きと語が食い違っていたため。
+和文題名とリポジトリ名は変更しない。経緯は `PUBLICATION_PLAN.md` §1。
+
 ## 検証・残作業
 
 今回の検証記録: `paper/revision/v0.3/VERIFICATION.md`。既存分析を一時領域で再現し、398件の凍結ファイルを保持する。
