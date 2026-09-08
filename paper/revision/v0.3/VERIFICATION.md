@@ -5,7 +5,7 @@
 - `python3 analysis/supplement_v03.py`: exit 0。398凍結ファイルのハッシュ一致、全196ランの費用と主解析の一致、CT全28ランのcall/run集計一致を確認。`analysis_output.txt`と`results.json`。
 - `python3 -m pytest -q analysis/tests/`: exit 0、45 passed。既存33件に、正確符号検定、中央値/平均の区別、残差保持、末尾照合、iterator集計の5件、再利用×補助モデルの分類、報告額/換算額の比、反復の対応付け、ターン減と費用増の同時成立の4件、感度確認が凍結予測から出発することの1件を加えた。`tests.txt`。
 - `python3 analysis/verify_frozen.py`: exit 0。398対象の変更・削除・追加すべて0。`frozen_verification.txt`。
-- `bash paper/build.sh`: exit 0。Tectonic 0.16.9。日本語版27ページ・表13件、英語版32ページ。図6件、引用16件。`build.log`。
+- `bash paper/build.sh`: exit 0。Tectonic 0.16.9。日本語版28ページ・表13件、英語版33ページ。図6件、引用24件。`build.log`。
 - ソースとBibTeXの引用キーは16件すべて一致。要旨には訂正経緯を入れず、版注と付録Aに開示。
 - PDF抽出で主結果・符号検定・会計額・構成比が存在し、未解決参照「??」と置換文字は0。34フォントを全て埋込み、リンク119件。`artifact_checks.json`。
 - TeXログにOverfull/Underfull、未定義参照、未定義フォント字形の警告なし。OSフォント参照に関する環境依存の警告は残る。
