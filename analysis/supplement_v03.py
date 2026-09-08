@@ -219,7 +219,7 @@ def main():
         'fresh_calls':{a:sum(f[a] for f in fresh.values()) for a in ('B','C')},
         'scenarios':{k:{'median':st.median(shifted(d)),'ci95':list(stats.bca_ci(shifted(d))),
                         'cheaper':sum(x<0 for x in shifted(d))} for k,d in scen.items()},
-        'note':'Bounds, not an identification. Which reading holds is not decidable from these logs.'}
+        'note':'Withdrawn from the manuscript on 2026-09-08. The per-call auxiliary cost is not a constant: it tracks the submitted prompt (probes/AUX_MODEL_2026-09-08.md), and the main experiment did not store per-call prompt sizes. Kept as a what-if computation only.'}
 
     (out/'results.json').write_text(json.dumps(results,ensure_ascii=False,indent=2)+'\n')
     print(json.dumps({k:results[k] for k in ['groups','active_model','ct_activity','log_audit']},ensure_ascii=False,indent=2))

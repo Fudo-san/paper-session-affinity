@@ -73,8 +73,12 @@ def test_frozen_prediction_is_reproduced_before_any_substitution():
     assert sub['r_hat_observed_carry']<sub['r_hat_frozen']
     assert sub['relative_error_frozen']<0<sub['relative_error_observed_carry']
 
-def test_auxiliary_model_call_does_not_scale_with_the_payload():
-    """A fixed-size call is what licenses carrying the probe estimate into the main runs."""
+def test_auxiliary_probe_records_share_one_prompt_shape():
+    """The probes look constant only because every one used the same 500-line prefix.
+
+    Measurements on 2026-09-08 show the auxiliary input tracking the prompt, so this
+    test records what the probe set can and cannot support, not workload independence.
+    """
     import json
     from pathlib import Path
     v3=json.loads((Path(__file__).resolve().parents[2]/'paper/revision/v0.3/results.json').read_text())
@@ -85,7 +89,8 @@ def test_auxiliary_model_call_does_not_scale_with_the_payload():
     assert a['cache_read_max']==0 and a['cache_creation_max']==0
     assert a['usage_excludes_aux']==a['n']     # its tokens never enter the usage aggregate
 
-def test_both_readings_of_the_auxiliary_call_leave_the_cost_verdict_unchanged():
+def test_the_withdrawn_what_if_still_brackets_the_observed_value():
+    """Kept for the record; the manuscript no longer uses these numbers."""
     import json
     from pathlib import Path
     v3=json.loads((Path(__file__).resolve().parents[2]/'paper/revision/v0.3/results.json').read_text())
