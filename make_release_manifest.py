@@ -12,7 +12,7 @@ import json
 import subprocess
 
 ROOT = Path(__file__).resolve().parent
-TAG = 'v1.2.1-preprint'
+TAG = 'v1.2.2-preprint'
 
 FIXED = ['analysis/e1_dataset_main.json', 'analysis/e2_results_main.json',
          'analysis/frozen_manifest.json', 'analysis/model_predictions.json',

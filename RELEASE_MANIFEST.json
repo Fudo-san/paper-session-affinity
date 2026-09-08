@@ -1,5 +1,5 @@
 {
-  "release_tag": "v1.2.1-preprint",
+  "release_tag": "v1.2.2-preprint",
   "commit": "recorded in the annotated tag, not here",
   "file_count": 440,
   "counts": {
@@ -8,7 +8,7 @@
     "paper": 31
   },
   "sha256": {
-    ".zenodo.json": "b1139c0a59746a1dde820941235227eb9ed092011b1c9682a5618c7d38247581",
+    ".zenodo.json": "c57b4ba7ee84e514e9a7f8427eb3a3802645c4529c81fc90aa999c0e1eda6c14",
     "CITATION.cff": "50c9d73c05272c0a29f4806a4bf2d27b03a0ba23d932ca868812a15a8f3063ee",
     "LICENSE": "edcc42c0148b5ad94173c1248437ba6f31d451f93d62c0017c86de11ca9fcb6d",
     "PUBLICATION_PLAN.md": "43ec338632169aade3bba41ccd95ca9be0e74cda56225cc06482fa5daf215c62",
