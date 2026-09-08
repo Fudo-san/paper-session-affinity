@@ -72,3 +72,26 @@ def test_frozen_prediction_is_reproduced_before_any_substitution():
     # Shrinking the carried history lowers the prediction, so the sign of the error flips.
     assert sub['r_hat_observed_carry']<sub['r_hat_frozen']
     assert sub['relative_error_frozen']<0<sub['relative_error_observed_carry']
+
+def test_auxiliary_model_call_does_not_scale_with_the_payload():
+    """A fixed-size call is what licenses carrying the probe estimate into the main runs."""
+    import json
+    from pathlib import Path
+    v3=json.loads((Path(__file__).resolve().parents[2]/'paper/revision/v0.3/results.json').read_text())
+    a=v3['aux_model']
+    lo,hi=a['payload_chars_span']
+    assert hi/lo>=50                      # the payload varies by a wide factor
+    assert a['input_max']-a['input_min']<100   # the auxiliary input barely moves
+    assert a['cache_read_max']==0 and a['cache_creation_max']==0
+    assert a['usage_excludes_aux']==a['n']     # its tokens never enter the usage aggregate
+
+def test_both_readings_of_the_auxiliary_call_leave_the_cost_verdict_unchanged():
+    import json
+    from pathlib import Path
+    v3=json.loads((Path(__file__).resolve().parents[2]/'paper/revision/v0.3/results.json').read_text())
+    sc=v3['aux_sensitivity']['scenarios']
+    # Removing it and having the main model do it bracket the observed value from both sides.
+    assert sc['aux_done_by_main_model']['median']<sc['observed']['median']<sc['aux_removed']['median']
+    # Neither reading reaches the pre-specified 20% reduction.
+    for v in sc.values():
+        assert v['median']>-0.20 and v['ci95'][1]>-0.20

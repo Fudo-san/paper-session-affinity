@@ -171,6 +171,56 @@ def main():
         'relative_error_frozen':(obs_ratio-frozen)/frozen,'relative_error_observed_carry':(obs_ratio-swapped)/swapped,
         'note':'Substituting the observed carry into the frozen formula. Not a recalibration; the frozen prediction stands.'}
 
+    # The auxiliary model, priced. calls.jsonl kept only model names, but the probes stored
+    # the raw CLI result, whose modelUsage carries per-model cost and tokens.
+    aux=[]
+    for pf in sorted((ROOT/'probes').glob('*.jsonl')):
+        for line in pf.read_text().splitlines():
+            if not line.strip():continue
+            d=json.loads(line);r=d.get('raw')
+            if not isinstance(r,dict):continue
+            mu=r.get('modelUsage') or {}
+            if d.get('resumed') or d.get('resume') or d.get('model_flag')=='haiku':continue
+            h=[v for k,v in mu.items() if 'haiku' in k];m=[v for k,v in mu.items() if 'haiku' not in k]
+            if not(h and m):continue
+            u=r.get('usage') or {}
+            aux.append({'payload_chars':d.get('payload_chars'),'cost':h[0]['costUSD'],
+                'input':h[0]['inputTokens'],'output':h[0]['outputTokens'],
+                'cache_read':h[0].get('cacheReadInputTokens',0),'cache_creation':h[0].get('cacheCreationInputTokens',0),
+                'usage_equals_main':(u.get('input_tokens')==m[0]['inputTokens'] and u.get('output_tokens')==m[0]['outputTokens']
+                    and u.get('cache_read_input_tokens')==m[0].get('cacheReadInputTokens')
+                    and u.get('cache_creation_input_tokens')==m[0].get('cacheCreationInputTokens'))})
+    costs=[a['cost'] for a in aux];ins=[a['input'] for a in aux]
+    results['aux_model']={'n':len(aux),'cost_median':st.median(costs),'cost_min':min(costs),'cost_max':max(costs),
+        'input_median':st.median(ins),'input_min':min(ins),'input_max':max(ins),
+        'output_median':st.median(a['output'] for a in aux),
+        'cache_read_max':max(a['cache_read'] for a in aux),'cache_creation_max':max(a['cache_creation'] for a in aux),
+        'payload_chars_span':[min(a['payload_chars'] for a in aux if a['payload_chars']),
+                              max(a['payload_chars'] for a in aux if a['payload_chars'])],
+        'usage_excludes_aux':sum(a['usage_equals_aux'] if False else a['usage_equals_main'] for a in aux),
+        'note':'Probe records only; the probes ran CLI 2.1.220 and the main experiment 2.1.247.'}
+
+    # Two readings of that call, priced onto the main experiment.
+    fresh=defaultdict(lambda:defaultdict(int))
+    for (s_,a),cs in calls_by.items():
+        for c in cs:
+            if not c['resumed']: fresh[(s_,c['rep'])][a]+=1
+    AUX=results['aux_model']['cost_median']
+    SUB=results['aux_model']['input_median']*RATES['input_tokens']/1e6
+    def shifted(delta):
+        v=[]
+        for p_ in pairs:
+            nb,nc=fresh[(p_['spec'],p_['rep'])]['B'],fresh[(p_['spec'],p_['rep'])]['C']
+            b,c=p_['cost_B']+nb*delta,p_['cost_C']+nc*delta
+            v.append((c-b)/b)
+        return v
+    scen={'observed':0.0,'aux_removed':-AUX,'aux_done_by_main_model':SUB-AUX}
+    results['aux_sensitivity']={'aux_cost_per_fresh_call':AUX,'main_model_cost_for_same_tokens':SUB,
+        'fresh_calls':{a:sum(f[a] for f in fresh.values()) for a in ('B','C')},
+        'scenarios':{k:{'median':st.median(shifted(d)),'ci95':list(stats.bca_ci(shifted(d))),
+                        'cheaper':sum(x<0 for x in shifted(d))} for k,d in scen.items()},
+        'note':'Bounds, not an identification. Which reading holds is not decidable from these logs.'}
+
     (out/'results.json').write_text(json.dumps(results,ensure_ascii=False,indent=2)+'\n')
     print(json.dumps({k:results[k] for k in ['groups','active_model','ct_activity','log_audit']},ensure_ascii=False,indent=2))
     print('CT accounting:',json.dumps(results['accounting']['ct_library'],indent=2))

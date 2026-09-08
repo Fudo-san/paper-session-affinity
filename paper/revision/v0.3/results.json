@@ -1348,5 +1348,58 @@
       "relative_error_observed_carry": 0.09646198109122278,
       "note": "Substituting the observed carry into the frozen formula. Not a recalibration; the frozen prediction stands."
     }
+  },
+  "aux_model": {
+    "n": 27,
+    "cost_median": 0.012116,
+    "cost_min": 0.012093,
+    "cost_max": 0.01213,
+    "input_median": 12043,
+    "input_min": 12018,
+    "input_max": 12045,
+    "output_median": 15,
+    "cache_read_max": 0,
+    "cache_creation_max": 0,
+    "payload_chars_span": [
+      300,
+      16000
+    ],
+    "usage_excludes_aux": 27,
+    "note": "Probe records only; the probes ran CLI 2.1.220 and the main experiment 2.1.247."
+  },
+  "aux_sensitivity": {
+    "aux_cost_per_fresh_call": 0.012116,
+    "main_model_cost_for_same_tokens": 0.036129,
+    "fresh_calls": {
+      "B": 263,
+      "C": 171
+    },
+    "scenarios": {
+      "observed": {
+        "median": 0.05511035508255105,
+        "ci95": [
+          -0.03179108996946077,
+          0.10122392661341914
+        ],
+        "cheaper": 44
+      },
+      "aux_removed": {
+        "median": 0.0746251629103516,
+        "ci95": [
+          -0.00961523387285003,
+          0.12213758031974899
+        ],
+        "cheaper": 41
+      },
+      "aux_done_by_main_model": {
+        "median": 0.017068884442060582,
+        "ci95": [
+          -0.05264891023488116,
+          0.0706817113499835
+        ],
+        "cheaper": 47
+      }
+    },
+    "note": "Bounds, not an identification. Which reading holds is not decidable from these logs."
   }
 }

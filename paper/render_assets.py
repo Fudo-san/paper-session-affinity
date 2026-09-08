@@ -132,6 +132,15 @@ newmacros={'SignP':f"{g['all']['sign']['p_two_sided']:.4f}",
  'NonCTMeanContribution':f"{100*g['non_ct']['relative_sum']/98:.2f}"}
 anc=g['active_non_ct'];cta=v3['ct_tasks']['CT-A']['paired'];mixr=v3['model_mix']['by_reuse']
 rr=v3['residual_ratio']['all'];carry={r['task']:r for r in v3['carry_check']['rows']}
+am=v3['aux_model'];asx=v3['aux_sensitivity'];sc=asx['scenarios']
+newmacros.update({'AuxCost':f"{am['cost_median']:.6f}",'AuxInput':f"{am['input_median']:,}",
+ 'AuxOutput':f"{am['output_median']:.0f}",'AuxN':f"{am['n']}",
+ 'AuxPayloadLo':f"{am['payload_chars_span'][0]:,}",'AuxPayloadHi':f"{am['payload_chars_span'][1]:,}",
+ 'AuxInputSpan':f"{am['input_max']-am['input_min']}",
+ 'AuxMainCost':f"{asx['main_model_cost_for_same_tokens']:.6f}",
+ 'AuxFreshB':f"{asx['fresh_calls']['B']}",'AuxFreshC':f"{asx['fresh_calls']['C']}",
+ 'AuxRemovedMedian':f"{100*sc['aux_removed']['median']:+.2f}",'AuxRemovedCI':interval(sc['aux_removed']['ci95']),
+ 'AuxMainMedian':f"{100*sc['aux_done_by_main_model']['median']:+.2f}",'AuxMainCI':interval(sc['aux_done_by_main_model']['ci95'])})
 newmacros.update({'ActiveNonCTMedian':f"{100*anc['median']:+.2f}",'ActiveNonCTCI':interval(anc['ci95']),
  'ActiveNonCTCheaper':f"{anc['sign']['negative']}",'ActiveNonCTP':f"{anc['sign']['p_two_sided']:.4f}",
  'AuxFresh':f"{mixr['fresh']['aux']}",'AuxResumed':f"{mixr['resumed']['single']}",
