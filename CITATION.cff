@@ -11,8 +11,8 @@ type: software
 license:
   - MIT
   - CC-BY-4.0
-version: "0.3-draft"
-# Unpublished draft: no release date assigned.
+version: "v1.2.2-preprint"
+date-released: "2026-09-08"
 
 # 著者表記は 2026-09-07 に本人が Fudo と決めた。単一名で用いる。
 # 所属・ORCID・連絡先は未設定。git の user.name / user.email は commit 用の
@@ -25,7 +25,9 @@ authors:
 
 # --- 公開時に確定 -----------------------------------------------------------
 repository-code: "https://github.com/Fudo-san/paper-session-affinity"
-doi: "TBD — Zenodo deposit 後に確定"
+# Concept DOI。全版を指し、新しい版を出しても変わらないのでこちらを引用する。
+# この版だけを指す version DOI は 10.5281/zenodo.22663556。
+doi: "10.5281/zenodo.22663555"
 
 abstract: >-
   マルチエージェント・コード生成におけるセッション継続は、リポジトリ再探索を

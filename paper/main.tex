@@ -59,7 +59,7 @@ CTでは、継続した2タスクがターン数を2〜3割減らしながら最
 さらに補助モデルの使用記録は、新規セッション\AuxFresh 件と継続セッション\AuxResumed 件で例外なく分かれた。その1回あたりの費用はプローブの保存記録から\AuxCost{} USDと読め、付随処理と読むか肩代わりと読むかで中央値は$\AuxMainMedian$\%から$\AuxRemovedMedian$\%に動くが、どちらでも費用の判定は変わらない。
 固定単価での換算増分はcache writeが最大項目だったが、CLI報告額との残差があり、請求内訳や継承履歴だけの費用は同定できなかった。
 継続対象5仕様のモデル予測は4件が誤差25\%以内で、5件とも過大予測だった。
-本稿の寄与は、削減が得られなかったことの報告に加え、継続が費用を変える経路を複数記述し、そのうち補助モデルの委譲が止まる経路が費用モデルに入っていなかったことを示した点にある。
+本稿の寄与は、削減が得られなかったことの報告に加え、継続が費用を変える経路を複数記述し、そのうち新規／継続で補助モデルの使用記録が分かれる経路が費用モデルに入っていなかったことを示した点にある。
 CTは1仕様に限られ、継続と実行順制約の因果効果は分離できない。
 \end{abstract}
 
@@ -67,7 +67,7 @@ CTは1仕様に限られ、継続と実行順制約の因果効果は分離で�
 
 \clearpage
 \section*{Abstract}
-Continuing related coding tasks in one session can reduce repeated exploration while carrying history and adding scheduling constraints. We characterize a commercial coding-agent CLI and compare fresh sessions (B) with write-scope-connected lane continuation (C) on seven specifications in one Python repository (196 runs; 98 pairs). The median paired relative cost difference is +\CostMedian\% (BCa 95\% interval: \CostCI\%), failing the pre-specified 20\% reduction criterion. Runtime and acceptance meet non-inferiority criteria with margins of 15\% and 10 percentage points, respectively. Post-hoc analysis finds that two structural controls with no continuation also split in sign, cautioning against reading the small positive aggregate as an effect of continuation in general. The CT specification is costlier in all 14 pairs, with a median difference of +50.6\%; outside CT, C is cheaper in 44/84 pairs, and the aggregate mean increase is concentrated in CT. Within CT, the two continued tasks take 21--30\% fewer turns while their peak context grows by 46\% and 91\%, and the leading task---fresh in both arms---is costlier in all 14 replications (median $\CTAMedian$\%). Auxiliary-model use separates without exception: it is recorded in all \AuxFresh{} fresh calls and in none of the \AuxResumed{} resumed ones. Fixed-rate accounting assigns the largest standardized increase to cache writes, but a residual relative to CLI-reported cost prevents a complete billing decomposition or attribution to inherited history alone. Excluding two structural unity predictions, four of five model predictions are within 25\% relative error and all five overpredict. Beyond reporting the absent saving, the study describes several routes by which continuation changes cost, one of which---the auxiliary-model delegation stopping---was absent from the cost model. A single CT specification and a bundled intervention limit causal interpretation and generalization.
+Continuing related coding tasks in one session can reduce repeated exploration while carrying history and adding scheduling constraints. We characterize a commercial coding-agent CLI and compare fresh sessions (B) with write-scope-connected lane continuation (C) on seven specifications in one Python repository (196 runs; 98 pairs). The median paired relative cost difference is +\CostMedian\% (BCa 95\% interval: \CostCI\%), failing the pre-specified 20\% reduction criterion. Runtime and acceptance meet non-inferiority criteria with margins of 15\% and 10 percentage points, respectively. Post-hoc analysis finds that two structural controls with no continuation also split in sign, cautioning against reading the small positive aggregate as an effect of continuation in general. The CT specification is costlier in all 14 pairs, with a median difference of +50.6\%; outside CT, C is cheaper in 44/84 pairs, and the aggregate mean increase is concentrated in CT. Within CT, the two continued tasks take 21--30\% fewer turns while their peak context grows by 46\% and 91\%, and the leading task---fresh in both arms---is costlier in all 14 replications (median $\CTAMedian$\%). Auxiliary-model use separates without exception: it is recorded in all \AuxFresh{} fresh calls and in none of the \AuxResumed{} resumed ones. Fixed-rate accounting assigns the largest standardized increase to cache writes, but a residual relative to CLI-reported cost prevents a complete billing decomposition or attribution to inherited history alone. Excluding two structural unity predictions, four of five model predictions are within 25\% relative error and all five overpredict. Beyond reporting the absent saving, the study describes several routes by which continuation changes cost, one of which---the split in recorded auxiliary-model use between fresh and resumed sessions---was absent from the cost model. A single CT specification and a bundled intervention limit causal interpretation and generalization.
 
 \vspace{1em}
 \noindent\textbf{版と証拠の位置づけ。}
@@ -606,7 +606,7 @@ CT-AはB側でもC側でも新規セッションであり、この差を継続�
 相対誤差は$\SubErrFrozen$\%の過大から$\SubErrObserved$\%の過小へ転じる。誤差は小さくならず、符号が変わって倍以上になる。
 したがって「継承量の過大な仮定が過大予測の原因である」という説明は、少なくともCTについては量的に成立しない。
 モデルに入っていない項が反対向きに効いており、過大な継承量の仮定がそれを部分的に打ち消していると考えるほうが整合する。
-補助モデルの委譲が止まること、および先頭タスクの作業量が増えることは、どちらも式\eqref{eq:carry}に無い項である。
+新規／継続で補助モデルの使用が分かれること、および先頭タスクの作業量が増えることは、どちらも式\eqref{eq:carry}に無い項である。
 なお同じ追加測定で、\spec{DISABLE_NON_ESSENTIAL_MODEL_CALLS}を1に設定しても補助モデルの呼び出しは止まらなかった。
 設定あり4件・なし4件のいずれでも補助モデルが記録され、入力・費用に差はない。この環境変数はこの呼び出しを抑止しない。
 
@@ -889,8 +889,10 @@ bash paper/build.sh
 
 分析は保存データだけで再実行できるが、本実験の再実行には商用サービスへのアクセス、実行フレームワーク、対象リポジトリの固定版が必要である。
 本原稿のソース一式だけで196ランを再取得できるとは主張しない。
-著者表示・所属・連絡先、公開リポジトリURL、DOI、投稿先識別子は未確定のため作成していない。
-ソースとPDFをローカルに作成したことを、外部公開の完了と同一視しない。
+著者表示はFudoで、所属と連絡先は設定していない。
+ソース、データ、原稿は\url{https://github.com/Fudo-san/paper-session-affinity}で公開し、固定版をZenodoへ登録している。
+全版を指すconcept DOIは\href{https://doi.org/10.5281/zenodo.22663555}{\spec{10.5281/zenodo.22663555}}であり、版ごとのDOIは各releaseに付く。
+投稿先識別子は未確定である。
 
 \clearpage
 \raggedright

@@ -1,7 +1,7 @@
 # 公開計画と文書整合の正本
 
-更新日: 2026-09-08
-状態: **GitHub 公開済み（2026-09-07）／Zenodo と arXiv は未実施**
+更新日: 2026-09-09
+状態: **GitHub 公開済み（2026-09-07）／Zenodo DOI 取得済み（2026-09-08）／arXiv は保留**
 
 ## 1. 選定結果
 
@@ -9,7 +9,7 @@
 |---|---|---|
 | 論文タイトル | *The Cost of Session Continuation in Multi-Agent Code Generation: A Measurement Study of a Commercial Coding-Agent CLI* | 負の結果を隠さず、測定研究として位置づける。2026-09-08に affinity から continuation へ変更（下記） |
 | 更新可能な正本 | 公開 GitHub repository `paper-session-affinity` | **先行して公開する。** issue、訂正、後続版を管理 |
-| 不変アーカイブ | Zenodo | GitHub 公開後。`v1.0.0-preprint` snapshot に DOI を付与 |
+| 不変アーカイブ | Zenodo | 取得済み。`v1.2.2-preprint` snapshot に DOI を付与（2026-09-08） |
 | Preprint | arXiv、primary `cs.SE` | **保留。** endorsement を確保できないため現時点では投稿しない |
 | Cross-list | `cs.AI` 候補 | arXiv 投稿が可能になった場合の候補。最終可否は arXiv 側の分類に従う |
 | 査読会議・誌 | preprint 後に選定 | 新着文献確認と英語原稿の完成後に別判断する |
@@ -47,8 +47,9 @@ endorsement を得る手段ができた時点で再開する。Zenodo は endors
 - ORCID: 任意。未使用
 - 連絡先メール: **未設定**。本人が明示的に選ばない限り論文 metadata に記載しない
 - Repository URL: <https://github.com/Fudo-san/paper-session-affinity>（2026-09-07 作成）
-- Release tag: `v1.0.0-preprint`
-- Zenodo DOI: **TBD — deposit 後に確定**。GitHub公開後に取得し、成果物の到達性をGitHubアカウントから切り離す
+- Release tag: `v1.2.2-preprint`（GitHub Release として公開したのはこの版のみ）
+- Zenodo DOI（concept、引用にはこちら）: **10.5281/zenodo.22663555**
+- Zenodo DOI（version `v1.2.2-preprint`）: **10.5281/zenodo.22663556**（2026-09-08 取得）
 - arXiv ID: **TBD — submission 後に確定**
 - Primary category: `cs.SE`
 - Cross-list candidate: `cs.AI`
@@ -86,7 +87,9 @@ Git の `user.name` や `user.email` は commit 用のローカル設定であ�
 - [x] **push 前**: `runs/**/calls.jsonl` の `session_id` を公開してよいか確定する
       （同梱のまま公開した。UUIDのみでprompt/response本文を含まない。公開後の撤回はできない）
 - [x] §1〜§9 と Abstract を単一 LaTeX 原稿へ統合
-- [ ] `［要引用］`、`TBD`、未解決の節番号・図表参照をゼロにする
+- [x] `［要引用］`、`TBD`、未解決の節番号・図表参照をゼロにする
+      （2026-09-09: 現行文書から解消。`arXiv ID: TBD` は保留中の事実であり残す。
+      `paper/revision/original/` と `drafts/` は歴史資料として当時のまま保持する）
 - [ ] 2026-07-31 以後の新着文献を再検索し、新規性の断定を再検査
 - [x] 生データに秘密・個人情報・非公開リポジトリ内容がないことを確認
       （2026-09-08: 公開430ファイルを全走査。実名・メール・鍵・IP・住所いずれも0件。
@@ -96,7 +99,9 @@ Git の `user.name` や `user.email` は commit 用のローカル設定であ�
       CLI出力は指標とツール名のみで、応答本文は v1.0.1 で除去した。`THIRD_PARTY_NOTICES.md` §3・§3.1）
 - [x] LICENSE を確定（2026-09-08: 現状のまま確定。コードにMIT、文書とデータにCC BY 4.0。
       `REUSE.toml` と `LICENSES/` で対応を明示済み。分割は変更しない）
-- [ ] `CITATION.cff` を著者名・DOI・release URL 確定後に追加
+- [x] `CITATION.cff` を著者名・DOI・release URL 確定後に追加
+      （2026-09-09: 著者 Fudo、concept DOI 10.5281/zenodo.22663555、
+      version `v1.2.2-preprint`、date-released 2026-09-08 を記載）
 - [x] 絶対パスは「実験記録として保持」か「可搬化」のどちらかをファイルごとに決める
       （2026-09-08: 全件を**実験記録として保持**と決めた。`/home/fudo1` は実行時の実パスであり、
       書き換えるとログが実行事実と食い違う。`benchmarks/build_specs.py` は環境変数

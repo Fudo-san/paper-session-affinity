@@ -129,7 +129,8 @@ commit `fefe7c4`（2026-07-31T01:55:17+09:00）と後続履歴でローカルな
 - arXiv: 論文本文。本文中または metadata から Zenodo DOI と GitHub tag を参照
 
 公開前に、tag の commit、Zenodo snapshot、本文記載の commit、分析結果 JSON の SHA-256 を
-同一の artifact manifest に記録する。DOI の `TBD` が残る間は release-ready ではない。
+同一の artifact manifest に記録する。DOI は 2026-09-08 に取得した
+（concept 10.5281/zenodo.22663555、version 10.5281/zenodo.22663556）。
 
 リリース単位の照合は `RELEASE_MANIFEST.json` で行う。`make_release_manifest.py` が生成し、
 凍結プロトコル、E1/E2 出力、run ledger、196ラン分の `run.json` と `calls.jsonl`、
