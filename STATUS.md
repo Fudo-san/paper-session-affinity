@@ -95,3 +95,16 @@ CTの換算増分はcache writeが最大。固定単価換算と報告費用の�
 §2に「履歴の引き継ぎと再取得の費用」を新設し、Handoff Debt・Handoff Tax・Context Compression・
 Ledger・Agentic Workloadsを対比した。§2.4にTOPAS、§6.7にReplay Gapを加えた。
 「履歴を渡せば再探索が減る」等は既知として先行研究に帰属させ、新規性の記述を測定対象の差へ限定した。
+
+## 公開完了（2026-09-10）
+
+GitHub Release `v1.3.0-preprint` を公開し、Zenodo が version DOI 10.5281/zenodo.22664106 を発行した。
+concept DOI 10.5281/zenodo.22663555 は変わらない。APIで著者 Fudo、版 v1.3.0-preprint、
+28/33ページの記述、ライセンス CC BY 4.0、種別 Preprint を確認した。
+
+GitHub から第三者として `v1.3.0-preprint` を clone し、タグ記載の manifest hash とファイルの一致、
+manifest 440件一致、テスト45件、凍結398件無傷を確認した。
+
+公開前ゲートの未了は0件。提供者規約の確認は公開後の2026-09-10に行い、
+`THIRD_PARTY_NOTICES.md` §2.1 に記録した。公開物に抵触する条項は見当たらない。
+自動化アクセスの条項の例外に当たるかについては、法的判断を示していない。

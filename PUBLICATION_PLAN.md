@@ -47,9 +47,10 @@ endorsement を得る手段ができた時点で再開する。Zenodo は endors
 - ORCID: 任意。未使用
 - 連絡先メール: **未設定**。本人が明示的に選ばない限り論文 metadata に記載しない
 - Repository URL: <https://github.com/Fudo-san/paper-session-affinity>（2026-09-07 作成）
-- Release tag: `v1.2.2-preprint`（GitHub Release として公開したのはこの版のみ）
+- GitHub Release: `v1.2.2-preprint`（2026-09-08）、`v1.3.0-preprint`（2026-09-08）。タグのみの版は Release を作っていない
 - Zenodo DOI（concept、引用にはこちら）: **10.5281/zenodo.22663555**
-- Zenodo DOI（version `v1.2.2-preprint`）: **10.5281/zenodo.22663556**（2026-09-08 取得）
+- Zenodo DOI（version `v1.2.2-preprint`）: **10.5281/zenodo.22663556**（2026-09-08 取得。和文要旨の誤りを含む）
+- Zenodo DOI（version `v1.3.0-preprint`）: **10.5281/zenodo.22664106**（2026-09-08 取得。2026-09-10 にAPIで著者・版・ページ数を確認）
 - arXiv ID: **TBD — submission 後に確定**
 - Primary category: `cs.SE`
 - Cross-list candidate: `cs.AI`
